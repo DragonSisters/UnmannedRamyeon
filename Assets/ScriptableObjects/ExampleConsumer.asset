@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ff02a0d89e29b41afd711a699e5118, type: 3}
   m_Name: ExampleConsumer
   m_EditorClassIdentifier: 
-  consumerPrefab: {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
   appearance: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
   dialogues:
   - state: 1
@@ -25,5 +24,5 @@ MonoBehaviour:
     line: "\uC800\uAE30\uC694."
   - state: 4
     line: "\uAC10\uC0AC\uD569\uB2C8\uB2E4~"
-  durationTime: 5
+  durationTime: 10
   appearDate: 0

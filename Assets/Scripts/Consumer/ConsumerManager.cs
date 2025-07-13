@@ -1,164 +1,184 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 /// <summary>
 /// 손님의 등장과 퇴장을 관리합니다.
 /// </summary>
-public class ConsumerManager : MonoBehaviour
+public class ConsumerManager : Singleton<ConsumerManager>
 {
-    // @charotiti9 TODO: 일단 간단하게 n초마다 등장하고 퇴장하게 만들어봅니다. 나중에 수정합니다.
-    public float appearTime = 100f;
+    [Header("Consumer 프리팹들을 직접 드래그하세요")]
+    [SerializeField] private List<GameObject> consumerPrefabs = new List<GameObject>();
 
     /// <summary>
-    /// 최대 소환갯수를 정합니다.
+    /// 생성된 컴포넌트들
     /// </summary>
-    public int maxNumber = 3;
+    private Dictionary<int, Consumer> consumerInstances = new Dictionary<int, Consumer>();
+
+    // @charotiti9 TODO: 일단 간단하게 n초마다 등장하고 퇴장하게 만들어봅니다. 나중에 수정합니다.
+    [Header("N초마다 등장합니다.")]
+    [SerializeField] private float appearTime = 3f;
+
+    [Header("최대 소환 갯수")]
+    [SerializeField] private int maxNumber = 3;
     private int currentNumber;
 
-    /// <summary>
-    /// 등장할 손님 목록
-    /// </summary>
-    public List<ConsumerScriptableObject> consumers = new();
-    /// <summary>
-    /// 테스트하고 싶은 손님이 있다면 이 손님만 등장하게 할게요
-    /// </summary>
-    public ConsumerScriptableObject testConsumer;
+    // 고유 ID 생성을 위한 카운터
+    private int nextConsumerID = 0;
 
     /// <summary>
     /// 업데이트 대신 사용할 코루틴
     /// </summary>
     private Coroutine updateCoroutine;
-    /// <summary>
-    /// 손님들의 행동 코루틴
-    /// </summary>
-    private Dictionary<int, Coroutine> consumerCoroutines;
-    /// <summary>
-    /// 증분할 손님 id
-    /// </summary>
-    private int consumerId;
 
     private void Start()
     {
-        consumerCoroutines = new Dictionary<int, Coroutine>();
         // @charotiti9 TODO: 임시로 여기서 생성을 시작하지만,
         // 나중에는 게임 순환시스템에서 신호가 오면 시작해야할 것입니다.
         StartSpawn();
     }
 
-    private void StartSpawn()
+    public void StartSpawn()
     {
-        if(IsAvailableSpawn())
+        if (IsAvailableSpawn())
         {
             updateCoroutine = StartCoroutine(UpdateIEnumerator());
         }
     }
 
-    private void StopSpawn()
+    public void StopSpawn()
     {
         // 모든 코루틴을 멈춥니다.
         if (updateCoroutine != null)
         {
             StopCoroutine(updateCoroutine);
         }
-        if(consumerCoroutines.Count > 0)
-        {
-            foreach (var consumerCoroutine in consumerCoroutines)
-            {
-                StopCoroutine(consumerCoroutine.Value);
-            }
-            consumerCoroutines.Clear();
-        }
-    }
-
-    private bool IsAvailableSpawn()
-    {
-        // @charotiti9 TODO: 지금은 무조건 스폰시키지만,
-        // 나중에 여러가지 조건이 생기면 여기서 검사합니다.
-        // ex. 게임이 시작하지 않았다거나... 끝났다거나...
-        return true;
     }
 
     private IEnumerator UpdateIEnumerator()
     {
+        ClearExistingInstances();
         while (IsAvailableSpawn())
         {
-            // @charotiti9 TODO: 랜덤 생성으로 간단히 테스트합니다.
-            if (consumers.Count == 0)
+            if (currentNumber >= maxNumber)
             {
-                Debug.LogError("추가된 손님이 하나도 없습니다. 생성할 손님 목록에 손님 스크립터블 오브젝트를 추가해주세요.");
-                yield break;
+                Debug.Log($"현재 개체수: {currentNumber}");
             }
-            var selectedConsumer = consumers[Random.Range(0, consumers.Count)];
-            if (testConsumer != null) // 테스트하고 싶은 손님이 있으시군요.
+            else
             {
-                selectedConsumer = testConsumer;
-            }
-
-            // @charotiti9 TODO: 나중에 풀링으로 바꿉니다. 지금은 테스트만...
-            if(currentNumber < maxNumber)
-            {
-                OnCustomerEnter(selectedConsumer);
+                // @charotiti9 TODO: 지금은 랜덤으로 생성합니다. 나중에 규칙을 추가적용합니다.
+                var randomPrefab = Random.Range(0, consumerPrefabs.Count);
+                CreateConsumerInstance(consumerPrefabs[randomPrefab]);
             }
 
             yield return new WaitForSeconds(appearTime);
         }
     }
 
-    private void OnCustomerEnter(ConsumerScriptableObject consumer)
+    private bool IsAvailableSpawn()
+    {
+        // @charotiti9 TODO: 나중에 여러가지 조건이 생기면 여기서 검사합니다.
+        // ex. 게임이 시작하지 않았다거나... 끝났다거나...
+        foreach (var prefab in consumerPrefabs)
+        {
+            if (prefab == null)
+            {
+                Debug.LogError("손님 프리팹이 null입니다. ConsumerManager 인스펙터를 확인해주세요.");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 기존 인스턴스들 정리
+    /// </summary>
+    private void ClearExistingInstances()
+    {
+        foreach (var kvp in consumerInstances)
+        {
+            if (kvp.Value != null)
+            {
+                DestroyImmediate(kvp.Value.gameObject);
+            }
+        }
+        consumerInstances.Clear();
+    }
+
+    private int CreateConsumerInstance(GameObject prefab)
     {
         currentNumber++;
-        GameObject consumerObject = Instantiate(consumer.consumerPrefab);
-        consumerObject.AddComponent<SpriteRenderer>().sprite = consumer.appearance;
-        // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumer.dialogues.Where(w => w.state == ConsumerState.Enter).Select(s => s.line).ToList();
-        print(string.Join(", ", line));
 
-        var consumerScript = consumerObject.GetComponent<Consumer>();
-        consumerScript.OnCustomerEnter();
+        // 프리팹 인스턴스 생성
+        GameObject instance = Instantiate(prefab);
 
-        // 행동을 시작해요
-        var currentConsumerId = consumerId++; // id를 저장해서 나중에 목록에서의 삭제를 용이하게 만듭니다.
-        var currentConsumerCoroutine = StartCoroutine(UpdateCustomerBehavior(consumer, currentConsumerId, consumerScript));
-        consumerCoroutines.Add(currentConsumerId, currentConsumerCoroutine);
-    }
-
-    private IEnumerator UpdateCustomerBehavior(ConsumerScriptableObject consumer, int id, Consumer consumerScript)
-    {
-        // 체류시간 계산
-        var duration = 0f;
-        while (duration < consumer.durationTime)
+        // Consumer 컴포넌트 확인
+        Consumer consumer = instance.GetComponent<Consumer>();
+        if (consumer == null)
         {
-            duration += Time.deltaTime;
-
-            // @charotiti9 TODO: 각종 대사를 외쳐요. 나중에 손님 상태에 따라서 말하는 대사를 변경해야합니다.
-            var state = consumerScript.state;
-            var line = consumer.dialogues.Where(w => w.state == state).Select(s => s.line).ToList();
-            print(string.Join(", ", line));
-
-            yield return null;
+            Debug.LogError($"Prefab {prefab.name}프리팹이 consumer 컴포넌트를 가지고 있지 않습니다.");
+            DestroyImmediate(instance);
+            return -1; // 실패시 -1 반환
         }
 
-        OnCustomerExit(consumer, consumerScript);
+        // 고유 ID 생성
+        int consumerID = nextConsumerID++;
+        consumer.id = consumerID;
 
-        // 코루틴 목록에서도 삭제
-        if (consumerCoroutines.ContainsKey(id))
+        // 이름 설정 (ID 포함)
+        instance.name = $"{prefab.name}_Instance_{consumerID}";
+
+        // 딕셔너리에 추가
+        consumerInstances.Add(consumerID, consumer);
+
+        Debug.Log($"손님{consumerID}가 생성되었습니다.");
+        return consumerID; // 생성된 ID 반환
+    }
+
+
+    /// ID로 Consumer 제거
+    /// </summary>
+    /// <param name="consumerID">제거할 Consumer의 ID</param>
+    public void DestroyConsumer(int consumerID)
+    {
+        if (!consumerInstances.ContainsKey(consumerID))
         {
-            consumerCoroutines.Remove(id);
+            Debug.LogWarning($"Consumer ID {consumerID}를 찾을 수 없습니다.");
+            return;
+        }
+
+        Consumer consumer = consumerInstances[consumerID];
+        if (consumer != null)
+        {
+            currentNumber--;
+            // 딕셔너리에서 제거
+            consumerInstances.Remove(consumerID);
+            DestroyImmediate(consumer.gameObject);
+            Debug.Log($"손님{consumerID}가 파괴되었습니다.");
         }
     }
 
-    private void OnCustomerExit(ConsumerScriptableObject consumer, Consumer consumerScript)
+    /// <summary>
+    /// 특정 ID의 Consumer 가져오기
+    /// </summary>
+    /// <param name="consumerID">찾을 Consumer ID</param>
+    /// <returns>Consumer 컴포넌트 또는 null</returns>
+    public Consumer GetConsumer(int consumerID)
     {
-        currentNumber--;
-        // @charotiti9 TODO: 퇴장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumer.dialogues.Where(w => w.state == ConsumerState.Exit).Select(s => s.line).ToList();
-        print(string.Join(", ", line));
+        if (consumerInstances.ContainsKey(consumerID))
+        {
+            return consumerInstances[consumerID];
+        }
+        return null;
+    }
 
-        consumerScript.OnCustomerExit();
-
-        // @charotiti9 TODO: 나중에 객체 비활성화로 바꿔야합니다.
-        Destroy(consumerScript.gameObject);
+    /// <summary>
+    /// 현재 활성화된 모든 Consumer ID 목록 가져오기
+    /// </summary>
+    /// <returns>Consumer ID 목록</returns>
+    public List<int> GetAllConsumerIDs()
+    {
+        return new List<int>(consumerInstances.Keys);
     }
 }

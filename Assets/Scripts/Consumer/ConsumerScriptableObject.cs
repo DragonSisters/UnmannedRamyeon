@@ -16,11 +16,6 @@ public enum ConsumerState
 public class ConsumerScriptableObject : ScriptableObject
 {
     /// <summary>
-    /// 붙어야하는 손님 스크립트 프리팹
-    /// </summary>
-    public GameObject consumerPrefab;
-
-    /// <summary>
     /// 외형
     /// </summary>
     public Sprite appearance;

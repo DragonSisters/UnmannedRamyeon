@@ -369,11 +369,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe7dbcf70993a6e439273d653d3190ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  consumerPrefabs:
+  - {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
   appearTime: 3
   maxNumber: 3
-  consumers:
-  - {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
-  testConsumer: {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
 --- !u!4 &862743925
 Transform:
   m_ObjectHideFlags: 0
