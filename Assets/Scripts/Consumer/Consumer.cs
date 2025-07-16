@@ -2,7 +2,6 @@
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.U2D;
 
 /// <summary>
 /// 모든 손님에게 상속되어야합니다.
