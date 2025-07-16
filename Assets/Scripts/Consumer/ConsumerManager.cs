@@ -15,6 +15,10 @@ public class ConsumerManager : Singleton<ConsumerManager>
     /// </summary>
     private Dictionary<int, Consumer> consumerInstances = new Dictionary<int, Consumer>();
 
+    private Queue<GameObject> pool = new Queue<GameObject>();
+    private List<GameObject> activeObjects = new List<GameObject>();
+
+
     // @charotiti9 TODO: 일단 간단하게 n초마다 등장하고 퇴장하게 만들어봅니다. 나중에 수정합니다.
     [Header("N초마다 등장합니다.")]
     [SerializeField] private float appearTime = 3f;
@@ -124,7 +128,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
         // 고유 ID 생성
         int consumerID = nextConsumerID++;
-        consumer.id = consumerID;
+        consumer.Id = consumerID;
 
         // 이름 설정 (ID 포함)
         instance.name = $"{prefab.name}_Instance_{consumerID}";
@@ -140,7 +144,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     /// ID로 Consumer 제거
     /// </summary>
     /// <param name="consumerID">제거할 Consumer의 ID</param>
-    public void DestroyConsumer(int consumerID)
+    public void DespawnConsumer(int consumerID)
     {
         if (!consumerInstances.ContainsKey(consumerID))
         {
