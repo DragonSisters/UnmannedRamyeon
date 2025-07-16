@@ -34,7 +34,7 @@ public class ConsumerScriptableObject : ScriptableObject
     /// <summary>
     /// 체류 시간
     /// </summary>
-    public float durationTime;
+    public float lifeTime;
 
     /// <summary>
     /// 찾아오는 최소 날짜(단계)

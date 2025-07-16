@@ -13,7 +13,7 @@ public class WarningConsumer : Consumer
     /// <summary>
     /// 기간안에 클릭되었는지 여부
     /// </summary>
-    private bool isClicked;
+    private bool isClicked { get { return Time.time - spawnedTime >= warningDuration; } }
 
     internal override IEnumerator UpdateCustomerBehavior()
     {
@@ -23,7 +23,7 @@ public class WarningConsumer : Consumer
         var duration = 0f;
         while (duration < warningDuration)
         {
-            duration += Time.deltaTime;
+            duration += Time.time;
 
             // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 비워둡니다.
             Debug.Log($"대기중: {state}");

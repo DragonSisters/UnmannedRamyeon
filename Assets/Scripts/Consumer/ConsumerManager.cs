@@ -7,75 +7,99 @@ using UnityEngine;
 /// </summary>
 public class ConsumerManager : Singleton<ConsumerManager>
 {
+    [Header("Consumer 프리팹들이 생성될 부모 오브젝트")]
+    [SerializeField] private Transform spawnParent;
     [Header("Consumer 프리팹들을 직접 드래그하세요")]
     [SerializeField] private List<GameObject> consumerPrefabs = new List<GameObject>();
-
-    /// <summary>
-    /// 생성된 컴포넌트들
-    /// </summary>
-    private Dictionary<int, Consumer> consumerInstances = new Dictionary<int, Consumer>();
-
-    private Queue<GameObject> pool = new Queue<GameObject>();
-    private List<GameObject> activeObjects = new List<GameObject>();
-
-
-    // @charotiti9 TODO: 일단 간단하게 n초마다 등장하고 퇴장하게 만들어봅니다. 나중에 수정합니다.
-    [Header("N초마다 등장합니다.")]
-    [SerializeField] private float appearTime = 3f;
-
+    [Header("Pool 사이즈")]
+    [SerializeField] private int poolSize = 10;
     [Header("최대 소환 갯수")]
-    [SerializeField] private int maxNumber = 3;
-    private int currentNumber;
+    [SerializeField] private int maxActiveCount = 3;
+    [Header("N~M초마다 등장합니다.")]
+    [SerializeField] private float minSpawnInterval = 1f;
+    [SerializeField] private float maxSpawnInterval = 3f;
 
-    // 고유 ID 생성을 위한 카운터
-    private int nextConsumerID = 0;
+    private Dictionary<GameObject, ObjectPool<Consumer>> pools;
 
-    /// <summary>
-    /// 업데이트 대신 사용할 코루틴
-    /// </summary>
-    private Coroutine updateCoroutine;
+    private Coroutine spawnCoroutine;
+    private Coroutine despawnCoroutine;
 
     private void Start()
     {
         // @charotiti9 TODO: 임시로 여기서 생성을 시작하지만,
         // 나중에는 게임 순환시스템에서 신호가 오면 시작해야할 것입니다.
+        InitializePools();
         StartSpawn();
+    }
+
+    public void InitializePools()
+    {
+        pools = new Dictionary<GameObject, ObjectPool<Consumer>>();
+
+        foreach (GameObject prefab in consumerPrefabs)
+        {
+            pools[prefab] = new ObjectPool<Consumer>(
+                prefab, poolSize, maxActiveCount, spawnParent);
+        }
     }
 
     public void StartSpawn()
     {
         if (IsAvailableSpawn())
         {
-            updateCoroutine = StartCoroutine(UpdateIEnumerator());
+            if (spawnCoroutine != null)
+            {
+                StopCoroutine(spawnCoroutine);
+            }
+            if (despawnCoroutine != null)
+            {
+                StopCoroutine(despawnCoroutine);
+            }
+
+            spawnCoroutine = StartCoroutine(SpawnRoutine());
+            despawnCoroutine = StartCoroutine(DespawnRoutine());
         }
+    }
+
+    private IEnumerator SpawnRoutine()
+    {
+        while (IsAvailableSpawn())
+        {
+            yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
+
+            SpawnRandomObject();
+        }
+    }
+
+    private IEnumerator DespawnRoutine()
+    {
+        while(IsAvailableSpawn())
+        {
+            CheckForDespawn();
+            yield return new WaitUntil(() => Time.frameCount % 30 == 0);
+        }
+    }
+
+    private Vector3 GetRandomSpawnPosition()
+    {
+        // @charotiti9 TODO: 스폰 위치 로직 구현
+        return new Vector3(
+            Random.Range(-10f, 10f),
+            Random.Range(-10f, 10f),
+            0f
+        );
     }
 
     public void StopSpawn()
     {
         // 모든 코루틴을 멈춥니다.
-        if (updateCoroutine != null)
+        if (spawnCoroutine != null)
         {
-            StopCoroutine(updateCoroutine);
+            StopCoroutine(spawnCoroutine);
         }
-    }
-
-    private IEnumerator UpdateIEnumerator()
-    {
-        ClearExistingInstances();
-        while (IsAvailableSpawn())
+        if (despawnCoroutine != null)
         {
-            if (currentNumber >= maxNumber)
-            {
-                Debug.Log($"현재 개체수: {currentNumber}");
-            }
-            else
-            {
-                // @charotiti9 TODO: 지금은 랜덤으로 생성합니다. 나중에 규칙을 추가적용합니다.
-                var randomPrefab = Random.Range(0, consumerPrefabs.Count);
-                CreateConsumerInstance(consumerPrefabs[randomPrefab]);
-            }
-
-            yield return new WaitForSeconds(appearTime);
+            StopCoroutine(despawnCoroutine);
         }
     }
 
@@ -95,94 +119,42 @@ public class ConsumerManager : Singleton<ConsumerManager>
         return true;
     }
 
-    /// <summary>
-    /// 기존 인스턴스들 정리
-    /// </summary>
-    private void ClearExistingInstances()
+    private void SpawnRandomObject()
     {
-        foreach (var kvp in consumerInstances)
+        if (consumerPrefabs.Count == 0)
         {
-            if (kvp.Value != null)
-            {
-                DestroyImmediate(kvp.Value.gameObject);
-            }
-        }
-        consumerInstances.Clear();
-    }
-
-    private int CreateConsumerInstance(GameObject prefab)
-    {
-        currentNumber++;
-
-        // 프리팹 인스턴스 생성
-        GameObject instance = Instantiate(prefab);
-
-        // Consumer 컴포넌트 확인
-        Consumer consumer = instance.GetComponent<Consumer>();
-        if (consumer == null)
-        {
-            Debug.LogError($"Prefab {prefab.name}프리팹이 consumer 컴포넌트를 가지고 있지 않습니다.");
-            DestroyImmediate(instance);
-            return -1; // 실패시 -1 반환
-        }
-
-        // 고유 ID 생성
-        int consumerID = nextConsumerID++;
-        consumer.Id = consumerID;
-
-        // 이름 설정 (ID 포함)
-        instance.name = $"{prefab.name}_Instance_{consumerID}";
-
-        // 딕셔너리에 추가
-        consumerInstances.Add(consumerID, consumer);
-
-        Debug.Log($"손님{consumerID}가 생성되었습니다.");
-        return consumerID; // 생성된 ID 반환
-    }
-
-
-    /// ID로 Consumer 제거
-    /// </summary>
-    /// <param name="consumerID">제거할 Consumer의 ID</param>
-    public void DespawnConsumer(int consumerID)
-    {
-        if (!consumerInstances.ContainsKey(consumerID))
-        {
-            Debug.LogWarning($"Consumer ID {consumerID}를 찾을 수 없습니다.");
             return;
         }
 
-        Consumer consumer = consumerInstances[consumerID];
-        if (consumer != null)
+        GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
+        if(!pools[prefab].IsAvailableToCreate())
         {
-            currentNumber--;
-            // 딕셔너리에서 제거
-            consumerInstances.Remove(consumerID);
-            DestroyImmediate(consumer.gameObject);
-            Debug.Log($"손님{consumerID}가 파괴되었습니다.");
+            return;
         }
+
+        Consumer obj = pools[prefab].GetOrCreate();
+        // @charotiti9 TODO: 위치 설정이 필요합니다. 지금은 랜덤으로 생성되도록 합니다.
+        obj.transform.position = GetRandomSpawnPosition();
+
+        obj.OnSpawn();
     }
 
-    /// <summary>
-    /// 특정 ID의 Consumer 가져오기
-    /// </summary>
-    /// <param name="consumerID">찾을 Consumer ID</param>
-    /// <returns>Consumer 컴포넌트 또는 null</returns>
-    public Consumer GetConsumer(int consumerID)
+    private void CheckForDespawn()
     {
-        if (consumerInstances.ContainsKey(consumerID))
+        foreach (var pool in pools.Values)
         {
-            return consumerInstances[consumerID];
-        }
-        return null;
-    }
+            var activeObjects = pool.GetActiveObjects();
 
-    /// <summary>
-    /// 현재 활성화된 모든 Consumer ID 목록 가져오기
-    /// </summary>
-    /// <returns>Consumer ID 목록</returns>
-    public List<int> GetAllConsumerIDs()
-    {
-        return new List<int>(consumerInstances.Keys);
+            // 역순으로 순회하여 안전한 제거
+            for (int i = activeObjects.Count - 1; i >= 0; i--)
+            {
+                var obj = activeObjects[i];
+                if (obj.ShouldDespawn())
+                {
+                    obj.OnDespawn();
+                    pool.Return(obj);
+                }
+            }
+        }
     }
 }
