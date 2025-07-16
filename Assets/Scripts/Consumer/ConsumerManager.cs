@@ -84,8 +84,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         // @charotiti9 TODO: 스폰 위치 로직 구현
         return new Vector3(
-            Random.Range(-10f, 10f),
-            Random.Range(-10f, 10f),
+            Random.Range(-4f, 4f),
+            Random.Range(-4f, 4f),
             0f
         );
     }
