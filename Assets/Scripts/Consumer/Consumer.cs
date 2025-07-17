@@ -16,7 +16,6 @@ public class Consumer : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
-        spawnedTime = Time.time;
         OnCustomerEnter();
         StartCoroutine(UpdateCustomerBehavior());
     }
@@ -37,11 +36,21 @@ public class Consumer : MonoBehaviour, IPoolable
         return Time.time - spawnedTime >= consumerScriptableObject.LifeTime;
     }
 
+    public void Initialize()
+    {
+        state = ConsumerState.Invalid;
+        spawnedTime = 0f;
+        ingredients.Clear();
+    }
+
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
     internal virtual void OnCustomerEnter()
     {
+        Initialize();
+
+        spawnedTime = Time.time;
         state = ConsumerState.Enter;
 
         var spriteRenderer = gameObject.GetOrAddComponent<SpriteRenderer>();
