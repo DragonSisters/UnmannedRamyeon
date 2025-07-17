@@ -13,32 +13,32 @@ public class WarningConsumer : Consumer
     /// <summary>
     /// 기간안에 클릭되었는지 여부
     /// </summary>
-    private bool isClicked { get { return Time.time - spawnedTime >= warningDuration; } }
+    private bool isWarningTiming { get { return Time.time - (spawnedTime + consumerScriptableObject.UsualTime) < warningDuration; } }
 
     internal override IEnumerator UpdateCustomerBehavior()
     {
         // 체류시간 계산을 위해 부모의 함수도 함께 돌립니다.
         StartCoroutine(base.UpdateCustomerBehavior());
 
-        var duration = 0f;
-        while (duration < warningDuration)
-        {
-            duration += Time.time;
+        // 일반 상태 지속
+        yield return new WaitForSeconds(consumerScriptableObject.UsualTime);
 
+        state = ConsumerState.Issue;
+        while (isWarningTiming)
+        {
             // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 비워둡니다.
-            Debug.Log($"대기중: {state}");
 
             yield return null;
         }
 
-        // 클릭되었는지 여부에 따라서 상태가 변경됩니다.
-        if (isClicked)
-        {
-            state = ConsumerState.Smile;
-        }
-        else
-        {
-            state = ConsumerState.Upset;
-        }
+        // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 아무 처리 없이 두겠습니다.
+        //if ()
+        //{
+        //    state = ConsumerState.Smile;
+        //}
+        //else
+        //{
+        //    state = ConsumerState.Upset;
+        //}
     }
 }

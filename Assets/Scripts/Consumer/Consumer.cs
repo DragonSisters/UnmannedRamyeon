@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -27,11 +26,12 @@ public class Consumer : MonoBehaviour, IPoolable
 
     public bool ShouldDespawn()
     {
-        if(consumerScriptableObject.lifeTime == 0)
+        // 체류시간이 다 되었다면 퇴장
+        if(consumerScriptableObject.LifeTime == 0)
         {
             throw new System.ArgumentException("손님의 체류시간이 0초일 수 없습니다. ScriptableObject를 확인해주세요.");
         }
-        return Time.time - spawnedTime >= consumerScriptableObject.lifeTime;
+        return Time.time - spawnedTime >= consumerScriptableObject.LifeTime;
     }
 
     /// <summary>
@@ -46,10 +46,10 @@ public class Consumer : MonoBehaviour, IPoolable
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
-        spriteRenderer.sprite = consumerScriptableObject.appearance;
+        spriteRenderer.sprite = consumerScriptableObject.Appearance;
 
         // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumerScriptableObject.dialogues.Where(w => w.state == ConsumerState.Enter).Select(s => s.line).ToList();
+        var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
     }
 
@@ -61,7 +61,7 @@ public class Consumer : MonoBehaviour, IPoolable
         state = ConsumerState.Exit;
 
         // @charotiti9 TODO: 퇴장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumerScriptableObject.dialogues.Where(w => w.state == ConsumerState.Exit).Select(s => s.line).ToList();
+        var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Exit);
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
     }
 
@@ -75,7 +75,7 @@ public class Consumer : MonoBehaviour, IPoolable
         while (!ShouldDespawn())
         {
             // @charotiti9 TODO: 각종 대사를 외쳐요. 나중에 손님 상태에 따라서 말하는 대사를 변경해야합니다.
-            var line = consumerScriptableObject.dialogues.Where(w => w.state == state).Select(s => s.line).ToList();
+            var line = consumerScriptableObject.GetDialogueFromState(state);
             print($"손님{gameObject.name}: {string.Join(", ", line)}");
 
             yield return null;
