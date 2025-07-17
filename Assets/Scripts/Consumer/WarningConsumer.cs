@@ -31,14 +31,14 @@ public class WarningConsumer : Consumer
             yield return null;
         }
 
-        // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 비워둡니다.
-        if (isWarningTiming)
-        {
-            state = ConsumerState.Smile;
-        }
-        else
-        {
-            state = ConsumerState.Upset;
-        }
+        // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 아무 처리 없이 두겠습니다.
+        //if ()
+        //{
+        //    state = ConsumerState.Smile;
+        //}
+        //else
+        //{
+        //    state = ConsumerState.Upset;
+        //}
     }
 }
