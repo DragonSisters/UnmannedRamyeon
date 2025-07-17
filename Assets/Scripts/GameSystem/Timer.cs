@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,11 +6,11 @@ public class Timer : MonoBehaviour
 {
     [SerializeField] private Image img_timerGuage;
 
-    // @anditsoon TODO: Å×½ºÆ® ¿ëÀ¸·Î 5ÃÊ·Î ÇØ ³õ¾ÒÀ¸³ª, ³ªÁß¿¡ ½ÇÁ¦ °ÔÀÓ ÇÃ·¹ÀÌ ¶§´Â 300 (300ÃÊ = 5ºĞ) ÀÌ µÇ¾î¾ß ÇÕ´Ï´Ù.
+    // @anditsoon TODO: í…ŒìŠ¤íŠ¸ ìš©ìœ¼ë¡œ 5ì´ˆë¡œ í•´ ë†“ì•˜ìœ¼ë‚˜, ë‚˜ì¤‘ì— ì‹¤ì œ ê²Œì„ í”Œë ˆì´ ë•ŒëŠ” 300 (300ì´ˆ = 5ë¶„) ì´ ë˜ì–´ì•¼ í•©ë‹ˆë‹¤.
     [SerializeField] private float time = 5;
     private float curTime;
 
-    // GameManager ¿¡ ÀÇÇØ inGameCanvas °¡ È°¼ºÈ­µÇ¸é ÀÚµ¿À¸·Î ½ÇÇàµË´Ï´Ù.
+    // GameManager ì— ì˜í•´ inGameCanvas ê°€ í™œì„±í™”ë˜ë©´ ìë™ìœ¼ë¡œ ì‹¤í–‰ë©ë‹ˆë‹¤.
     void Start()
     {
         StartCoroutine(nameof(StartTimer));

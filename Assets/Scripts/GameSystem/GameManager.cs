@@ -1,33 +1,33 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
 
 public class GameManager : Singleton<GameManager>
 {
-    [Header("½ÃÀÛ È­¸é °ü·Ã °ÔÀÓ ¿ÀºêÁ§Æ®")]
+    [Header("ì‹œì‘ í™”ë©´ ê´€ë ¨ ê²Œì„ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject btn_Start;
     [SerializeField] private GameObject img_Start;
 
-    [Header("ÀÎ°ÔÀÓ È­¸é °ü·Ã °ÔÀÓ ¿ÀºêÁ§Æ®")]
+    [Header("ì¸ê²Œì„ í™”ë©´ ê´€ë ¨ ê²Œì„ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] private GameObject inGameCanvas;
     [SerializeField] private GameObject consumerManager;
 
-    [Header("EndCanvas °ü·Ã °ÔÀÓ ¿ÀºêÁ§Æ®")]
+    [Header("EndCanvas ê´€ë ¨ ê²Œì„ ì˜¤ë¸Œì íŠ¸")]
     [SerializeField] private GameObject endCanvas;
     [SerializeField] private GameObject img_Success;
     [SerializeField] private GameObject img_Fail;
 
-    // Start ¹öÆ°¿¡ ¿¬°áÇÒ ÇÔ¼öÀÔ´Ï´Ù
+    // Start ë²„íŠ¼ì— ì—°ê²°í•  í•¨ìˆ˜ì…ë‹ˆë‹¤
     public void OnStartButtonClick()
     {
         StartCoroutine(nameof(UnableStartUI));
     }
 
-    // ½ÃÀÛ È­¸é¿¡¼­ ¹öÆ°ÀÌ »ç¶óÁö°í, °ÔÀÓÀÌ ½ÃÀÛµÈ´Ù´Â UI (img_Start) °¡ ³ª¿É´Ï´Ù.
-    // @anditsoon TODO: Áö±İÀº ÀÓ½Ã·Î 1ÃÊ °£ ³ªÅ¸³µ´Ù »ç¶óÁö°Ô ¸¸µé¾úÁö¸¸, ÃßÈÄ ³¯¾Æ¿À´Â È¿°ú¶ó´ø°¡ ±ô¹ÚÀÌ´Â È¿°ú µîÀ» Ãß°¡ÇÒ ¿¹Á¤ÀÔ´Ï´Ù.
-    // 1ÃÊ µÚ °ÔÀÓ ½ÃÀÛ UI °¡ »ç¶óÁö°í ÀÎ°ÔÀÓ UI °¡ ³ªÅ¸³³´Ï´Ù.
+    // ì‹œì‘ í™”ë©´ì—ì„œ ë²„íŠ¼ì´ ì‚¬ë¼ì§€ê³ , ê²Œì„ì´ ì‹œì‘ëœë‹¤ëŠ” UI (img_Start) ê°€ ë‚˜ì˜µë‹ˆë‹¤.
+    // @anditsoon TODO: ì§€ê¸ˆì€ ì„ì‹œë¡œ 1ì´ˆ ê°„ ë‚˜íƒ€ë‚¬ë‹¤ ì‚¬ë¼ì§€ê²Œ ë§Œë“¤ì—ˆì§€ë§Œ, ì¶”í›„ ë‚ ì•„ì˜¤ëŠ” íš¨ê³¼ë¼ë˜ê°€ ê¹œë°•ì´ëŠ” íš¨ê³¼ ë“±ì„ ì¶”ê°€í•  ì˜ˆì •ì…ë‹ˆë‹¤.
+    // 1ì´ˆ ë’¤ ê²Œì„ ì‹œì‘ UI ê°€ ì‚¬ë¼ì§€ê³  ì¸ê²Œì„ UI ê°€ ë‚˜íƒ€ë‚©ë‹ˆë‹¤.
     private IEnumerator UnableStartUI()
     {
         btn_Start.SetActive(false);
@@ -37,8 +37,8 @@ public class GameManager : Singleton<GameManager>
         StartGame();
     }
 
-    // inGameUI ¸¦ È°¼ºÈ­ÇÕ´Ï´Ù
-    // È°¼ºÈ­µÇ¸ç Äµ¹ö½º¿¡ ºÙ¾îÀÖ´Â TimerUI °¡ ÀÚµ¿À¸·Î ½ÇÇàµË´Ï´Ù
+    // inGameUI ë¥¼ í™œì„±í™”í•©ë‹ˆë‹¤
+    // í™œì„±í™”ë˜ë©° ìº”ë²„ìŠ¤ì— ë¶™ì–´ìˆëŠ” TimerUI ê°€ ìë™ìœ¼ë¡œ ì‹¤í–‰ë©ë‹ˆë‹¤
     private void StartGame()
     {
         inGameCanvas.SetActive(true);
@@ -47,10 +47,10 @@ public class GameManager : Singleton<GameManager>
 
     public void EndGame()
     {
-        // @anditsoon TODO: ÇöÀç´Â consumerManager ¸¸ ²ô°í ÀÖÀ¸³ª, ³ªÁß¿¡´Â ¾À¿¡ ³ª¿Â ¼Õ´Ôµé ¸ğµÎ¸¦ ¾ø¾Ö¾ß ÇÕ´Ï´Ù.
+        // @anditsoon TODO: í˜„ì¬ëŠ” consumerManager ë§Œ ë„ê³  ìˆìœ¼ë‚˜, ë‚˜ì¤‘ì—ëŠ” ì”¬ì— ë‚˜ì˜¨ ì†ë‹˜ë“¤ ëª¨ë‘ë¥¼ ì—†ì• ì•¼ í•©ë‹ˆë‹¤.
         consumerManager.SetActive(false);
         endCanvas.SetActive(true);
-        // @anditsoon TODO: ÇöÀç´Â ¼º°ø È­¸éÀÌ ÀÚµ¿À¸·Î ³ª¿À°Ô ÇØ ³õ¾ÒÀ¸³ª, ³ªÁß¿¡´Â °ÔÀÓ °á°ú¿¡ µû¶ó ¼º°ø/½ÇÆĞ È­¸éÀÌ ±¸ºĞµÇ¾î ³ª¿À°Ô ±¸ÇöÇØ¾ß ÇÕ´Ï´Ù.
+        // @anditsoon TODO: í˜„ì¬ëŠ” ì„±ê³µ í™”ë©´ì´ ìë™ìœ¼ë¡œ ë‚˜ì˜¤ê²Œ í•´ ë†“ì•˜ìœ¼ë‚˜, ë‚˜ì¤‘ì—ëŠ” ê²Œì„ ê²°ê³¼ì— ë”°ë¼ ì„±ê³µ/ì‹¤íŒ¨ í™”ë©´ì´ êµ¬ë¶„ë˜ì–´ ë‚˜ì˜¤ê²Œ êµ¬í˜„í•´ì•¼ í•©ë‹ˆë‹¤.
         img_Success.SetActive(true);
     }
 }
