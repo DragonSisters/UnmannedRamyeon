@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,10 +11,11 @@ public class Consumer : MonoBehaviour, IPoolable
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     internal ConsumerState state;
     internal float spawnedTime;
+    internal List<IngredientScriptableObject> ingredients = new();
+    private const int INGREDIENT_COUNT = 4;
 
     public void OnSpawn()
     {
-        spawnedTime = Time.time;
         OnCustomerEnter();
         StartCoroutine(UpdateCustomerBehavior());
     }
@@ -34,11 +36,21 @@ public class Consumer : MonoBehaviour, IPoolable
         return Time.time - spawnedTime >= consumerScriptableObject.LifeTime;
     }
 
+    public void Initialize()
+    {
+        state = ConsumerState.Invalid;
+        spawnedTime = 0f;
+        ingredients.Clear();
+    }
+
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
     internal virtual void OnCustomerEnter()
     {
+        Initialize();
+
+        spawnedTime = Time.time;
         state = ConsumerState.Enter;
 
         var spriteRenderer = gameObject.GetOrAddComponent<SpriteRenderer>();
@@ -51,6 +63,9 @@ public class Consumer : MonoBehaviour, IPoolable
         // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
         var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
+
+        // 재료를 고릅니다.
+        ingredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
     }
 
     /// <summary>
