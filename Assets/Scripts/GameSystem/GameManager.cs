@@ -12,7 +12,6 @@ public class GameManager : Singleton<GameManager>
 
     [Header("인게임 화면 관련 게임 오브젝트")]
     [SerializeField] private GameObject inGameCanvas;
-    [SerializeField] private GameObject consumerManager;
 
     [Header("EndCanvas 관련 게임 오브젝트")]
     [SerializeField] private GameObject endCanvas;
@@ -42,13 +41,13 @@ public class GameManager : Singleton<GameManager>
     private void StartGame()
     {
         inGameCanvas.SetActive(true);
-        consumerManager.SetActive(true);
+        ConsumerManager.Instance.StartSpawn();
     }
 
     public void EndGame()
     {
         // @anditsoon TODO: 현재는 consumerManager 만 끄고 있으나, 나중에는 씬에 나온 손님들 모두를 없애야 합니다.
-        consumerManager.SetActive(false);
+        ConsumerManager.Instance.StopSpawn();
         endCanvas.SetActive(true);
         // @anditsoon TODO: 현재는 성공 화면이 자동으로 나오게 해 놓았으나, 나중에는 게임 결과에 따라 성공/실패 화면이 구분되어 나오게 구현해야 합니다.
         img_Success.SetActive(true);

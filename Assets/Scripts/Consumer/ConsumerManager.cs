@@ -24,14 +24,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
 
-    private void Start()
-    {
-        // @charotiti9 TODO: 임시로 여기서 생성을 시작하지만,
-        // 나중에는 게임 순환시스템에서 신호가 오면 시작해야할 것입니다.
-        InitializePools();
-        StartSpawn();
-    }
-
     public void InitializePools()
     {
         pools = new Dictionary<GameObject, ObjectPool<Consumer>>();
@@ -45,6 +37,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void StartSpawn()
     {
+        InitializePools();
         if (IsAvailableSpawn())
         {
             if (spawnCoroutine != null)
@@ -92,6 +85,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void StopSpawn()
     {
+        // @charotiti9 TODO:  나중에는 씬에 나온 손님들 모두를 없애야 합니다.
         // 모든 코루틴을 멈춥니다.
         if (spawnCoroutine != null)
         {
