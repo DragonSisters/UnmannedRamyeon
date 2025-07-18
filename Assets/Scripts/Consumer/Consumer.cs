@@ -14,6 +14,25 @@ public class Consumer : MonoBehaviour, IPoolable
     internal List<IngredientScriptableObject> ingredients = new();
     private const int INGREDIENT_COUNT = 4;
 
+    [Header("재료 관련 변수")]
+    [SerializeField] private List<IngredientScriptableObject> targetedIngredients = new();
+    [SerializeField] private List<IngredientScriptableObject> ownedIngredients = new();
+    [SerializeField] private List<IngredientScriptableObject> untargetedIngredients = new();
+    [SerializeField] private int maxIngredientNumber;
+
+
+    // @anditsoon TODO: GetKeyDown 으로 테스트 완료, 이제 코루틴으로 순서대로 실행되게 해야 함.
+    //                  실행 시 if 문 안의 조건들을 같이 호출할 것.
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Alpha1))
+    //    {
+    //        if (targetedIngredients.Count <= 0 || ownedIngredients.Count >= maxIngredientNumber) return;
+
+    //        IngredientManager.Instance.PickIngredient(ownedIngredients, targetedIngredients, untargetedIngredients);
+    //    }
+    //}
+
     public void OnSpawn()
     {
         OnCustomerEnter();
@@ -64,12 +83,12 @@ public class Consumer : MonoBehaviour, IPoolable
         var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
 
-        // 재료를 고릅니다.
-        ingredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
+        // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
+        targetedIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
+        maxIngredientNumber = targetedIngredients.Count;
 
-        // 필요한 재료를 구합니다.
-        gameObject.GetComponent<IngredientPicker>().GetTargetIngredients();
-        gameObject.GetComponent<IngredientPicker>().GetRequiredIngredients();
+        // 필요하지 않은 재료의 리스트를 구합니다.
+        untargetedIngredients = IngredientManager.Instance.GetIngredientLists(IngredientManager.Instance.ingredientScriptableObject, targetedIngredients, untargetedIngredients);
     }
 
     /// <summary>

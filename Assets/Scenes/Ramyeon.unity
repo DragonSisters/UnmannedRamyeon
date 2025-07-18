@@ -236,7 +236,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   img_timerGuage: {fileID: 1364227510}
-  time: 5
+  time: 100
 --- !u!1 &484616438
 GameObject:
   m_ObjectHideFlags: 0
