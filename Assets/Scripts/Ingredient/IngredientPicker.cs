@@ -21,6 +21,8 @@ public class IngredientPicker : MonoBehaviour
     {
         targetIngredients = gameObject.GetComponent<Consumer>().ingredients;
 
+        Debug.Log($"타겟 재료들: {string.Join(", ", targetIngredients)}");
+
         return targetIngredients;
     }
 
@@ -34,6 +36,8 @@ public class IngredientPicker : MonoBehaviour
                 requiredIngredients.Add(ingredient);
             }
         }
+
+        Debug.Log($"손님이 필요한 재료들: {string.Join(", ", targetIngredients)}");
 
         return requiredIngredients;
     }

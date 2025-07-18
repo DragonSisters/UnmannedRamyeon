@@ -66,6 +66,10 @@ public class Consumer : MonoBehaviour, IPoolable
 
         // 재료를 고릅니다.
         ingredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
+
+        // 필요한 재료를 구합니다.
+        gameObject.GetComponent<IngredientPicker>().GetTargetIngredients();
+        gameObject.GetComponent<IngredientPicker>().GetRequiredIngredients();
     }
 
     /// <summary>
