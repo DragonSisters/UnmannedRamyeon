@@ -58,7 +58,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void StartSpawn()
     {
-        InitializePools();
         if (IsAvailableSpawn())
         {
             if (spawnCoroutine != null)
