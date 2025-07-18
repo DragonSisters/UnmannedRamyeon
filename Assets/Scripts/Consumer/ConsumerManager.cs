@@ -61,7 +61,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
         foreach (GameObject prefab in consumerPrefabs)
         {
             pools[prefab] = new ObjectPool<Consumer>(
-                prefab, poolSize, maxActiveCount, spawnParent);
+                prefab, poolSize, spawnParent);
         }
     }
 
@@ -105,6 +105,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
 
             SpawnRandomObject();
+            
         }
     }
 
@@ -151,7 +152,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
-        if(!pools[prefab].IsAvailableToCreate())
+        if(!pools[prefab].CanActiveMore(maxActiveCount))
         {
             return;
         }

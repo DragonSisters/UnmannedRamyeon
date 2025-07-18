@@ -8,7 +8,6 @@ public class ObjectPool<T> where T : MonoBehaviour
     private GameObject prefab;
     private Transform parent;
     private bool isInitialized = false;
-    private int maxActiveCount;
 
 
     public List<T> GetActiveObjects() => activeObjects;
@@ -16,12 +15,12 @@ public class ObjectPool<T> where T : MonoBehaviour
     public int PooledCount => pool.Count;
     public int TotalCount => ActiveCount + PooledCount;
 
-    public ObjectPool(GameObject prefab, int initialSize, int maxActiveCount, Transform parent = null)
+    public ObjectPool(GameObject prefab, int initialSize, Transform parent = null)
     {
-        Initialize(prefab, initialSize, maxActiveCount, parent);
+        Initialize(prefab, initialSize, parent);
     }
 
-    public void Initialize(GameObject prefab, int initialSize, int maxActiveCount, Transform parent = null)
+    public void Initialize(GameObject prefab, int initialSize, Transform parent = null)
     {
         if (isInitialized)
         {
@@ -31,7 +30,6 @@ public class ObjectPool<T> where T : MonoBehaviour
 
         this.prefab = prefab;
         this.parent = parent;
-        this.maxActiveCount = maxActiveCount;
 
         // 초기 풀 생성
         for (int i = 0; i < initialSize; i++)
@@ -41,7 +39,6 @@ public class ObjectPool<T> where T : MonoBehaviour
 
         isInitialized = true;
     }
-
 
     private T CreateNewObject()
     {
@@ -69,7 +66,7 @@ public class ObjectPool<T> where T : MonoBehaviour
         }
     }
 
-    public bool IsAvailableToCreate()
+    public bool CanActiveMore(int maxActiveCount)
     {
         return ActiveCount < maxActiveCount;
     }
