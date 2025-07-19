@@ -15,6 +15,7 @@ public class Consumer : MonoBehaviour, IPoolable
     private const int INGREDIENT_COUNT = 4;
 
     [Header("재료 관련 변수")]
+    [SerializeField] private List<IngredientScriptableObject> chosenIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> targetedIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> ownedIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> untargetedIngredients = new();
@@ -51,6 +52,10 @@ public class Consumer : MonoBehaviour, IPoolable
     {
         OnCustomerExit();
         StopCoroutine(UpdateCustomerBehavior());
+        IngredientManager.Instance.ResetIngredientLists(chosenIngredients);
+        IngredientManager.Instance.ResetIngredientLists(targetedIngredients);
+        IngredientManager.Instance.ResetIngredientLists(ownedIngredients);
+        IngredientManager.Instance.ResetIngredientLists(untargetedIngredients);
     }
 
     public bool ShouldDespawn()
@@ -92,8 +97,9 @@ public class Consumer : MonoBehaviour, IPoolable
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
 
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
-        targetedIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
-        maxIngredientNumber = targetedIngredients.Count;
+        chosenIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
+        targetedIngredients = new List<IngredientScriptableObject>(chosenIngredients);
+        maxIngredientNumber = chosenIngredients.Count;
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetedIngredients, untargetedIngredients);

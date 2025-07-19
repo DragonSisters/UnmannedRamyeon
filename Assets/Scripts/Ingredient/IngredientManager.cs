@@ -94,10 +94,8 @@ public class IngredientManager : Singleton<IngredientManager>
         return Random.Range(0, ingredientList.Count - 1);
     }
 
-    public void ResetIngredientLists(List<IngredientScriptableObject> targetIngredients, List<IngredientScriptableObject> ownedIngredients, List<IngredientScriptableObject> untargetedIngredients)
+    public void ResetIngredientLists(List<IngredientScriptableObject> ingredientsList)
     {
-        targetIngredients.Clear();
-        ownedIngredients.Clear();
-        untargetedIngredients.Clear();
+        ingredientsList.Clear();
     }
 }
