@@ -29,7 +29,15 @@ public class Consumer : MonoBehaviour, IPoolable
     //    {
     //        if (targetedIngredients.Count <= 0 || ownedIngredients.Count >= maxIngredientNumber) return;
 
-    //        IngredientManager.Instance.PickIngredient(ownedIngredients, targetedIngredients, untargetedIngredients);
+    //        IngredientManager.Instance.PickIngredient(targetedIngredients, untargetedIngredients, ownedIngredients);
+    //    }
+
+    //    if(Input.GetKeyDown(KeyCode.Alpha2))
+    //    {
+    //        IngredientManager.Instance.ResetIngredientLists(targetedIngredients, untargetedIngredients, ownedIngredients);
+    //        Debug.Log($"리스트 1 : {string.Join(", ", targetedIngredients)}");
+    //        Debug.Log($"리스트 2 : {string.Join(", ", untargetedIngredients)}");
+    //        Debug.Log($"리스트 3 : {string.Join(", ", ownedIngredients)}");
     //    }
     //}
 
@@ -88,7 +96,7 @@ public class Consumer : MonoBehaviour, IPoolable
         maxIngredientNumber = targetedIngredients.Count;
 
         // 필요하지 않은 재료의 리스트를 구합니다.
-        untargetedIngredients = IngredientManager.Instance.GetIngredientLists(IngredientManager.Instance.ingredientScriptableObject, targetedIngredients, untargetedIngredients);
+        untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetedIngredients, untargetedIngredients);
     }
 
     /// <summary>

@@ -43,8 +43,10 @@ public class IngredientManager : Singleton<IngredientManager>
         return selectedList;
     }
 
-    public List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> initialList, List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList)
+    public List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList, List<IngredientScriptableObject> initialList = null)
     {
+        if (initialList == null) initialList = ingredientScriptableObject;
+
         foreach (IngredientScriptableObject ingredient in initialList)
         {
             if (!standardList.Contains(ingredient))
@@ -56,7 +58,7 @@ public class IngredientManager : Singleton<IngredientManager>
         return separatedList;
     }
 
-    public void PickIngredient(List<IngredientScriptableObject> ownedIngredients, List<IngredientScriptableObject> targetedIngredients, List<IngredientScriptableObject> untargetedIngredients)
+    public void PickIngredient(List<IngredientScriptableObject> targetedIngredients, List<IngredientScriptableObject> untargetedIngredients, List<IngredientScriptableObject> ownedIngredients)
     {
         int probability = Random.Range(0, 10);
         int index = 0;
@@ -90,5 +92,12 @@ public class IngredientManager : Singleton<IngredientManager>
     private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {
         return Random.Range(0, ingredientList.Count - 1);
+    }
+
+    public void ResetIngredientLists(List<IngredientScriptableObject> targetIngredients, List<IngredientScriptableObject> ownedIngredients, List<IngredientScriptableObject> untargetedIngredients)
+    {
+        targetIngredients.Clear();
+        ownedIngredients.Clear();
+        untargetedIngredients.Clear();
     }
 }
