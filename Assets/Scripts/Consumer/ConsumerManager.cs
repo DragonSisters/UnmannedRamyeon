@@ -24,20 +24,49 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
 
+    #region 테스트용
+#if UNITY_EDITOR
+    void OnGUI()
+    {
+        if (GUI.Button(new Rect(10, 40, 100, 30), "Initialize"))
+        {
+            InitializePools();
+        }
+        if (GUI.Button(new Rect(10, 70, 100, 30), "StartSpawn"))
+        {
+            StartSpawn();
+        }
+        if (GUI.Button(new Rect(10, 100, 100, 30), "StopSpawn"))
+        {
+            StopSpawn();
+        }
+    }
+#endif
+    #endregion
+
+
     public void InitializePools()
     {
+        // 모든 오브젝트 정리
+        if(pools != null)
+        {
+            foreach (var pool in pools.Values)
+            {
+                pool.Clear();
+            }
+        }
+
         pools = new Dictionary<GameObject, ObjectPool<Consumer>>();
 
         foreach (GameObject prefab in consumerPrefabs)
         {
             pools[prefab] = new ObjectPool<Consumer>(
-                prefab, poolSize, maxActiveCount, spawnParent);
+                prefab, poolSize, spawnParent);
         }
     }
 
     public void StartSpawn()
     {
-        InitializePools();
         if (IsAvailableSpawn())
         {
             if (spawnCoroutine != null)
@@ -54,6 +83,21 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
     }
 
+    public void StopSpawn()
+    {
+        // 모든 손님을 없앱니다.
+        CheckAndDespawnCustomers(true);
+        // 모든 코루틴을 멈춥니다.
+        if (spawnCoroutine != null)
+        {
+            StopCoroutine(spawnCoroutine);
+        }
+        if (despawnCoroutine != null)
+        {
+            StopCoroutine(despawnCoroutine);
+        }
+    }
+
     private IEnumerator SpawnRoutine()
     {
         while (IsAvailableSpawn())
@@ -61,6 +105,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
 
             SpawnRandomObject();
+            
         }
     }
 
@@ -68,7 +113,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         while(IsAvailableSpawn())
         {
-            CheckForDespawn();
+            CheckAndDespawnCustomers();
             yield return new WaitUntil(() => Time.frameCount % 30 == 0);
         }
     }
@@ -81,20 +126,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
             Random.Range(-4f, 4f),
             0f
         );
-    }
-
-    public void StopSpawn()
-    {
-        // @charotiti9 TODO:  나중에는 씬에 나온 손님들 모두를 없애야 합니다.
-        // 모든 코루틴을 멈춥니다.
-        if (spawnCoroutine != null)
-        {
-            StopCoroutine(spawnCoroutine);
-        }
-        if (despawnCoroutine != null)
-        {
-            StopCoroutine(despawnCoroutine);
-        }
     }
 
     private bool IsAvailableSpawn()
@@ -121,7 +152,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
-        if(!pools[prefab].IsAvailableToCreate())
+        if(!pools[prefab].CanActiveMore(maxActiveCount))
         {
             return;
         }
@@ -133,7 +164,11 @@ public class ConsumerManager : Singleton<ConsumerManager>
         obj.OnSpawn();
     }
 
-    private void CheckForDespawn()
+    /// <summary>
+    /// 스폰되어있는 손님들을 디스폰합니다.
+    /// </summary>
+    /// <param name="skipCheck">조건없이 모두 디스폰할 것인지 선택합니다</param>
+    private void CheckAndDespawnCustomers(bool skipCheck = false)
     {
         foreach (var pool in pools.Values)
         {
@@ -143,7 +178,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             for (int i = activeObjects.Count - 1; i >= 0; i--)
             {
                 var obj = activeObjects[i];
-                if (obj.ShouldDespawn())
+                if (obj.ShouldDespawn() || skipCheck)
                 {
                     obj.OnDespawn();
                     pool.Return(obj);

@@ -22,6 +22,9 @@ public class GameManager : Singleton<GameManager>
     public void OnStartButtonClick()
     {
         StartCoroutine(nameof(UnableStartUI));
+        // @charotiti9 TODO: 손님 풀을 미리 만들어두어야합니다. 지금은 자리가 마땅치 않아서 게임 시작 버튼을 누르면 생성하도록 만들었습니다.
+        // 추후 더 괜찮은 자리가 나오면 자리를 옮겨줍시다.
+        ConsumerManager.Instance.InitializePools();
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
@@ -46,8 +49,9 @@ public class GameManager : Singleton<GameManager>
 
     public void EndGame()
     {
-        // @anditsoon TODO: 현재는 consumerManager 만 끄고 있으나, 나중에는 씬에 나온 손님들 모두를 없애야 합니다.
+        // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
         ConsumerManager.Instance.StopSpawn();
+
         endCanvas.SetActive(true);
         // @anditsoon TODO: 현재는 성공 화면이 자동으로 나오게 해 놓았으나, 나중에는 게임 결과에 따라 성공/실패 화면이 구분되어 나오게 구현해야 합니다.
         img_Success.SetActive(true);
