@@ -86,7 +86,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     public void StopSpawn()
     {
         // 모든 손님을 없앱니다.
-        CheckForDespawn(true);
+        CheckAndDespawnCustomers(true);
         // 모든 코루틴을 멈춥니다.
         if (spawnCoroutine != null)
         {
@@ -113,7 +113,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         while(IsAvailableSpawn())
         {
-            CheckForDespawn();
+            CheckAndDespawnCustomers();
             yield return new WaitUntil(() => Time.frameCount % 30 == 0);
         }
     }
@@ -167,8 +167,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
     /// <summary>
     /// 스폰되어있는 손님들을 디스폰합니다.
     /// </summary>
-    /// <param name="despawnAll">조건없이 모두 디스폰할 것인지 선택합니다</param>
-    private void CheckForDespawn(bool despawnAll = false)
+    /// <param name="skipCheck">조건없이 모두 디스폰할 것인지 선택합니다</param>
+    private void CheckAndDespawnCustomers(bool skipCheck = false)
     {
         foreach (var pool in pools.Values)
         {
@@ -178,7 +178,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             for (int i = activeObjects.Count - 1; i >= 0; i--)
             {
                 var obj = activeObjects[i];
-                if (obj.ShouldDespawn() || despawnAll)
+                if (obj.ShouldDespawn() || skipCheck)
                 {
                     obj.OnDespawn();
                     pool.Return(obj);
