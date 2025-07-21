@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bf5ce1d0f2c5446b45c9fc567fd3eb, type: 3}
   m_Name: Ingredient_GreenOnion
   m_EditorClassIdentifier: 
-  Name: "\uB300\uD30C"
-  Icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  name: "\uB300\uD30C"
+  icon: {fileID: 0}
+  price: 500
