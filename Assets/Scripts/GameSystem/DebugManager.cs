@@ -1,0 +1,59 @@
+﻿using System.Collections;
+using UnityEngine;
+
+public class DebugManager : MonoBehaviour
+{
+#if UNITY_EDITOR
+    private bool open = false;
+    private int currentY = 10;
+    private const int Y_SPACE_SIZE = 30;
+
+    private void OnGUI()
+    {
+        currentY = 10;
+        if (GUI.Button(new Rect(10, currentY, 150, 30), "Toggle DebugUI"))
+        {
+            open = !open;
+        }
+        if (!open)
+        {
+            return;
+        }
+
+        // 손님시스템
+        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer Initialize"))
+        {
+            ConsumerManager.Instance.InitializePools();
+        }
+        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StartSpawn"))
+        {
+            ConsumerManager.Instance.StartSpawn();
+        }
+        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StopSpawn"))
+        {
+            ConsumerManager.Instance.StopSpawn();
+        }
+
+        // 인풋시스템
+        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Input UpdateClick"))
+        {
+            StartCoroutine(UpdateClick());
+        }
+    }
+
+    private IEnumerator UpdateClick()
+    {
+        while (true)
+        {
+            SpriteClickHandler.Instance.UpdateHandler();
+            yield return null;
+        }
+    }
+
+    private int CountUpY()
+    {
+        currentY += Y_SPACE_SIZE;
+        return currentY;
+    }
+#endif
+}
