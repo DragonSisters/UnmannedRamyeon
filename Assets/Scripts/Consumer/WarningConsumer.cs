@@ -34,27 +34,27 @@ public class WarningConsumer : Consumer, IClickableSprite
         yield return new WaitForSeconds(consumerScriptableObject.UsualTime);
 
         state = ConsumerState.Issue;
-        while (isWarningTiming)
-        {
-            // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 비워둡니다.
-            isClickable = true;
 
-            yield return null;
-        }
+        // 이슈 상태 지속 = 클릭 가능한 상태
+        isClickable = true;
+        yield return new WaitUntil(() => !isWarningTiming|| IsIssueSolved); // 이슈가 해결되었다면 바로 넘어갑니다.
         isClickable = false;
-        // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 아무 처리 없이 두겠습니다.
-        //if ()
-        //{
-        //    state = ConsumerState.Smile;
-        //}
-        //else
-        //{
-        //    state = ConsumerState.Upset;
-        //}
+
+        // 클릭되었는지 여부를 통해 판단합니다
+        if (IsIssueSolved)
+        {
+            state = ConsumerState.Smile;
+        }
+        else
+        {
+            state = ConsumerState.Upset;
+        }
     }
     public void OnSpriteClicked()
     {
-        print($"클릭됨: {gameObject.name}");
+        Debug.Log($"Clicked: {gameObject.name}");
+
+        IsIssueSolved = true;
     }
 
 }

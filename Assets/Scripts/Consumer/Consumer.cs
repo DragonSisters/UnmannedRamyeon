@@ -10,6 +10,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     internal ConsumerState state;
+    internal bool IsIssueSolved;
     internal float spawnedTime;
     internal List<IngredientScriptableObject> ingredients = new();
     private const int INGREDIENT_COUNT = 4;
@@ -65,6 +66,12 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public bool ShouldDespawn()
     {
+        // @charotiti9 TODO: 나중에 체류시간이 삭제되고
+        //      1. 문제가 해결되었을 때
+        //      2. 해결할 시간이 지났을 때
+        //      3. 재료를 다 골랐을 때
+        // 퇴장하는 것으로 변경합니다
+        
         // 체류시간이 다 되었다면 퇴장
         if(consumerScriptableObject.LifeTime == 0)
         {
@@ -76,6 +83,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private void Initialize()
     {
         state = ConsumerState.Invalid;
+        IsIssueSolved = false;
         spawnedTime = 0f;
         ingredients.Clear();
     }
@@ -90,12 +98,21 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         spawnedTime = Time.time;
         state = ConsumerState.Enter;
 
+        // 스프라이트 렌더러 추가
         var spriteRenderer = gameObject.GetOrAddComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
         spriteRenderer.sprite = consumerScriptableObject.Appearance;
+        // 박스 콜라이더 추가
+        var boxCollider = gameObject.GetOrAddComponent<BoxCollider2D>();
+        if (boxCollider == null)
+        {
+            boxCollider = gameObject.AddComponent<BoxCollider2D>();
+        }
+        // 충돌되지 않도록 trigger on
+        boxCollider.isTrigger = true;
 
         // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
         var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
