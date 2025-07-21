@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 모든 손님에게 상속되어야합니다.
 /// </summary>
-public class Consumer : MonoBehaviour, IPoolable
+public abstract class Consumer : MonoBehaviour, IPoolable
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     internal ConsumerState state;
@@ -21,6 +21,10 @@ public class Consumer : MonoBehaviour, IPoolable
     [SerializeField] private List<IngredientScriptableObject> untargetedIngredients = new();
     [SerializeField] private int maxIngredientNumber;
 
+    // 추상 함수
+    internal abstract void OnEnter();
+    internal abstract void OnExit();
+    internal abstract IEnumerator OnUpdate();
 
     // @anditsoon TODO: GetKeyDown 으로 테스트 완료, 이제 코루틴으로 순서대로 실행되게 해야 함.
     //                  실행 시 if 문 안의 조건들을 같이 호출할 것.
@@ -52,6 +56,7 @@ public class Consumer : MonoBehaviour, IPoolable
     {
         OnCustomerExit();
         StopCoroutine(UpdateCustomerBehavior());
+        StopCoroutine(OnUpdate());
         IngredientManager.Instance.ResetIngredientLists(chosenIngredients);
         IngredientManager.Instance.ResetIngredientLists(targetedIngredients);
         IngredientManager.Instance.ResetIngredientLists(ownedIngredients);
@@ -68,7 +73,7 @@ public class Consumer : MonoBehaviour, IPoolable
         return Time.time - spawnedTime >= consumerScriptableObject.LifeTime;
     }
 
-    public void Initialize()
+    private void Initialize()
     {
         state = ConsumerState.Invalid;
         spawnedTime = 0f;
@@ -78,7 +83,7 @@ public class Consumer : MonoBehaviour, IPoolable
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
-    internal virtual void OnCustomerEnter()
+    private void OnCustomerEnter()
     {
         Initialize();
 
@@ -103,26 +108,31 @@ public class Consumer : MonoBehaviour, IPoolable
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetedIngredients, untargetedIngredients);
+
+        OnEnter();
     }
 
     /// <summary>
     /// 손님이 떠날 때 해야하는 행동
     /// </summary>
-    internal virtual void OnCustomerExit()
+    private void OnCustomerExit()
     {
         state = ConsumerState.Exit;
 
         // @charotiti9 TODO: 퇴장대사를 외친다. 지금은 print로 간단히 처리
         var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Exit);
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
+
+        OnExit();
     }
 
     /// <summary>
     /// 손님이 머무는 동안 해야하는 행동(update)
     /// </summary>
-    internal virtual IEnumerator UpdateCustomerBehavior()
+    private IEnumerator UpdateCustomerBehavior()
     {
         state = ConsumerState.Usual;
+        StartCoroutine(OnUpdate());
 
         while (!ShouldDespawn())
         {

@@ -15,11 +15,21 @@ public class WarningConsumer : Consumer
     /// </summary>
     private bool isWarningTiming { get { return Time.time - (spawnedTime + consumerScriptableObject.UsualTime) < warningDuration; } }
 
-    internal override IEnumerator UpdateCustomerBehavior()
-    {
-        // 체류시간 계산을 위해 부모의 함수도 함께 돌립니다.
-        StartCoroutine(base.UpdateCustomerBehavior());
+    /// <summary>
+    /// 클릭할 수 있는 상태인지 여부
+    /// </summary>
+    public bool IsClickable => isClickable;
+    private bool isClickable;
 
+    internal override void OnEnter()
+    {
+        // 초기화
+        isClickable = false;
+    }
+    internal override void OnExit() { }
+
+    internal override IEnumerator OnUpdate()
+    {
         // 일반 상태 지속
         yield return new WaitForSeconds(consumerScriptableObject.UsualTime);
 
@@ -27,10 +37,11 @@ public class WarningConsumer : Consumer
         while (isWarningTiming)
         {
             // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 비워둡니다.
+            isClickable = true;
 
             yield return null;
         }
-
+        isClickable = false;
         // @charotiti9 TODO: 클릭되었는지 여부를 검사해야합니다. 지금은 그냥 아무 처리 없이 두겠습니다.
         //if ()
         //{
