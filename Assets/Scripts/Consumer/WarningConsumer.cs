@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
 /// </summary>
-public class WarningConsumer : Consumer
+public class WarningConsumer : Consumer, IClickableSprite
 {
     /// <summary>
     /// 주의를 주어야하는 기간. 짧을수록 어렵다.
@@ -52,4 +52,9 @@ public class WarningConsumer : Consumer
         //    state = ConsumerState.Upset;
         //}
     }
+    public void OnSpriteClicked()
+    {
+        print($"클릭됨: {gameObject.name}");
+    }
+
 }
