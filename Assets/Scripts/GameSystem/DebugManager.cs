@@ -11,7 +11,7 @@ public class DebugManager : MonoBehaviour
     private void OnGUI()
     {
         currentY = 10;
-        if (GUI.Button(new Rect(10, currentY, 150, 30), "Toggle DebugUI"))
+        if (GUI.Button(new Rect(10, currentY, 100, 30), open ? "🔽 Close" : "▶️ Open"))
         {
             open = !open;
         }
