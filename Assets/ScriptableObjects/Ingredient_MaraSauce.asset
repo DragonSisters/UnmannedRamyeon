@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bf5ce1d0f2c5446b45c9fc567fd3eb, type: 3}
   m_Name: Ingredient_MaraSauce
   m_EditorClassIdentifier: 
-  Name: "\uB9C8\uB77C\uC18C\uC2A4"
-  Icon: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  name: "\uB9C8\uB77C\uC18C\uC2A4"
+  icon: {fileID: 0}
+  price: 800

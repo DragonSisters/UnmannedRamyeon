@@ -15,6 +15,33 @@ public class IngredientManager : Singleton<IngredientManager>
         {
             throw new System.Exception($"재료매니저에 등록된 재료가 하나도 없습니다. {this.name}를 확인해주세요.");
         }
+
+        foreach (var item in ingredientScriptableObject)
+        {
+            var isValidate = IsValidate(item);
+            if(!isValidate)
+            {
+                throw new System.Exception($"재료({item.Name})에 문제가 있습니다 scriptable object를 확인해주세요.");
+            }
+        }
+        
+    }
+
+    private bool IsValidate(IngredientScriptableObject ingredient)
+    {
+        if(string.IsNullOrEmpty(ingredient.Name))
+        {
+            return false;
+        }
+        if(ingredient.Icon == null)
+        {
+            return false;
+        }
+        if(ingredient.Price == 0)
+        {
+            return false;
+        }
+        return true;
     }
 
     public List<IngredientScriptableObject> GetRandomIngredients(int count)

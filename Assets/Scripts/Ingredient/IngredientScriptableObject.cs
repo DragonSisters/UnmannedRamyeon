@@ -3,6 +3,11 @@
 [CreateAssetMenu(fileName = "Ingredient", menuName = "Scriptable Objects/Ingredient")]
 public class IngredientScriptableObject : ScriptableObject
 {
-    [SerializeField] private string Name;
-    [SerializeField] private Sprite Icon;
+    [SerializeField] private string name;
+    [SerializeField] private Sprite icon;
+    [SerializeField] private int price;
+
+    public string Name => name;
+    public Sprite Icon => icon;
+    public int Price => price;
 }
