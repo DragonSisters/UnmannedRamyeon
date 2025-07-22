@@ -89,7 +89,6 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         int probability = Random.Range(0, 10);
         int index = 0;
-        IngredientScriptableObject ingredient = null;
 
         if (probability < correctIngredientProbability)
         {

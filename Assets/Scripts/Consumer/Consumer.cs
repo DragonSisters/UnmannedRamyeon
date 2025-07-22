@@ -9,6 +9,7 @@ using UnityEngine;
 public abstract class Consumer : MonoBehaviour, IPoolable
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
+    [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerState state;
     internal bool IsIssueSolved;
     internal float spawnedTime;
@@ -122,6 +123,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         chosenIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
         targetedIngredients = new List<IngredientScriptableObject>(chosenIngredients);
         maxIngredientNumber = chosenIngredients.Count;
+
+        // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
+        consumerUI.UpdateIngredientImages(chosenIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetedIngredients, untargetedIngredients);

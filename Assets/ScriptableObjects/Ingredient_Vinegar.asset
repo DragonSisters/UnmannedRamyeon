@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ingredient_Vinegar
   m_EditorClassIdentifier: 
   name: "\uC2DD\uCD08"
-  icon: {fileID: 0}
+  icon: {fileID: 6269476980466069211, guid: 9e2a9713bef3d8e4aa73d864a39511f7, type: 3}
   price: 500

@@ -1121,6 +1121,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c64a017040e7f904db63a7f265add602, type: 2}
   - {fileID: 11400000, guid: 10e7096c5bb9493468c784907e73c43e, type: 2}
   - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
+  correctIngredientProbability: 9
 --- !u!4 &1428224508
 Transform:
   m_ObjectHideFlags: 0
@@ -1737,7 +1738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.4716981, g: 0.4716981, b: 0.4716981, a: 1}
+  m_Color: {r: 0.69182384, g: 0.69182384, b: 0.69182384, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1768,9 +1769,9 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 619394802}
+  - {fileID: 1822800780}
   - {fileID: 1094846348}
   - {fileID: 862743925}
   - {fileID: 1502370961}
   - {fileID: 1855267296}
-  - {fileID: 1822800780}
   - {fileID: 1428224508}

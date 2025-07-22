@@ -47,6 +47,7 @@ public class GameManager : Singleton<GameManager>
     private void StartGame()
     {
         isGameStarted = true;
+        startCanvas.SetActive(false);
         inGameCanvas.SetActive(true);
         StartCoroutine(UpdateGame());
 

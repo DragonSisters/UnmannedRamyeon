@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ingredient_Dumpling
   m_EditorClassIdentifier: 
   name: "\uB9CC\uB450"
-  icon: {fileID: 0}
+  icon: {fileID: -4079781652125799873, guid: 188c35b6be8a4904492ab171a6676116, type: 3}
   price: 1500

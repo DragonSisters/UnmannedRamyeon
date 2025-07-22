@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ingredient_Egg
   m_EditorClassIdentifier: 
   name: "\uACC4\uB780"
-  icon: {fileID: 0}
+  icon: {fileID: -4453793554027076156, guid: 0120b0bb911d1984bb042e1647365550, type: 3}
   price: 1000

@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ingredient_Ssamjang
   m_EditorClassIdentifier: 
   name: "\uC308\uC7A5"
-  icon: {fileID: 0}
+  icon: {fileID: -5499655750600488587, guid: 6d617f84ca4596545b19726eee12da9f, type: 3}
   price: 500
