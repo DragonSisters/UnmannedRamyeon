@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4616820302320733929}
   - component: {fileID: 3315410734380157484}
+  - component: {fileID: 5369129573054951317}
   - component: {fileID: 1264228265461581360}
   m_Layer: 0
   m_Name: WarningConsumer
@@ -47,13 +48,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   consumerScriptableObject: {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
+  ingredientHandler: {fileID: 5369129573054951317}
   consumerUI: {fileID: 1264228265461581360}
-  chosenIngredients: []
-  targetedIngredients: []
+  warningDuration: 2
+--- !u!114 &5369129573054951317
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7357440723094547320}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec071e00cca309b4aa0bd220901d36c1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  correctIngredientProbability: 9
+  IngredientPickUpTime: 3
+  targetIngredients: []
   ownedIngredients: []
   untargetedIngredients: []
   maxIngredientNumber: 0
-  warningDuration: 2
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -66,6 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be075c60df3403e408b8af5d96d30751, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  consumer: {fileID: 3315410734380157484}
   ingredientImages:
   - {fileID: 7177649550471202808}
   - {fileID: 4714268260903511614}
