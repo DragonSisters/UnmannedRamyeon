@@ -8,7 +8,8 @@ public class ConsumerUI : MonoBehaviour
 {
     [SerializeField] private Image[] ingredientImages;
     [SerializeField] private Image[] correctOrWrongImages;
-    [SerializeField] private Sprite[] correctOrWrongSprites;
+    [SerializeField] private Sprite correctSprite;
+    [SerializeField] private Sprite wrongSprite;
 
     public void UpdateIngredientImages(List<IngredientScriptableObject> ingredients)
     {

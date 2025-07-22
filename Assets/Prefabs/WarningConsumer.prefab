@@ -71,14 +71,13 @@ MonoBehaviour:
   - {fileID: 4714268260903511614}
   - {fileID: 5326805627570156960}
   - {fileID: 918265168683616666}
-  CorrectOrWrongImages:
+  correctOrWrongImages:
   - {fileID: 1465262773573074016}
   - {fileID: 5506468716946603656}
   - {fileID: 8470616316550231890}
   - {fileID: 1708015316335417189}
-  CorrectOrWrongSprites:
-  - {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
-  - {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
+  correctSprite: {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
+  wrongSprite: {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
 --- !u!1001 &2917918133184767696
 PrefabInstance:
   m_ObjectHideFlags: 0
