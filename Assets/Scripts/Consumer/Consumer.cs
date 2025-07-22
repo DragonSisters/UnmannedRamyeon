@@ -21,6 +21,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     [SerializeField] private List<IngredientScriptableObject> targetedIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> ownedIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> untargetedIngredients = new();
+    [SerializeField] private List<int> orders = new List<int> { 1, 2, 3, 4 };
     [SerializeField] private int maxIngredientNumber;
 
     // 추상 함수
@@ -36,9 +37,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         {
             if (targetedIngredients.Count <= 0 || ownedIngredients.Count >= maxIngredientNumber) return;
 
-            IngredientScriptableObject ingredient = IngredientManager.Instance.PickIngredientAndResortLists(targetedIngredients, untargetedIngredients, ownedIngredients);
-
-            
+            IngredientScriptableObject ingredient = IngredientManager.Instance.PickIngredientAndResortLists(orders, targetedIngredients, untargetedIngredients, ownedIngredients);
         }
     }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Threading;
@@ -10,6 +11,7 @@ public class IngredientManager : Singleton<IngredientManager>
 {
     [SerializeField] internal List<IngredientScriptableObject> ingredientScriptableObject = new();
     [SerializeField] private float correctIngredientProbability = 9f;
+    [SerializeField] private float IngredientPickUpTime = 3f;
 
     void Start()
     {
@@ -26,7 +28,6 @@ public class IngredientManager : Singleton<IngredientManager>
                 throw new System.Exception($"재료({item.Name})에 문제가 있습니다 scriptable object를 확인해주세요.");
             }
         }
-        
     }
 
     private bool IsValidate(IngredientScriptableObject ingredient)
@@ -93,49 +94,52 @@ public class IngredientManager : Singleton<IngredientManager>
         return separatedList;
     }
 
-    public IngredientScriptableObject PickIngredientAndResortLists(List<int> orders, List<IngredientScriptableObject> targetedIngredients, List<IngredientScriptableObject> untargetedIngredients, List<IngredientScriptableObject> ownedIngredients)
+    public IEnumerator ChooseIngredientRoutine(List<IngredientScriptableObject> targetIngredients, List<IngredientScriptableObject> untargetIngredients, List<IngredientScriptableObject> ownedIngredients, List<int> orders)
     {
+        Debug.Log("코루틴 시작");
+
         IngredientScriptableObject ingredient = null;
 
         // 재료를 가져올 순서를 섞습니다.
         orders = ShufflePartOfList(orders, orders.Count);
 
-        // 옳은 재료 혹은 틀린 재료를 가져옵니다.
-        int probability = Random.Range(0, 10);
-        int index = 0;
-
-        if (probability < correctIngredientProbability)
+        // 순서대로 가져옵니다.
+        for(int i = 0; i < orders.Count; i++)
         {
-            index = GetRandomIndex(targetedIngredients);
-            ingredient = targetedIngredients[index];
-            UpdateIngredientsLists(targetedIngredients, ingredient, ownedIngredients);
-            Debug.Log($"필요한 재료들 업데이트: {string.Join(", ", targetedIngredients)}");
+            int order = orders[i];
+
+            // 확률에 따라 가져오는 재료가 다릅니다.
+            int probability = Random.Range(0, 10);
+
+            if (probability < correctIngredientProbability)
+            {
+                ingredient = targetIngredients[i];
+                // @anditsoon TODO: UI 업데이트
+                Debug.Log($"틀린 재료! : {ingredient.Name}");
+            }
+            else
+            {
+                int randomIndex = GetRandomIndex(untargetIngredients);
+                ingredient = untargetIngredients[randomIndex];
+                Debug.Log($"올바른 재료! : {ingredient.Name}");
+                // @anditsoon TODO: UI 업데이트
+            }
+
+            // 가지고 있는 재료들 리스트에 새로 가져온 재료를 추가합니다.
+            ownedIngredients.Add(ingredient);
+            Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
+
+            // @anditsoon TODO: 추후 알맞게 시간 변경할 것
+            yield return new WaitForSeconds(IngredientPickUpTime);
         }
-        else
-        {
-            index = GetRandomIndex(untargetedIngredients);
-            ingredient = untargetedIngredients[index];
-            UpdateIngredientsLists(untargetedIngredients, ingredient, ownedIngredients);
-            Debug.Log($"필요 없는 재료들 업데이트: {string.Join(", ", untargetedIngredients)}");
-        }
-
-        return ingredient;
-    }
-
-    public void UpdateIngredientsLists(List<IngredientScriptableObject> ingredientList, IngredientScriptableObject ingredient, List<IngredientScriptableObject> ownedIngredients)
-    {
-        Debug.Log($"선택된 재료: {ingredient}");
-
-        ingredientList.Remove(ingredient);
-
-        ownedIngredients.Add(ingredient);
-        Debug.Log($"가지고 있는 재료들 업데이트: {string.Join(", ", ownedIngredients)}");
     }
 
     private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {
         return Random.Range(0, ingredientList.Count - 1);
     }
+
+
 
     public void ResetIngredientLists(List<IngredientScriptableObject> ingredientsList)
     {
