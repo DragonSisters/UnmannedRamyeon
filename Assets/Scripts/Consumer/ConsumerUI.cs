@@ -7,8 +7,8 @@ using System.Collections.Generic;
 public class ConsumerUI : MonoBehaviour
 {
     [SerializeField] private Image[] ingredientImages;
-    [SerializeField] private Image[] CorrectOrWrongImages;
-    [SerializeField] private Sprite[] CorrectOrWrongSprites;
+    [SerializeField] private Image[] correctOrWrongImages;
+    [SerializeField] private Sprite[] correctOrWrongSprites;
 
     public void UpdateIngredientImages(List<IngredientScriptableObject> ingredients)
     {
