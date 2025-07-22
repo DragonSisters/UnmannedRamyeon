@@ -48,6 +48,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
         ingredientHandler.ResetAllIngredientLists();
+        consumerUI.DeactivateAllFeedbackUIs();
     }
 
     public bool ShouldDespawn()

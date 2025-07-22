@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec071e00cca309b4aa0bd220901d36c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  consumerUI: {fileID: 1264228265461581360}
   correctIngredientProbability: 9
   IngredientPickUpTime: 3
   targetIngredients: []
