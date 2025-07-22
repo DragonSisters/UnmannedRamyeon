@@ -18,6 +18,9 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject img_Success;
     [SerializeField] private GameObject img_Fail;
 
+    public bool IsGameStarted => isGameStarted;
+    private bool isGameStarted;
+
     // Start 버튼에 연결할 함수입니다
     public void OnStartButtonClick()
     {
@@ -43,12 +46,25 @@ public class GameManager : Singleton<GameManager>
     // 활성화되며 캔버스에 붙어있는 TimerUI 가 자동으로 실행됩니다
     private void StartGame()
     {
+        isGameStarted = true;
         inGameCanvas.SetActive(true);
+        StartCoroutine(UpdateGame());
+
         ConsumerManager.Instance.StartSpawn();
+    }
+
+    private IEnumerator UpdateGame()
+    {
+        while (isGameStarted)
+        {
+            SpriteClickHandler.Instance.UpdateHandler();
+            yield return null;
+        }
     }
 
     public void EndGame()
     {
+        isGameStarted = false;
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
         ConsumerManager.Instance.StopSpawn();
 

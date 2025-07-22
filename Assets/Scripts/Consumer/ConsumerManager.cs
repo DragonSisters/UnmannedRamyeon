@@ -24,27 +24,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
 
-    #region 테스트용
-#if UNITY_EDITOR
-    void OnGUI()
-    {
-        if (GUI.Button(new Rect(10, 40, 100, 30), "Initialize"))
-        {
-            InitializePools();
-        }
-        if (GUI.Button(new Rect(10, 70, 100, 30), "StartSpawn"))
-        {
-            StartSpawn();
-        }
-        if (GUI.Button(new Rect(10, 100, 100, 30), "StopSpawn"))
-        {
-            StopSpawn();
-        }
-    }
-#endif
-    #endregion
-
-
     public void InitializePools()
     {
         // 모든 오브젝트 정리
