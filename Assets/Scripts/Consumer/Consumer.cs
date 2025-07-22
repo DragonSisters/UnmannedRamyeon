@@ -17,8 +17,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal List<IngredientScriptableObject> ingredients = new();
     private const int INGREDIENT_COUNT = 4;
 
-    
-
     // 추상 함수
     internal abstract void OnEnter();
     internal abstract void OnExit();
@@ -30,9 +28,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (ingredientHandler.targetIngredients.Count <= 0 || ingredientHandler.ownedIngredients.Count >= ingredientHandler.maxIngredientNumber) return;
-
-            StartCoroutine(ingredientHandler.ChooseIngredientRoutine());
+            
         }
     }
 
@@ -66,7 +62,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         }
         return Time.time - spawnedTime >= consumerScriptableObject.LifeTime;
     }
-
     private void Initialize()
     {
         state = ConsumerState.Invalid;
@@ -114,6 +109,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         ingredientHandler.untargetedIngredients = ingredientHandler.GetIngredientLists(ingredientHandler.targetIngredients, ingredientHandler.untargetedIngredients);
+
+        // 재료를 고르기 시작합니다.
+        if (!(ingredientHandler.targetIngredients.Count <= 0 || ingredientHandler.ownedIngredients.Count >= ingredientHandler.maxIngredientNumber)) 
+            StartCoroutine(ingredientHandler.ChooseIngredientRoutine());
 
         OnEnter();
     }
