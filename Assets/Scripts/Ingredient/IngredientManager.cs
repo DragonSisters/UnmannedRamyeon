@@ -96,8 +96,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public IEnumerator ChooseIngredientRoutine(List<IngredientScriptableObject> targetIngredients, List<IngredientScriptableObject> untargetIngredients, List<IngredientScriptableObject> ownedIngredients, List<int> orders)
     {
-        Debug.Log("코루틴 시작");
-
         IngredientScriptableObject ingredient = null;
 
         // 재료를 가져올 순서를 섞습니다.
@@ -115,13 +113,13 @@ public class IngredientManager : Singleton<IngredientManager>
             {
                 ingredient = targetIngredients[i];
                 // @anditsoon TODO: UI 업데이트
-                Debug.Log($"틀린 재료! : {ingredient.Name}");
+                Debug.Log($"올바른 재료! : {ingredient.Name}");
             }
             else
             {
                 int randomIndex = GetRandomIndex(untargetIngredients);
                 ingredient = untargetIngredients[randomIndex];
-                Debug.Log($"올바른 재료! : {ingredient.Name}");
+                Debug.Log($"틀린 재료! : {ingredient.Name}");
                 // @anditsoon TODO: UI 업데이트
             }
 
