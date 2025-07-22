@@ -160,7 +160,8 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      Img_Mayonnaise_0: -6690436349200553321
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

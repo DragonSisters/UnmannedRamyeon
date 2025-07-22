@@ -14,7 +14,7 @@ public class ConsumerUI : MonoBehaviour
     {
         for(int ingredientNum = 0; ingredientNum < ingredients.Count; ingredientNum++)
         {
-            ingredientImages[ingredientNum].sprite = ingredients[ingredientNum].IconSprite;
+            ingredientImages[ingredientNum].sprite = ingredients[ingredientNum].Icon;
         }
     }
 }

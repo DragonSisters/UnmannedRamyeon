@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Ingredient_ChocoSnack
   m_EditorClassIdentifier: 
   name: "\uCD08\uCF54\uACFC\uC790"
-  icon: {fileID: 0}
+  icon: {fileID: -1134177990000511113, guid: 387aee3f8e95d84489c57397812f0fdc, type: 3}
   price: 300
