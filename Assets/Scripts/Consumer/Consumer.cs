@@ -11,6 +11,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     [SerializeField] internal ConsumerIngredientHandler ingredientHandler;
     [SerializeField] internal ConsumerUI consumerUI;
+    internal ConsumerMood moodScript;
+
     internal ConsumerState state;
     internal bool IsIssueSolved;
     internal float spawnedTime;
@@ -58,17 +60,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         IsIssueSolved = false;
         spawnedTime = 0f;
         ingredients.Clear();
-    }
-
-    /// <summary>
-    /// 손님이 들어올 때 해야하는 행동
-    /// </summary>
-    private void OnCustomerEnter()
-    {
-        Initialize();
-
-        spawnedTime = Time.time;
-        state = ConsumerState.Enter;
 
         // 스프라이트 렌더러 추가
         var spriteRenderer = gameObject.GetOrAddComponent<SpriteRenderer>();
@@ -85,6 +76,24 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         }
         // 충돌되지 않도록 trigger on
         boxCollider.isTrigger = true;
+        // 손님 기분 스크립트 추가
+        moodScript = gameObject.GetOrAddComponent<ConsumerMood>();
+        if (moodScript == null)
+        {
+            moodScript = gameObject.AddComponent<ConsumerMood>();
+        }
+        moodScript.Initialize();
+    }
+
+    /// <summary>
+    /// 손님이 들어올 때 해야하는 행동
+    /// </summary>
+    private void OnCustomerEnter()
+    {
+        Initialize();
+
+        spawnedTime = Time.time;
+        state = ConsumerState.Enter;
 
         // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
         var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
