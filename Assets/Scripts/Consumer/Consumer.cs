@@ -17,8 +17,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private const int INGREDIENT_COUNT = 4;
 
     [Header("재료 관련 변수")]
-    [SerializeField] private List<IngredientScriptableObject> chosenIngredients = new();
-    [SerializeField] private List<IngredientScriptableObject> targetedIngredients = new();
+    [SerializeField] private List<IngredientScriptableObject> targetIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> ownedIngredients = new();
     [SerializeField] private List<IngredientScriptableObject> untargetedIngredients = new();
     [SerializeField] private List<int> orders = new List<int> { 1, 2, 3, 4 };
@@ -35,9 +34,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (targetedIngredients.Count <= 0 || ownedIngredients.Count >= maxIngredientNumber) return;
+            if (targetIngredients.Count <= 0 || ownedIngredients.Count >= maxIngredientNumber) return;
 
-            IngredientScriptableObject ingredient = IngredientManager.Instance.PickIngredientAndResortLists(orders, targetedIngredients, untargetedIngredients, ownedIngredients);
+            StartCoroutine(IngredientManager.Instance.ChooseIngredientRoutine(targetIngredients, untargetedIngredients, ownedIngredients, orders));
         }
     }
 
@@ -52,8 +51,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         OnCustomerExit();
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
-        IngredientManager.Instance.ResetIngredientLists(chosenIngredients);
-        IngredientManager.Instance.ResetIngredientLists(targetedIngredients);
+        IngredientManager.Instance.ResetIngredientLists(targetIngredients);
+        //IngredientManager.Instance.ResetIngredientLists(targetedIngredients);
         IngredientManager.Instance.ResetIngredientLists(ownedIngredients);
         IngredientManager.Instance.ResetIngredientLists(untargetedIngredients);
     }
@@ -113,15 +112,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         print($"손님{gameObject.name}: {string.Join(", ", line)}");
 
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
-        chosenIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
-        targetedIngredients = new List<IngredientScriptableObject>(chosenIngredients);
-        maxIngredientNumber = chosenIngredients.Count;
+        targetIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
+        maxIngredientNumber = targetIngredients.Count;
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.UpdateIngredientImages(chosenIngredients);
+        consumerUI.UpdateIngredientImages(targetIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
-        untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetedIngredients, untargetedIngredients);
+        untargetedIngredients = IngredientManager.Instance.GetIngredientLists(targetIngredients, untargetedIngredients);
 
         OnEnter();
     }
