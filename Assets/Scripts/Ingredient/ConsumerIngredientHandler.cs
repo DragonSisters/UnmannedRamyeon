@@ -6,20 +6,85 @@ public class ConsumerIngredientHandler : MonoBehaviour
 {
     [SerializeField] private ConsumerUI consumerUI;
     [SerializeField] private float correctIngredientProbability = 9f;
-    [SerializeField] private float IngredientPickUpTime = 3f;
+    [SerializeField] private float ingredientPickUpTime = 3f;
+    public float IngredientPickUpTime => ingredientPickUpTime;
 
     [Header("재료 리스트들")]
     [SerializeField] internal List<IngredientScriptableObject> targetIngredients = new List<IngredientScriptableObject>();
     [SerializeField] internal List<IngredientScriptableObject> ownedIngredients = new List<IngredientScriptableObject>();
     [SerializeField] internal List<IngredientScriptableObject> untargetedIngredients = new List<IngredientScriptableObject>();
 
-    [SerializeField] internal int maxIngredientNumber;
-    internal List<int> orders = new List<int> { 0, 1, 2, 3 };
+    [SerializeField] internal int maxIngredientNumber = 4;
+    private Queue<int> orders = new Queue<int>();
 
-    public bool IsIngredientSelectDone => isIngredientSelectDone;
-    private bool isIngredientSelectDone = false;
+    public bool IsIngredientSelectDone => ownedIngredients.Count >= maxIngredientNumber;
 
-    public List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList, List<IngredientScriptableObject> initialList = null)
+    public void Initialize()
+    {
+        ResetAllIngredientLists();
+        SetAllIngredientLists();
+        ShuffleIngredientOrder();
+    }
+
+    public void ChooseIngredient()
+    {
+        GetRandomIngredient(orders.Dequeue());
+    }
+
+    private void GetRandomIngredient(int index)
+    {
+        // 확률에 따라 가져오는 재료가 다릅니다.
+        int probability = Random.Range(0, 10);
+        bool isCorrect = false;
+
+        IngredientScriptableObject ingredient = null;
+        if (probability < correctIngredientProbability)
+        {
+            ingredient = targetIngredients[index];
+            isCorrect = true;
+            Debug.Log($"올바른 재료! : {ingredient.Name}");
+        }
+        else
+        {
+            int randomIndex = GetRandomIndex(untargetedIngredients);
+            ingredient = untargetedIngredients[randomIndex];
+            Debug.Log($"틀린 재료! : {ingredient.Name}");
+        }
+
+        // 가지고 있는 재료들 리스트에 새로 가져온 재료를 추가합니다.
+        ownedIngredients.Add(ingredient);
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
+
+        // UI를 업데이트 합니다.
+        consumerUI.DisplayIngredientFeedback(isCorrect, index);
+    }
+
+    private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
+    {
+        return Random.Range(0, ingredientList.Count - 1);
+    }
+
+    private void ResetAllIngredientLists()
+    {
+        targetIngredients.Clear();
+        ownedIngredients.Clear();
+        untargetedIngredients.Clear();
+    }
+
+    private void SetAllIngredientLists()
+    {
+        // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
+        targetIngredients = IngredientManager.Instance.GetRandomIngredients(maxIngredientNumber);
+
+        // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
+        consumerUI.UpdateIngredientImages(targetIngredients);
+
+        // 필요하지 않은 재료의 리스트를 구합니다.
+        untargetedIngredients = GetIngredientLists(targetIngredients, untargetedIngredients);
+
+    }
+
+    private List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList, List<IngredientScriptableObject> initialList = null)
     {
         if (initialList == null) initialList = IngredientManager.Instance.ingredientScriptableObject;
 
@@ -33,64 +98,15 @@ public class ConsumerIngredientHandler : MonoBehaviour
         return separatedList;
     }
 
-    public IEnumerator ChooseIngredientRoutine()
+    private void ShuffleIngredientOrder()
     {
-        IngredientScriptableObject ingredient = null;
-
         // 재료를 가져올 순서를 섞습니다.
-        orders = IngredientManager.Instance.ShufflePartOfList(orders, orders.Count);
-
-        // 순서대로 가져옵니다.
-        for (int i = 0; i < orders.Count; i++)
+        var orderList = new List<int> { 0, 1, 2, 3 };
+        orderList = IngredientManager.Instance.ShufflePartOfList(orderList, orderList.Count);
+        foreach (var item in orderList)
         {
-            int order = orders[i];
-
-            // 확률에 따라 가져오는 재료가 다릅니다.
-            int probability = Random.Range(0, 10);
-            bool isCorrect = false;
-
-            if (probability < correctIngredientProbability)
-            {
-                ingredient = targetIngredients[order];
-                isCorrect = true;
-                Debug.Log($"올바른 재료! : {ingredient.Name}");
-            }
-            else
-            {
-                int randomIndex = GetRandomIndex(untargetedIngredients);
-                ingredient = untargetedIngredients[randomIndex];
-                Debug.Log($"틀린 재료! : {ingredient.Name}");
-            }
-
-            // 가지고 있는 재료들 리스트에 새로 가져온 재료를 추가합니다.
-            ownedIngredients.Add(ingredient);
-            Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
-
-            // UI를 업데이트 합니다.
-            consumerUI.DisplayIngredientFeedback(isCorrect, order);
-
-            // @anditsoon TODO: 추후 알맞게 시간 변경할 것
-            yield return new WaitForSeconds(IngredientPickUpTime);
+            orders.Enqueue(item);
         }
-
-        isIngredientSelectDone = true;
     }
 
-    private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
-    {
-        return Random.Range(0, ingredientList.Count - 1);
-    }
-    
-    public void Initialize()
-    {
-        isIngredientSelectDone = false;
-        ResetAllIngredientLists();
-    }
-
-    private void ResetAllIngredientLists()
-    {
-        targetIngredients.Clear();
-        ownedIngredients.Clear();
-        untargetedIngredients.Clear();
-    }
 }

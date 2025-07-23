@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 모든 손님에게 상속되어야합니다.
+/// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
 /// </summary>
 public abstract class Consumer : MonoBehaviour, IPoolable
 {
@@ -16,6 +16,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
     public ConsumerState State { get; private set; }
+    /// <summary>
+    /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
+    /// </summary>
+    private ConsumerState cachedStateBeforeIssue;
+
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
     /// </summary>
@@ -33,9 +38,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     }
 
     internal bool IsIssueSolved;
+    private bool exitCompleted;
 
     internal List<IngredientScriptableObject> ingredients = new();
-    private const int INGREDIENT_COUNT = 4;
 
     // 추상 함수
     internal abstract void OnEnter();
@@ -46,13 +51,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         Initialize();
         ingredientHandler.Initialize();
-        OnCustomerEnter();
+
+        SetState(ConsumerState.Enter);
         StartCoroutine(UpdateCustomerBehavior());
     }
 
     public void OnDespawn()
     {
-        OnCustomerExit();
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
         consumerUI.DeactivateAllFeedbackUIs();
@@ -60,13 +65,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public bool ShouldDespawn()
     {
-        // exit 상태에서 완료되었을 때 호출됩니다. delegate처리
-        return false; // @charotiti9 TODO: 임시
+        // exit 상태에서 출구로 퇴장이 완료되었을 때 true를 반환합니다.
+        return exitCompleted;
     }
+
     private void Initialize()
     {
         SetState(ConsumerState.Invalid);
         IsIssueSolved = false;
+        exitCompleted = false;
         ingredients.Clear();
 
         // 스프라이트 렌더러 추가
@@ -93,28 +100,64 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         moodScript.Initialize();
     }
 
+
+    /// <summary>
+    /// 손님이 머무는 동안 해야하는 행동(update)
+    /// </summary>
+    private IEnumerator UpdateCustomerBehavior()
+    {
+        StartCoroutine(OnUpdate());
+
+        while (!ShouldDespawn())
+        {
+            switch (State)
+            {
+                case ConsumerState.Invalid:
+                    Debug.LogError($"손님({gameObject.name})의 상태가 설정되지 않았습니다. 확인해주세요.");
+                    break;
+                case ConsumerState.Enter:
+                    OnCustomerEnter();
+                    break;
+                case ConsumerState.Exit:
+                    OnCustomerExit();
+                    break;
+                case ConsumerState.Search:
+                    CustomerSearchIngredient();
+                    // @charotiti9 TODO: 이동시키기.
+                    yield return new WaitForSeconds(ingredientHandler.IngredientPickUpTime);
+                    break;
+                case ConsumerState.LineUp:
+                    // @charotiti9 TODO: 자신의 차례가 되었을 때 Cookig으로 상태 넘기기. 지금은 임의로 Cooking으로 넘깁니다.
+                    SetState(ConsumerState.Cooking);
+                    break;
+                case ConsumerState.Cooking:
+                    // @charotiti9 TODO: 일정 시간이 지나면 완료되고 Exit으로 넘어가게 만들기. 지금은 임의로 Exit으로 넘깁니다.
+                    SetState(ConsumerState.Exit);
+                    break;
+                // 이하로는 외부조정중. 이슈는 모든 상태에서 올 수 있으므로 주의가 필요합니다.
+                case ConsumerState.Issue:
+                    break;
+                case ConsumerState.IssueUnsolved:
+                case ConsumerState.IssueSolved:
+                    SetState(cachedStateBeforeIssue); // 이슈가 끝나면 다시 예전상태로 돌아갑니다.
+                    break;
+                default:
+                    break;
+            }
+
+            yield return null;
+        }
+    }
+
+
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
     private void OnCustomerEnter()
     {
-        SetState(ConsumerState.Enter);
-
-        // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
-        ingredientHandler.targetIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
-        ingredientHandler.maxIngredientNumber = ingredientHandler.targetIngredients.Count;
-
-        // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.UpdateIngredientImages(ingredientHandler.targetIngredients);
-
-        // 필요하지 않은 재료의 리스트를 구합니다.
-        ingredientHandler.untargetedIngredients = ingredientHandler.GetIngredientLists(ingredientHandler.targetIngredients, ingredientHandler.untargetedIngredients);
-
-        // 재료를 고르기 시작합니다.
-        if (!(ingredientHandler.targetIngredients.Count <= 0 || ingredientHandler.ownedIngredients.Count >= ingredientHandler.maxIngredientNumber)) 
-            StartCoroutine(ingredientHandler.ChooseIngredientRoutine());
 
         OnEnter();
+        SetState(ConsumerState.Search);
     }
 
     /// <summary>
@@ -122,21 +165,23 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private void OnCustomerExit()
     {
-        SetState(ConsumerState.Exit);
         OnExit();
+
+        // @charotiti9 TODO: 손님이 출구로 나갔다면 Despawn 되도록 합니다. 지금은 임시로 바로 Despawn합니다.
+        exitCompleted = true;
     }
 
-    /// <summary>
-    /// 손님이 머무는 동안 해야하는 행동(update)
-    /// </summary>
-    private IEnumerator UpdateCustomerBehavior()
+    private void CustomerSearchIngredient()
     {
-        SetState(ConsumerState.Search);
-        StartCoroutine(OnUpdate());
-
-        while (!ShouldDespawn())
+        // 재료를 다 골랐다면 줄 서러 갑니다.
+        if (ingredientHandler.IsIngredientSelectDone)
         {
-            yield return null;
+            SetState(ConsumerState.LineUp);
+        }
+        // 아직 다 못골랐다면 계속 고릅니다.
+        else
+        {
+            ingredientHandler.ChooseIngredient();
         }
     }
 }
