@@ -12,7 +12,26 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
 
-    internal ConsumerState state;
+    /// <summary>
+    /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
+    /// </summary>
+    public ConsumerState State { get; private set; }
+    /// <summary>
+    /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
+    /// </summary>
+    internal void SetState(ConsumerState newState)
+    {
+        State = newState;
+
+        // Invalid 초기화일 때는 대사를 건너뜁니다.
+        if (State == ConsumerState.Invalid)
+        {
+            return;
+        }
+        var line = consumerScriptableObject.GetDialogueFromState(newState);
+        print($"손님{gameObject.name}: {string.Join(", ", line)}");
+    }
+
     internal bool IsIssueSolved;
 
     internal List<IngredientScriptableObject> ingredients = new();
@@ -45,7 +64,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     }
     private void Initialize()
     {
-        state = ConsumerState.Invalid;
+        SetState(ConsumerState.Invalid);
         IsIssueSolved = false;
         ingredients.Clear();
 
@@ -80,11 +99,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         Initialize();
 
-        state = ConsumerState.Enter;
-
-        // @charotiti9 TODO: 등장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Enter);
-        print($"손님{gameObject.name}: {string.Join(", ", line)}");
+        SetState(ConsumerState.Enter);
 
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
         ingredientHandler.targetIngredients = IngredientManager.Instance.GetRandomIngredients(INGREDIENT_COUNT);
@@ -108,12 +123,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private void OnCustomerExit()
     {
-        state = ConsumerState.Exit;
-
-        // @charotiti9 TODO: 퇴장대사를 외친다. 지금은 print로 간단히 처리
-        var line = consumerScriptableObject.GetDialogueFromState(ConsumerState.Exit);
-        print($"손님{gameObject.name}: {string.Join(", ", line)}");
-
+        SetState(ConsumerState.Exit);
         OnExit();
     }
 
@@ -122,15 +132,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        state = ConsumerState.Search;
+        SetState(ConsumerState.Search);
         StartCoroutine(OnUpdate());
 
         while (!ShouldDespawn())
         {
-            // @charotiti9 TODO: 각종 대사를 외쳐요. 나중에 손님 상태에 따라서 말하는 대사를 변경해야합니다.
-            var line = consumerScriptableObject.GetDialogueFromState(state);
-            print($"손님{gameObject.name}: {string.Join(", ", line)}");
-
             yield return null;
         }
     }
