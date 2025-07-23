@@ -14,9 +14,20 @@ public class WarningConsumer : Consumer, IClickableSprite
     [SerializeField] private int issueUnresolvedPenalty = 20;
 
     /// <summary>
+    /// 최소/최대 일반상태 유지 시간
+    /// </summary>
+    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
+    private float usualTime;
+
+    /// <summary>
+    /// 스폰된 시간
+    /// </summary>
+    private float? spawnedTime = null;
+
+    /// <summary>
     /// 기간안에 클릭되었는지 여부
     /// </summary>
-    private bool isWarningTiming { get { return Time.time - (spawnedTime + consumerScriptableObject.UsualTime) < warningDuration; } }
+    private bool isWarningTiming { get { return Time.time - (spawnedTime + usualTime) < warningDuration; } }
 
     /// <summary>
     /// 클릭할 수 있는 상태인지 여부
@@ -28,13 +39,15 @@ public class WarningConsumer : Consumer, IClickableSprite
     {
         // 초기화
         isClickable = false;
+        spawnedTime = Time.time;
+        usualTime = Random.Range(minUsualTime, maxUsualTime);
     }
     internal override void OnExit() { }
 
     internal override IEnumerator OnUpdate()
     {
         // 일반 상태 지속
-        yield return new WaitForSeconds(consumerScriptableObject.UsualTime);
+        yield return new WaitForSeconds(usualTime);
 
         state = ConsumerState.Issue;
 
@@ -66,5 +79,4 @@ public class WarningConsumer : Consumer, IClickableSprite
 
         IsIssueSolved = true;
     }
-
 }

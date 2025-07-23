@@ -39,17 +39,6 @@ public class ConsumerScriptableObject : ScriptableObject
     /// </summary>
     [SerializeField] private int appearDate;
 
-    /// <summary>
-    /// 체류 시간
-    /// </summary>
-    [SerializeField] private float lifeTime;
-
-    /// <summary>
-    /// 최소/최대 일반상태 유지 시간
-    /// </summary>
-    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
-    private float usualTime = -1f;
-
     public Sprite Appearance => appearance;
     public string GetDialogueFromState(ConsumerState state)
     {
@@ -64,18 +53,4 @@ public class ConsumerScriptableObject : ScriptableObject
         throw new System.Exception($"손님의 대사 설정 중 {state} 상태로 설정된 대사가 없습니다.");
     }
     public int AppearDate => appearDate;
-    public float LifeTime => lifeTime;
-    public float UsualTime 
-    {
-        get 
-        {
-            // 아직 설정되지 않았을 때만 설정합니다.
-            if (usualTime <= 0)
-            {
-                usualTime = Random.Range(minUsualTime, maxUsualTime);
-            }
-
-            return usualTime;
-        } 
-    }
 }
