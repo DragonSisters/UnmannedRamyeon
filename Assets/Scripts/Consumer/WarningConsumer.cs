@@ -10,6 +10,9 @@ public class WarningConsumer : Consumer, IClickableSprite
     /// 주의를 주어야하는 기간. 짧을수록 어렵다.
     /// </summary>
     [SerializeField] private float warningDuration = 2f;
+    [SerializeField] private int issueResolvedBonus = 5;
+    [SerializeField] private int issueUnresolvedPenalty = 20;
+
     /// <summary>
     /// 기간안에 클릭되었는지 여부
     /// </summary>
@@ -37,17 +40,24 @@ public class WarningConsumer : Consumer, IClickableSprite
 
         // 이슈 상태 지속 = 클릭 가능한 상태
         isClickable = true;
+        // 기분이 내려가기 시작합니다
+        moodScript.StartDecrease();
         yield return new WaitUntil(() => !isWarningTiming|| IsIssueSolved); // 이슈가 해결되었다면 바로 넘어갑니다.
+        moodScript.StopDecrease();
         isClickable = false;
 
         // 클릭되었는지 여부를 통해 판단합니다
         if (IsIssueSolved)
         {
             state = ConsumerState.Smile;
+            // 이슈가 해결되면 약간 증가시켜줍니다 (보상)
+            moodScript.IncreaseMood(issueResolvedBonus);
         }
         else
         {
             state = ConsumerState.Upset;
+            // 이슈가 해결되지 않으면 만족도가 많이 떨어집니다
+            moodScript.DecreaseMood(issueUnresolvedPenalty);
         }
     }
     public void OnSpriteClicked()
