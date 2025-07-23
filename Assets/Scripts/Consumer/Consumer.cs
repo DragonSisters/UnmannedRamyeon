@@ -134,7 +134,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        state = ConsumerState.Usual;
+        state = ConsumerState.Search;
         StartCoroutine(OnUpdate());
 
         while (!ShouldDespawn())

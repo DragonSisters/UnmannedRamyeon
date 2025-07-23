@@ -49,13 +49,13 @@ public class WarningConsumer : Consumer, IClickableSprite
         // 클릭되었는지 여부를 통해 판단합니다
         if (IsIssueSolved)
         {
-            state = ConsumerState.Smile;
+            state = ConsumerState.IssueSolved;
             // 이슈가 해결되면 약간 증가시켜줍니다 (보상)
             moodScript.IncreaseMood(issueResolvedBonus);
         }
         else
         {
-            state = ConsumerState.Upset;
+            state = ConsumerState.IssueUnsolved;
             // 이슈가 해결되지 않으면 만족도가 많이 떨어집니다
             moodScript.DecreaseMood(issueUnresolvedPenalty);
         }

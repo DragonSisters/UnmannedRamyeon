@@ -5,12 +5,14 @@ public enum ConsumerState
 {
     Invalid = -1, // 설정이 되지 않은, 정상이 아닌 상태입니다. 예외처리해야합니다.
     
-    Enter, // 등장
+    Enter, // 입장
     Exit, // 퇴장
-    Usual, // 아무것도 아닌 상태입니다.
-    Issue, // 이슈 상태입니다.
-    Upset, // 화남
-    Smile, // 좋음
+    Search, // 재료 찾기
+    LineUp, // 줄서기
+    Cooking, // 라면 끓이기
+    Issue, // 문제가 일어난 상태
+    IssueUnsolved, // 이슈처리 실패
+    IssueSolved, // 이슈처리 성공
 }
 
 [CreateAssetMenu(fileName = "Consumer", menuName = "Scriptable Objects/Consumer")]
