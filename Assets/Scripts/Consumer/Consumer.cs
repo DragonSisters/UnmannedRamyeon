@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -62,14 +61,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         ingredients.Clear();
 
         // 스프라이트 렌더러 추가
-        var spriteRenderer = gameObject.GetOrAddComponent<SpriteRenderer>();
+        var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
         spriteRenderer.sprite = consumerScriptableObject.Appearance;
         // 박스 콜라이더 추가
-        var boxCollider = gameObject.GetOrAddComponent<BoxCollider2D>();
+        var boxCollider = gameObject.GetComponent<BoxCollider2D>();
         if (boxCollider == null)
         {
             boxCollider = gameObject.AddComponent<BoxCollider2D>();
@@ -77,7 +76,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 충돌되지 않도록 trigger on
         boxCollider.isTrigger = true;
         // 손님 기분 스크립트 추가
-        moodScript = gameObject.GetOrAddComponent<ConsumerMood>();
+        moodScript = gameObject.GetComponent<ConsumerMood>();
         if (moodScript == null)
         {
             moodScript = gameObject.AddComponent<ConsumerMood>();

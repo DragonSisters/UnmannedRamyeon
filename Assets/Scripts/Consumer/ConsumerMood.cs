@@ -80,7 +80,7 @@ public class ConsumerMood : MonoBehaviour
     {
         while (currentAmount > MIN_MOOD)
         {
-            currentAmount -= DECREASE_AMOUNT;
+            DecreaseMood(DECREASE_AMOUNT);
 
             if (currentAmount < MIN_MOOD)
             {
