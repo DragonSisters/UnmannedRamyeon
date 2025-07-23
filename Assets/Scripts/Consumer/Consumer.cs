@@ -22,16 +22,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal abstract void OnExit();
     internal abstract IEnumerator OnUpdate();
 
-    // @anditsoon TODO: GetKeyDown 으로 테스트 완료, 이제 코루틴으로 순서대로 실행되게 해야 함.
-    //                  실행 시 if 문 안의 조건들을 같이 호출할 것.
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            
-        }
-    }
-
     public void OnSpawn()
     {
         OnCustomerEnter();

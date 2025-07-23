@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 public class ConsumerUI : MonoBehaviour
 {
-    [SerializeField] private Consumer consumer;
     [SerializeField] private Image[] ingredientImages;
     [SerializeField] private Image[] correctOrWrongImages;
     [SerializeField] private Sprite correctSprite;
