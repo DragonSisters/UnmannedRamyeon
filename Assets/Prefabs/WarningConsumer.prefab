@@ -50,7 +50,7 @@ MonoBehaviour:
   consumerScriptableObject: {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
   ingredientHandler: {fileID: 5369129573054951317}
   consumerUI: {fileID: 1264228265461581360}
-  warningDuration: 2
+  warningDuration: 5
   issueResolvedBonus: 5
   issueUnresolvedPenalty: 20
   minUsualTime: 5
