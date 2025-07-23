@@ -16,6 +16,9 @@ public class ConsumerIngredientHandler : MonoBehaviour
     [SerializeField] internal int maxIngredientNumber;
     internal List<int> orders = new List<int> { 0, 1, 2, 3 };
 
+    public bool IsIngredientSelectDone => isIngredientSelectDone;
+    private bool isIngredientSelectDone = false;
+
     public List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList, List<IngredientScriptableObject> initialList = null)
     {
         if (initialList == null) initialList = IngredientManager.Instance.ingredientScriptableObject;
@@ -69,14 +72,22 @@ public class ConsumerIngredientHandler : MonoBehaviour
             // @anditsoon TODO: 추후 알맞게 시간 변경할 것
             yield return new WaitForSeconds(IngredientPickUpTime);
         }
+
+        isIngredientSelectDone = true;
     }
 
     private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {
         return Random.Range(0, ingredientList.Count - 1);
     }
+    
+    public void Initialize()
+    {
+        isIngredientSelectDone = false;
+        ResetAllIngredientLists();
+    }
 
-    public void ResetAllIngredientLists()
+    private void ResetAllIngredientLists()
     {
         targetIngredients.Clear();
         ownedIngredients.Clear();

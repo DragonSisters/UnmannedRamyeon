@@ -44,6 +44,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public void OnSpawn()
     {
+        Initialize();
+        ingredientHandler.Initialize();
         OnCustomerEnter();
         StartCoroutine(UpdateCustomerBehavior());
     }
@@ -53,7 +55,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         OnCustomerExit();
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
-        ingredientHandler.ResetAllIngredientLists();
         consumerUI.DeactivateAllFeedbackUIs();
     }
 
@@ -97,8 +98,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private void OnCustomerEnter()
     {
-        Initialize();
-
         SetState(ConsumerState.Enter);
 
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
