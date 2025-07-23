@@ -18,4 +18,27 @@ public class ConsumerUI : MonoBehaviour
             ingredientImages[ingredientNum].sprite = ingredients[ingredientNum].Icon;
         }
     }
+
+    public void DisplayIngredientFeedback(bool isCorrect, int index)
+    {
+        Image selectedImage = correctOrWrongImages[index];
+        selectedImage.gameObject.SetActive(true);
+
+        if(isCorrect)
+        {
+            selectedImage.sprite = correctSprite;
+        }
+        else
+        {
+            selectedImage.sprite = wrongSprite;
+        }
+    }
+
+    public void DeactivateAllFeedbackUIs()
+    {
+        foreach(Image image in correctOrWrongImages)
+        {
+            image.gameObject.SetActive(false);
+        }
+    }
 }
