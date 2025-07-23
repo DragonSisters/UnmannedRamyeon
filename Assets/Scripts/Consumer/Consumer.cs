@@ -19,13 +19,21 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// <summary>
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
-    private ConsumerState cachedStateBeforeIssue;
+    private ConsumerState cachedStateBeforeIssue = ConsumerState.Invalid;
 
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
     /// </summary>
     internal void SetState(ConsumerState newState)
     {
+        // 이슈와 관련된 상태가 아니라면 cache해놓습니다.
+        if (newState != ConsumerState.Issue 
+            && newState != ConsumerState.IssueSolved 
+            && newState != ConsumerState.IssueUnsolved)
+        {
+            cachedStateBeforeIssue = newState;
+        }
+
         State = newState;
 
         // Invalid 초기화일 때는 대사를 건너뜁니다.
