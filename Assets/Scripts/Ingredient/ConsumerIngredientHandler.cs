@@ -76,8 +76,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
         return Random.Range(0, ingredientList.Count - 1);
     }
 
-
-
     public void ResetAllIngredientLists()
     {
         targetIngredients.Clear();
