@@ -21,12 +21,13 @@ MonoBehaviour:
   - state: 2
     line: "\uBB58  \uACE8\uB77C\uBCF4\uC9C0~"
   - state: 3
-    line: "\uC800\uAE30\uC694! \uC308\uC7A5 \uC5B4\uB528\uC5B4\uC694?"
+    line: "\uC904\uC11C\uC57C\uC9C0"
   - state: 4
-    line: "\uBB50\uC57C..."
+    line: "\uB9DB\uC788\uACA0\uB2E4!"
   - state: 5
-    line: "\uAC10\uC0AC\uD569\uB2C8\uB2E4~"
+    line: "\uC308\uC7A5 \uC5B4\uB528\uC9C0?"
+  - state: 6
+    line: "\uBB50\uC57C... \uC5C6\uC796\uC544"
+  - state: 7
+    line: "\uAC10\uC0AC\uD569\uB2C8\uB2E4!"
   appearDate: 0
-  lifeTime: 10
-  minUsualTime: 2
-  maxUsualTime: 4

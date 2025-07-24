@@ -14,9 +14,14 @@ public class WarningConsumer : Consumer, IClickableSprite
     [SerializeField] private int issueUnresolvedPenalty = 20;
 
     /// <summary>
-    /// 기간안에 클릭되었는지 여부
+    /// 최소/최대 일반상태 유지 시간
     /// </summary>
-    private bool isWarningTiming { get { return Time.time - (spawnedTime + consumerScriptableObject.UsualTime) < warningDuration; } }
+    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
+
+    /// <summary>
+    /// 스폰된 시간
+    /// </summary>
+    private float? spawnedTime = null;
 
     /// <summary>
     /// 클릭할 수 있는 상태인지 여부
@@ -28,34 +33,41 @@ public class WarningConsumer : Consumer, IClickableSprite
     {
         // 초기화
         isClickable = false;
+        spawnedTime = Time.time;
     }
     internal override void OnExit() { }
 
     internal override IEnumerator OnUpdate()
     {
-        // 일반 상태 지속
-        yield return new WaitForSeconds(consumerScriptableObject.UsualTime);
+        var usualTime = Random.Range(minUsualTime, maxUsualTime);
 
-        state = ConsumerState.Issue;
+        yield return new WaitForSeconds(usualTime);
+
+        // 이슈상태 시작
+        SetState(ConsumerState.Issue);
 
         // 이슈 상태 지속 = 클릭 가능한 상태
         isClickable = true;
         // 기분이 내려가기 시작합니다
         moodScript.StartDecrease();
-        yield return new WaitUntil(() => !isWarningTiming|| IsIssueSolved); // 이슈가 해결되었다면 바로 넘어갑니다.
+
+        yield return new WaitUntil(() => 
+        (Time.time - (spawnedTime + usualTime) > warningDuration) // 주의를 주어야하는 기간이라면 기다립니다.
+        || IsIssueSolved); // 이슈가 해결되었다면 바로 넘어갑니다.
+
         moodScript.StopDecrease();
         isClickable = false;
 
         // 클릭되었는지 여부를 통해 판단합니다
         if (IsIssueSolved)
         {
-            state = ConsumerState.Smile;
+            SetState(ConsumerState.IssueSolved);
             // 이슈가 해결되면 약간 증가시켜줍니다 (보상)
             moodScript.IncreaseMood(issueResolvedBonus);
         }
         else
         {
-            state = ConsumerState.Upset;
+            SetState(ConsumerState.IssueUnsolved);
             // 이슈가 해결되지 않으면 만족도가 많이 떨어집니다
             moodScript.DecreaseMood(issueUnresolvedPenalty);
         }
@@ -66,5 +78,4 @@ public class WarningConsumer : Consumer, IClickableSprite
 
         IsIssueSolved = true;
     }
-
 }
