@@ -1,15 +1,16 @@
-﻿using NUnit.Framework;
-using Unity.VisualScripting;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using TMPro;
 
 public class ConsumerUI : MonoBehaviour
 {
     [SerializeField] private Image[] ingredientImages;
     [SerializeField] private Image[] correctOrWrongImages;
+    [SerializeField] private TMP_Text speechBubbleText;
     [SerializeField] private Sprite correctSprite;
     [SerializeField] private Sprite wrongSprite;
+    [SerializeField] private Sprite speechBubbleSprite;
 
     public void UpdateIngredientImages(List<IngredientScriptableObject> ingredients)
     {
@@ -40,5 +41,10 @@ public class ConsumerUI : MonoBehaviour
         {
             image.gameObject.SetActive(false);
         }
+    }
+
+    public void ShowNextIngredient(IngredientScriptableObject ingredient)
+    {
+        speechBubbleText.text = StringUtil.KoreanParticle($"음~ {ingredient.Name}을/를 가져와볼까~"); 
     }
 }
