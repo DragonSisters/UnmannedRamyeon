@@ -92,4 +92,20 @@ public class ConsumerMood : MonoBehaviour
         }
     }
 
+    public float GetMoodRatio()
+    {
+        switch(Mood)
+        {
+            case MoodState.veryDissatisfied:
+                return 0.5f;
+            case MoodState.dissatisfied:
+                return 0.8f;
+            case MoodState.satisfied:
+                return 0.9f;
+            case MoodState.verySatisfied:
+                return 1;
+        }
+
+        return 0;
+    }
 }
