@@ -54,7 +54,7 @@ public class LineUpManager : Singleton<LineUpManager>
     {
         var minConsumerCount = int.MaxValue;
         var minLineIndex = -1;
-        for (int i = 0; i < lineList.Count - 1; i++)
+        for (int i = 0; i < lineList.Count; i++)
         {
             var consumerCount = lineList[i].line.Count;
             if(consumerCount < minConsumerCount)
