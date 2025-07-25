@@ -43,7 +43,7 @@ public class ConsumerUI : MonoBehaviour
         }
     }
 
-    public void ShowNextIngredient(IngredientScriptableObject ingredient)
+    public void SpeakNextIngredient(IngredientScriptableObject ingredient)
     {
         speechBubbleText.text = StringUtil.KoreanParticle($"음~ {ingredient.Name}을/를 가져와볼까~"); 
     }
