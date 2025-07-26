@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public enum MoodState
@@ -21,10 +20,10 @@ public class ConsumerMood : MonoBehaviour
     private const int DECREASE_AMOUNT = 5; // 서서히 감소할 양
     private const float DECREASE_INTERVAL = 0.5f; // n초에 1번씩 줄어듦
 
-    private const float veryDissatisfiedRatio = 0.5f;
-    private const float dissatisfiedRatio = 0.8f;
-    private const float satisfiedRatio = 0.9f;
-    private const float verySatisfiedRatio = 1f;
+    private const float VERY_DISSATISFIED_RATIO = 0.5f;
+    private const float DISSATISFIED_RATIO = 0.8f;
+    private const float SATISFIED_RATIO = 0.9f;
+    private const float VERY_SATISFIED_RATIO = 1f;
 
     private Coroutine decreaseCoroutine;
 
@@ -103,13 +102,13 @@ public class ConsumerMood : MonoBehaviour
         switch(Mood)
         {
             case MoodState.veryDissatisfied:
-                return veryDissatisfiedRatio;
+                return VERY_DISSATISFIED_RATIO;
             case MoodState.dissatisfied:
-                return dissatisfiedRatio;
+                return DISSATISFIED_RATIO;
             case MoodState.satisfied:
-                return satisfiedRatio;
+                return SATISFIED_RATIO;
             case MoodState.verySatisfied:
-                return verySatisfiedRatio;
+                return VERY_SATISFIED_RATIO;
         }
 
         return 0;
