@@ -90,7 +90,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     private List<IngredientScriptableObject> GetIngredientLists(List<IngredientScriptableObject> standardList, List<IngredientScriptableObject> separatedList, List<IngredientScriptableObject> initialList = null)
     {
-        if (initialList == null) initialList = IngredientManager.Instance.ingredientScriptableObject;
+        if (initialList == null) initialList = IngredientManager.Instance.IngredientScriptableObject;
 
         foreach (IngredientScriptableObject ingredient in initialList)
         {
