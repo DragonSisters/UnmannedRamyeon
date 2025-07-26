@@ -11,6 +11,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
+    internal ConsumerMove moveScript;
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
@@ -50,8 +51,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal bool IsIssueSolved;
     private bool exitCompleted;
 
-    internal List<IngredientScriptableObject> ingredients = new();
-
     // 추상 함수
     internal abstract void OnEnter();
     internal abstract void OnExit();
@@ -88,7 +87,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         SetState(ConsumerState.Invalid);
         IsIssueSolved = false;
         exitCompleted = false;
-        ingredients.Clear();
 
         // 스프라이트 렌더러 추가
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -112,6 +110,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable
             moodScript = gameObject.AddComponent<ConsumerMood>();
         }
         moodScript.Initialize();
+        // 손님 이동 스크립트 추가
+        moveScript = gameObject.GetComponent<ConsumerMove>();
+        if (moveScript == null)
+        {
+            moveScript = gameObject.AddComponent<ConsumerMove>();
+        }
+        moveScript.Initialize();
     }
 
 
@@ -136,9 +141,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
                     OnCustomerExit();
                     break;
                 case ConsumerState.Search:
-                    CustomerSearchIngredient();
-                    // @charotiti9 TODO: 이동시키기.
-                    yield return new WaitForSeconds(ingredientHandler.IngredientPickUpTime);
+                    yield return SearchIngredient();
                     break;
                 case ConsumerState.LineUp:
                     // @charotiti9 TODO: 자신의 차례가 되었을 때 Cookig으로 상태 넘기기. 지금은 임의로 Cooking으로 넘깁니다.
@@ -169,7 +172,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private void OnCustomerEnter()
     {
-
         OnEnter();
         SetState(ConsumerState.Search);
     }
@@ -185,17 +187,32 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         exitCompleted = true;
     }
 
-    private void CustomerSearchIngredient()
+    private IEnumerator SearchIngredient()
     {
-        // 재료를 다 골랐다면 줄 서러 갑니다.
-        if (ingredientHandler.IsIngredientSelectDone)
+        if(ingredientHandler.IsIngredientSelectDone)
         {
+            // 잠시 서서 기다리는 시간도 포함합니다.
+            yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
+
+            // 재료를 다 골랐다면 줄 서러 갑니다.
             SetState(ConsumerState.LineUp);
+            yield break;
         }
-        // 아직 다 못골랐다면 계속 고릅니다.
-        else
+
+        // 필요한 재료를 가져옵니다.
+        var neededIngredientInfo = ingredientHandler.GetNeededIngredientInfo();
+        var point = neededIngredientInfo.ingredient.Point;
+
+        // 해당 재료를 가지러 이동합니다.
+        while (!moveScript.IsCloseEnough(point))
         {
-            ingredientHandler.ChooseIngredient();
+            moveScript.MoveTo(point);
+            yield return null;
         }
+
+        // 잠시 서서 기다리는 시간도 포함합니다.
+        yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
+
+        ingredientHandler.AddOwnIngredient(neededIngredientInfo.ingredient, neededIngredientInfo.index, neededIngredientInfo.isCorrect);
     }
 }

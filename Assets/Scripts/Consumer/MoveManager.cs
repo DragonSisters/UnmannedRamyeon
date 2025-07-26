@@ -4,9 +4,39 @@ using UnityEngine;
 
 public class MoveManager : Singleton<MoveManager>
 {
+    [Header("이동")]
+    [SerializeField] private const float MOVE_SPEED = 1;
+    [SerializeField] private const float MOVE_SPEED_RANGE = 0.5f;
+    public const float RANGE_THRESHOLD = 0.3f;
     [Header("입퇴장")]
+    [SerializeField] private const float ENTER_POINT_RANGE = 0.5f;
     [SerializeField] private Transform enterPoint;
     [SerializeField] private Transform exitPoint;
+    public float RandomMoveSpeed => Random.Range(-MOVE_SPEED_RANGE, MOVE_SPEED_RANGE) + MOVE_SPEED;
+    public Vector2 RandomEnterPoint
+    {
+        get
+        {
+            var randomX = Random.Range(-ENTER_POINT_RANGE, ENTER_POINT_RANGE);
+            var randomY = Random.Range(-ENTER_POINT_RANGE, ENTER_POINT_RANGE);
+
+            return (Vector2)enterPoint.position + new Vector2(randomX, randomY);
+        }
+    }
+    [Header("재료")]
+    [SerializeField] private const float INGREDIENT_POINT_RANGE = 0.2f;
+    public Vector2 RandomIngredientPointFactor
+    {
+        get
+        {
+            var randomX = Random.Range(-INGREDIENT_POINT_RANGE, INGREDIENT_POINT_RANGE);
+            var randomY = Random.Range(-INGREDIENT_POINT_RANGE, INGREDIENT_POINT_RANGE);
+
+            return new Vector2(randomX, randomY);
+        }
+    }
+
+
     [Header("줄서기")]
     [SerializeField] private int lineCount = 4;
     [SerializeField] private float lineSpacingFactor = 1f;
