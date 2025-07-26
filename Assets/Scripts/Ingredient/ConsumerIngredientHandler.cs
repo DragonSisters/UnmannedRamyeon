@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ConsumerIngredientHandler : MonoBehaviour
 {
-    [SerializeField] private ConsumerUI consumerUI;
-    [SerializeField] private float correctIngredientProbability = 9f;
-    [SerializeField] private float ingredientPickUpTime = 3f;
+    private ConsumerUI consumerUI;
+    private float correctIngredientProbability = 9f;
+    private float ingredientPickUpTime = 3f;
     public float IngredientPickUpTime => ingredientPickUpTime;
 
     internal List<IngredientScriptableObject> targetIngredients = new List<IngredientScriptableObject>();
@@ -21,6 +22,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     public void Initialize()
     {
+        consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
         ResetAllIngredientLists();
         SetAllIngredientLists();
         ShuffleIngredientOrder();

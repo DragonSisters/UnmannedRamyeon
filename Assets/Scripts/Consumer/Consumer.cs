@@ -62,6 +62,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         Initialize();
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
+        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
+        priceCalculator.Initialize();
 
         SetState(ConsumerState.Enter);
         StartCoroutine(UpdateCustomerBehavior());
@@ -71,7 +73,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
-        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
