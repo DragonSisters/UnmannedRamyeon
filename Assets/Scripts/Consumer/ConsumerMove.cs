@@ -1,14 +1,25 @@
 ﻿using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.AI;
 
 public class ConsumerMove : MonoBehaviour
 {
     private float moveSpeed;
+    private NavMeshAgent agent;
+    private const float RANGE_THRESHOLD = 0.5f;
 
     public void Initialize()
     {
         moveSpeed = MoveManager.Instance.RandomMoveSpeed;
         gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
+
+        agent = gameObject.GetComponent<NavMeshAgent>();
+        if (agent == null)
+        {
+            agent = gameObject.AddComponent<NavMeshAgent>();
+        }
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
+        agent.speed = moveSpeed;
     }
 
     public Vector2 GetIngredientPoint(IngredientScriptableObject ingredient)
@@ -18,12 +29,12 @@ public class ConsumerMove : MonoBehaviour
 
     public void MoveTo(Vector3 point)
     {
-        gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, point, moveSpeed * Time.deltaTime);
+        agent.SetDestination(point);
     }
 
     public bool IsCloseEnough(Vector2 point)
     {
         float distance = Vector2.Distance(gameObject.transform.position, point);
-        return distance <= MoveManager.RANGE_THRESHOLD;
+        return distance <= RANGE_THRESHOLD;
     }
 }

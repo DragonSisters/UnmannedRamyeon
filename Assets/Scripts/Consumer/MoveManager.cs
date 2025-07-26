@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class MoveManager : Singleton<MoveManager>
 {
-    [Header("이동")]
-    [SerializeField] private const float MOVE_SPEED = 1;
-    [SerializeField] private const float MOVE_SPEED_RANGE = 0.5f;
-    public const float RANGE_THRESHOLD = 0.3f;
     [Header("입퇴장")]
-    [SerializeField] private const float ENTER_POINT_RANGE = 0.5f;
     [SerializeField] private Transform enterPoint;
     [SerializeField] private Transform exitPoint;
+
+    private const float MOVE_SPEED = 2;
+    private const float MOVE_SPEED_RANGE = 0.5f;
+    private const float ENTER_POINT_RANGE = 0.5f;
+
     public float RandomMoveSpeed => Random.Range(-MOVE_SPEED_RANGE, MOVE_SPEED_RANGE) + MOVE_SPEED;
     public Vector2 RandomEnterPoint
     {
