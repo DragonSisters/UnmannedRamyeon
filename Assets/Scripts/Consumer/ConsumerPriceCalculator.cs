@@ -16,12 +16,17 @@ public class ConsumerPriceCalculator : MonoBehaviour
     public int GetFinalPrice()
     {
         float price = 0;
-        
-        List<IngredientScriptableObject> approvedIngredients = ingredientHandler.approvedIngredients;
 
-        foreach(IngredientScriptableObject ingredient in approvedIngredients)
+        List<(IngredientScriptableObject ingredient, int index, bool isCorrect)> ownedIngredients 
+            = ingredientHandler.OwnedIngredients;
+
+        foreach(var ingredientInfo in ownedIngredients)
         {
-            price += ingredient.Price;
+            // 지적한 ingredient만 값에 들어갑니다
+            if (ingredientInfo.isCorrect)
+            {
+                price += ingredientInfo.ingredient.Price;
+            }
         }
 
         price *= consumerMood.GetMoodRatio();
