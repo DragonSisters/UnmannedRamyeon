@@ -5,12 +5,25 @@ using TMPro;
 
 public class ConsumerUI : MonoBehaviour
 {
+    public GameObject TargetIngredientUI;
+    public GameObject SpeechBubbleUI;
+
     [SerializeField] private Image[] ingredientImages;
     [SerializeField] private Image[] correctOrWrongImages;
     [SerializeField] private TMP_Text speechBubbleText;
     [SerializeField] private Sprite correctSprite;
     [SerializeField] private Sprite wrongSprite;
     [SerializeField] private Sprite speechBubbleSprite;
+
+    public void ActivateIngredientUI(bool isActive)
+    {
+        TargetIngredientUI.SetActive(isActive);
+    }
+
+    public void ActivateSpeechBubbleUI(bool isActive)
+    {
+        SpeechBubbleUI.SetActive(isActive);
+    }
 
     public void UpdateIngredientImages(List<IngredientScriptableObject> ingredients)
     {

@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
 /// </summary>
-public abstract class Consumer : MonoBehaviour, IPoolable
+public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
@@ -19,6 +19,18 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
     public ConsumerState State { get; private set; }
+
+    /// <summary>
+    /// 클릭할 수 있는 상태인지 반환합니다.
+    /// </summary>
+    public bool IsClickable => isClickable;
+    private bool isClickable = true;
+    /// <summary>
+    /// 클릭 된 상태인지 반환합니다.
+    /// </summary>
+    public bool IsClicked => isClicked;
+    private bool isClicked = false;
+
     /// <summary>
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
@@ -55,6 +67,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal abstract void OnEnter();
     internal abstract void OnExit();
     internal abstract IEnumerator OnUpdate();
+    internal abstract void OnClick ();
 
     public void OnSpawn()
     {
@@ -135,7 +148,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
                     Debug.LogError($"손님({gameObject.name})의 상태가 설정되지 않았습니다. 확인해주세요.");
                     break;
                 case ConsumerState.Enter:
-                    OnCustomerEnter();
+                    yield return OnCustomerEnter();
                     break;
                 case ConsumerState.Exit:
                     OnCustomerExit();
@@ -170,9 +183,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
-    private void OnCustomerEnter()
+    private IEnumerator OnCustomerEnter()
     {
         OnEnter();
+
+        // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
+        consumerUI.ActivateIngredientUI(true);
+        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
+        consumerUI.ActivateIngredientUI(false);
+
         SetState(ConsumerState.Search);
     }
 
@@ -214,5 +233,36 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
         ingredientHandler.AddOwnIngredient(neededIngredientInfo.ingredient, neededIngredientInfo.index, neededIngredientInfo.isCorrect);
+        
+        // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
+        consumerUI.ActivateIngredientUI(true);
+        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
+        consumerUI.ActivateIngredientUI(false);
+    }
+
+    public void OnSpriteClicked()
+    {
+        Debug.Log($"손님{gameObject.GetInstanceID()}가 클릭되었습니다.");
+
+        // 모든 Consumer 검사하여 다른 손님은 Click해제
+        ConsumerManager.Instance.OnClickedConsumer();
+
+        isClicked = true;
+        // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
+        if (State == ConsumerState.Issue)
+        {
+            OnClick();
+            return;
+        }
+
+        // 이슈상태가 아니라면 재료가 보이도록 합니다.
+        consumerUI.ActivateIngredientUI(true);
+    }
+
+    public void OnSpriteDeselected()
+    {
+        isClicked = false;
+        // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
+        consumerUI.ActivateIngredientUI(false);
     }
 }
