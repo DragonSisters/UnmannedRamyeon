@@ -20,6 +20,11 @@ public class ConsumerMood : MonoBehaviour
     private const int DECREASE_AMOUNT = 5; // 서서히 감소할 양
     private const float DECREASE_INTERVAL = 0.5f; // n초에 1번씩 줄어듦
 
+    private const float VERY_DISSATISFIED_RATIO = 0.5f;
+    private const float DISSATISFIED_RATIO = 0.8f;
+    private const float SATISFIED_RATIO = 0.9f;
+    private const float VERY_SATISFIED_RATIO = 1f;
+
     private Coroutine decreaseCoroutine;
 
     public MoodState Mood
@@ -92,4 +97,20 @@ public class ConsumerMood : MonoBehaviour
         }
     }
 
+    public float GetMoodRatio()
+    {
+        switch(Mood)
+        {
+            case MoodState.veryDissatisfied:
+                return VERY_DISSATISFIED_RATIO;
+            case MoodState.dissatisfied:
+                return DISSATISFIED_RATIO;
+            case MoodState.satisfied:
+                return SATISFIED_RATIO;
+            case MoodState.verySatisfied:
+                return VERY_SATISFIED_RATIO;
+        }
+
+        return 0;
+    }
 }

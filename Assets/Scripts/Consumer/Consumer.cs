@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -8,9 +9,10 @@ using UnityEngine;
 public abstract class Consumer : MonoBehaviour, IPoolable
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
-    [SerializeField] internal ConsumerIngredientHandler ingredientHandler;
     [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
+    internal ConsumerPriceCalculator priceCalculator;
+    internal ConsumerIngredientHandler ingredientHandler;
 
     /// <summary>
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
@@ -58,7 +60,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     public void OnSpawn()
     {
         Initialize();
+        ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
+        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
+        priceCalculator.Initialize();
 
         SetState(ConsumerState.Enter);
         StartCoroutine(UpdateCustomerBehavior());
@@ -68,6 +73,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(OnUpdate());
+        FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
 

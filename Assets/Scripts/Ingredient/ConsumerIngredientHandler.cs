@@ -1,26 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ConsumerIngredientHandler : MonoBehaviour
 {
-    [SerializeField] private ConsumerUI consumerUI;
-    [SerializeField] private float correctIngredientProbability = 9f;
-    [SerializeField] private float ingredientPickUpTime = 3f;
+    private ConsumerUI consumerUI;
+    private float correctIngredientProbability = 9f;
+    private float ingredientPickUpTime = 3f;
     public float IngredientPickUpTime => ingredientPickUpTime;
 
-    [Header("재료 리스트들")]
-    [SerializeField] internal List<IngredientScriptableObject> targetIngredients = new List<IngredientScriptableObject>();
-    [SerializeField] internal List<IngredientScriptableObject> ownedIngredients = new List<IngredientScriptableObject>();
-    [SerializeField] internal List<IngredientScriptableObject> untargetedIngredients = new List<IngredientScriptableObject>();
+    internal List<IngredientScriptableObject> targetIngredients = new List<IngredientScriptableObject>();
+    internal List<IngredientScriptableObject> approvedIngredients = new List<IngredientScriptableObject>();
+    internal List<IngredientScriptableObject> untargetedIngredients = new List<IngredientScriptableObject>();
 
     [SerializeField] internal int maxIngredientNumber = 4;
+    internal int pickUpCount = 0;
     private Queue<int> orders = new Queue<int>();
 
-    public bool IsIngredientSelectDone => ownedIngredients.Count >= maxIngredientNumber;
+    public bool IsIngredientSelectDone => pickUpCount >= maxIngredientNumber;
 
     public void Initialize()
     {
+        consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
         ResetAllIngredientLists();
         SetAllIngredientLists();
         ShuffleIngredientOrder();
@@ -52,8 +54,10 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
 
         // 가지고 있는 재료들 리스트에 새로 가져온 재료를 추가합니다.
-        ownedIngredients.Add(ingredient);
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
+        approvedIngredients.Add(ingredient);
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", approvedIngredients)}");
+
+        pickUpCount++;
 
         // UI를 업데이트 합니다.
         consumerUI.DisplayIngredientFeedback(isCorrect, index);
@@ -67,7 +71,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     private void ResetAllIngredientLists()
     {
         targetIngredients.Clear();
-        ownedIngredients.Clear();
+        approvedIngredients.Clear();
         untargetedIngredients.Clear();
     }
 
