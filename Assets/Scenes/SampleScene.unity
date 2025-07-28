@@ -962,7 +962,7 @@ MonoBehaviour:
   consumerPrefabs:
   - {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
   poolSize: 10
-  maxActiveCount: 1
+  maxActiveCount: 3
   minSpawnInterval: 1
   maxSpawnInterval: 3
 --- !u!4 &862743925

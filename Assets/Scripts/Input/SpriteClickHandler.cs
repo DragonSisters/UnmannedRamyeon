@@ -3,12 +3,20 @@ using UnityEngine;
 
 public class SpriteClickHandler : Singleton<SpriteClickHandler>
 {
+    public IClickableSprite CurrentClickedSprite => currentClickedSprite;
+    private IClickableSprite currentClickedSprite;
+
     public void UpdateHandler()
     {
         if (Input.GetMouseButtonDown(0))
         {
             HandleSpriteClick();
         }
+    }
+
+    public bool IsClickedObject(IClickableSprite sprite)
+    {
+        return currentClickedSprite == sprite;
     }
 
     private void HandleSpriteClick()
@@ -41,6 +49,7 @@ public class SpriteClickHandler : Singleton<SpriteClickHandler>
         // 클릭할 수 있을 때만 클릭처리합니다.
         if (clickableSprites.Count > 0 && clickableSprites[0].IsClickable)
         {
+            currentClickedSprite = clickableSprites[0];
             clickableSprites[0].OnSpriteClicked();
         }
     }

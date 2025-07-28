@@ -24,6 +24,22 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
 
+
+    public void DeselectOtherConsumers()
+    {
+        foreach (var consumer in pools)
+        {
+            var activeObjs = consumer.Value.GetActiveObjects();
+            foreach (var obj in activeObjs)
+            {
+                if(obj.IsClicked && ((IClickableSprite)obj != SpriteClickHandler.Instance.CurrentClickedSprite))
+                {
+                    obj.OnSpriteDeselected();
+                }
+            }
+        }
+    }
+
     public void InitializePools()
     {
         // 모든 오브젝트 정리

@@ -4,7 +4,9 @@ using UnityEngine;
 public class IngredientManager : Singleton<IngredientManager>
 {
     public const int MAX_INGREDIENT_NUMBER = 4;
-    public const float INGREDIENT_PICKUP_TIME = 3f;
+    public const float INGREDIENT_PICKUP_TIME = 2f;
+    public const float UI_DURATION_ON_COLLECT = 1f;
+    public const float UI_DURATION_PREVIEW = 2f;
     public const float CORRECT_INGREDIENT_PROBAILITY = 9f;
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
 

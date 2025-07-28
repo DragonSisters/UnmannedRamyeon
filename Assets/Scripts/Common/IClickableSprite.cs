@@ -8,4 +8,5 @@
     /// 클릭되면 실행할 로직을 이 안에 넣습니다
     /// </summary>
     public void OnSpriteClicked();
+    public void OnSpriteDeselected();
 }
