@@ -245,7 +245,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         Debug.Log($"손님{gameObject.GetInstanceID()}가 클릭되었습니다.");
 
         // 모든 Consumer 검사하여 다른 손님은 Click해제
-        ConsumerManager.Instance.OnClickedConsumer();
+        ConsumerManager.Instance.DeselectOtherConsumers();
 
         isClicked = true;
         // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.

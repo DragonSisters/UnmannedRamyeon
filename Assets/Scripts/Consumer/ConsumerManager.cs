@@ -25,7 +25,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private Coroutine despawnCoroutine;
 
 
-    public void OnClickedConsumer()
+    public void DeselectOtherConsumers()
     {
         foreach (var consumer in pools)
         {
