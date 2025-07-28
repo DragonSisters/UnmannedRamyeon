@@ -97,16 +97,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
     }
 
-    private Vector3 GetRandomSpawnPosition()
-    {
-        // @charotiti9 TODO: 스폰 위치 로직 구현
-        return new Vector3(
-            Random.Range(-4f, 4f),
-            Random.Range(-4f, 4f),
-            0f
-        );
-    }
-
     private bool IsAvailableSpawn()
     {
         // @charotiti9 TODO: 나중에 여러가지 조건이 생기면 여기서 검사합니다.
@@ -137,9 +127,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         Consumer obj = pools[prefab].GetOrCreate();
-        // @charotiti9 TODO: 위치 설정이 필요합니다. 지금은 랜덤으로 생성되도록 합니다.
-        obj.transform.position = GetRandomSpawnPosition();
-
         obj.OnSpawn();
     }
 

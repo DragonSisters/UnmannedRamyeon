@@ -15,3 +15,4 @@ MonoBehaviour:
   name: "\uB9C8\uC694\uB124\uC988"
   icon: {fileID: -6690436349200553321, guid: 1123433c27de505429de7b18f809ddc9, type: 3}
   price: 500
+  point: {x: -3, y: -3}
