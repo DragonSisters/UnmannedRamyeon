@@ -21,6 +21,8 @@ public class ConsumerMove : MonoBehaviour
         agent.updateRotation = false;
         agent.updateUpAxis = false;
         agent.speed = moveSpeed;
+        agent.radius = 0.3f;
+        agent.height = 0.1f;
     }
 
     public Vector2 GetIngredientPoint(IngredientScriptableObject ingredient)
