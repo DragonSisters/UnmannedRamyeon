@@ -11,6 +11,10 @@ public class ConsumerUI : MonoBehaviour
     [SerializeField] private TMP_Text speechBubbleText;
     [SerializeField] private Sprite speechBubbleSprite;
 
+    // IngredientUI의 이벤트를 ConsumerIngredientHandler에게 중계해주는 이벤트입니다.
+    public delegate void ClickEventForwardHandler(int index);
+    public event ClickEventForwardHandler ForwardOnClicked;
+
     public void ActivateIngredientUI(bool isActive)
     {
         TargetIngredientUI.SetActive(isActive);
@@ -25,8 +29,9 @@ public class ConsumerUI : MonoBehaviour
     {
         for (int i = 0; i < ingredients.Count; i++)
         {
-            ingredientUis[i].Initialize();
+            ingredientUis[i].Initialize(i);
             ingredientUis[i].SetIngredientImage(ingredients[i].Icon);
+            ingredientUis[i].OnClicked += ForwardIngredientClick;
         }
     }
 
@@ -41,5 +46,10 @@ public class ConsumerUI : MonoBehaviour
         {
             ui.DeactivateFeedbackUI();
         }
+    }
+
+    private void ForwardIngredientClick(int index)
+    {
+        ForwardOnClicked?.Invoke(index);
     }
 }

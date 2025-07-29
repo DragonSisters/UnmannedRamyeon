@@ -9,12 +9,15 @@ public class IngredientUI : MonoBehaviour, IClickableSprite
     [SerializeField] private Image ingredientImage;
     [SerializeField] private Image feedbackImage;
 
+    private int index = -1;
+    public delegate void ClickEventHandler(int index);
+    public event ClickEventHandler OnClicked;
     public bool IsClickable => isClickable;
     private bool isClickable = false;
 
     private const int CLICK_TOLERANCE = 15;
 
-    public void Initialize()
+    public void Initialize(int index)
     {
         // 박스 콜라이더 추가
         var boxCollider = gameObject.GetComponent<BoxCollider2D>();
@@ -34,13 +37,16 @@ public class IngredientUI : MonoBehaviour, IClickableSprite
         var newSize = new Vector2(rectTransform.rect.width, rectTransform.rect.height) 
             + new Vector2(CLICK_TOLERANCE, CLICK_TOLERANCE);
         boxCollider.size = newSize;
+
+        // 인덱스 설정
+        this.index = index;
     }
 
     public void OnSpriteClicked()
     {
         Debug.Log($"재료가 클릭되었습니다");
-        // @charotiti9 TODO: 재료를 isCorrect = true로 만듭니다
-
+        // 재료를 isCorrect = true로 만듭니다
+        OnClicked?.Invoke(index);
         feedbackImage.sprite = correctSprite;
         isClickable = false;
     }

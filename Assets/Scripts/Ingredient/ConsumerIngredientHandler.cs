@@ -45,6 +45,8 @@ public class ConsumerIngredientHandler : MonoBehaviour
     public void Initialize()
     {
         consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
+        consumerUI.ForwardOnClicked += UpdateCorrectOwnIngredient; // 재료를 클릭하면 isCorrect를 true로 전환해주는 이벤트
+
         ResetAllIngredientLists();
         SetAllIngredientLists();
         ChooseAllIngredients();
@@ -89,7 +91,20 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     public void UpdateCorrectOwnIngredient(int index)
     {
-        OwnedIngredients[index].IsCorrect = true;
+        if(index < 0)
+        {
+            throw new System.Exception($"재료 인덱스 설정이 잘못되었습니다.");
+        }
+
+        // 같은 인덱스를 찾아서 재료 맞게 처리
+        foreach (var ownedIngredient in OwnedIngredients)
+        {
+            if(ownedIngredient.Index == index)
+            {
+                ownedIngredient.IsCorrect = true;
+            }
+        }
+        Debug.Log($"[{OwnedIngredients[index].Ingredient.Name}] 클릭 완료. 이제 최종가격에 포함됩니다.");
     }
 
     private void GetNeededIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
