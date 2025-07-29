@@ -25,6 +25,7 @@ public class ConsumerUI : MonoBehaviour
     {
         for (int i = 0; i < ingredients.Count; i++)
         {
+            ingredientUis[i].Initialize();
             ingredientUis[i].SetIngredientImage(ingredients[i].Icon);
         }
     }

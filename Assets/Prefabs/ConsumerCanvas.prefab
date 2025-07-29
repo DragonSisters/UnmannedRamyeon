@@ -89,7 +89,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientHandler: {fileID: 0}
   correctSprite: {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
   wrongSprite: {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
   ingredientImage: {fileID: 5468114496687055144}
@@ -183,7 +182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientHandler: {fileID: 0}
   correctSprite: {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
   wrongSprite: {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
   ingredientImage: {fileID: 7571383392481788142}
@@ -395,7 +393,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientHandler: {fileID: 0}
   correctSprite: {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
   wrongSprite: {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
   ingredientImage: {fileID: 7030711019286090608}
@@ -459,7 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -534,7 +531,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -609,7 +606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -714,7 +711,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ingredientHandler: {fileID: 0}
   correctSprite: {fileID: 6185612564094138996, guid: 724badd710b1d1643868f27575d39d88, type: 3}
   wrongSprite: {fileID: -6066252800685954953, guid: 399baeb42990af74fbe9e8dcfa53f1af, type: 3}
   ingredientImage: {fileID: 2648347870539181898}
@@ -804,7 +800,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 100
-  m_PresetInfoIsWorld: 0
+  m_PresetInfoIsWorld: 1
 --- !u!114 &5557616255203972173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -881,7 +877,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

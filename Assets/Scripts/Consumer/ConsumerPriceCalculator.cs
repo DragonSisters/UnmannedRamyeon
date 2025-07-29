@@ -17,15 +17,14 @@ public class ConsumerPriceCalculator : MonoBehaviour
     {
         float price = 0;
 
-        List<(IngredientScriptableObject ingredient, int index, bool isCorrect)> ownedIngredients 
-            = ingredientHandler.OwnedIngredients;
+        List<IngredientInfo> ingredientInfos = ingredientHandler.OwnedIngredients;
 
-        foreach(var ingredientInfo in ownedIngredients)
+        foreach(var ingredientInfo in ingredientInfos)
         {
             // 지적한 ingredient만 값에 들어갑니다
-            if (ingredientInfo.isCorrect)
+            if (ingredientInfo.IsCorrect)
             {
-                price += ingredientInfo.ingredient.Price;
+                price += ingredientInfo.Ingredient.Price;
             }
         }
 

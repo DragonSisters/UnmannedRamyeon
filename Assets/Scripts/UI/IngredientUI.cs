@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class IngredientUI : MonoBehaviour, IClickableSprite
 {
-    [SerializeField] private ConsumerIngredientHandler ingredientHandler;
     [SerializeField] private Sprite correctSprite;
     [SerializeField] private Sprite wrongSprite;
 
@@ -13,9 +12,35 @@ public class IngredientUI : MonoBehaviour, IClickableSprite
     public bool IsClickable => isClickable;
     private bool isClickable = false;
 
+    private const int CLICK_TOLERANCE = 15;
+
+    public void Initialize()
+    {
+        // 박스 콜라이더 추가
+        var boxCollider = gameObject.GetComponent<BoxCollider2D>();
+        if (boxCollider == null)
+        {
+            boxCollider = gameObject.AddComponent<BoxCollider2D>();
+        }
+        // 충돌되지 않도록 trigger on
+        boxCollider.isTrigger = true;
+
+        // 사이즈 조정
+        var rectTransform = gameObject.GetComponent<RectTransform>();
+        if (rectTransform == null)
+        {
+            throw new System.Exception($"UI는 늘 RectTransform을 가지고 있어야 합니다.");
+        }
+        var newSize = new Vector2(rectTransform.rect.width, rectTransform.rect.height) 
+            + new Vector2(CLICK_TOLERANCE, CLICK_TOLERANCE);
+        boxCollider.size = newSize;
+    }
+
     public void OnSpriteClicked()
     {
+        Debug.Log($"재료가 클릭되었습니다");
         // @charotiti9 TODO: 재료를 isCorrect = true로 만듭니다
+
         feedbackImage.sprite = correctSprite;
         isClickable = false;
     }

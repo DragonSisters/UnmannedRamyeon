@@ -220,7 +220,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         // 필요한 재료를 가져옵니다.
         var neededIngredientInfo = ingredientHandler.GetNeededIngredientInfo();
-        var point = neededIngredientInfo.ingredient.Point;
+        var point = neededIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
         while (!moveScript.IsCloseEnough(point))
@@ -232,7 +232,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
-        ingredientHandler.AddOwnIngredient(neededIngredientInfo.ingredient, neededIngredientInfo.index, neededIngredientInfo.isCorrect);
+        ingredientHandler.AddOwnIngredient(neededIngredientInfo.Ingredient, neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
         
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);
