@@ -16,6 +16,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
+    /// <summary>
+    /// 스폰된 시간
+    /// </summary>
+    internal float? spawnedTime = null;
+
     private const float COOKING_WAITING_TIME = 5f;
 
     /// <summary>
