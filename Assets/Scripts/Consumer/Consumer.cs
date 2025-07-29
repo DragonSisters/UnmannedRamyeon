@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
-    [SerializeField] internal ConsumerUI consumerUI;
+    internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
     internal ConsumerPriceCalculator priceCalculator;
@@ -69,15 +69,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal abstract void HandleChildEnter();
     internal abstract void HandleChildExit();
     internal abstract IEnumerator HandleChildUpdate();
-    internal abstract void HandleChildClick();
+    internal abstract void HandleChildClick ();
 
     public void OnSpawn()
     {
         Initialize();
-        ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
-        ingredientHandler.Initialize();
-        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
-        priceCalculator.Initialize();
 
         SetState(ConsumerState.Enter);
         StartCoroutine(UpdateCustomerBehavior());
@@ -99,6 +95,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
+        consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
+
+        ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
+        ingredientHandler.Initialize();
+
+        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
+        priceCalculator.Initialize();
+
         SetState(ConsumerState.Invalid);
         IsIssueSolved = false;
         exitCompleted = false;
@@ -133,7 +137,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
         moveScript.Initialize();
     }
-
 
     /// <summary>
     /// 손님이 머무는 동안 해야하는 행동(update)
@@ -179,13 +182,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
     }
 
-
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
     private IEnumerator OnCustomerEnter()
     {
         HandleChildEnter();
+
+        ChooseIngredients();
 
         // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);
@@ -209,6 +213,18 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         HandleChildExit();
         exitCompleted = true;
+    }
+
+    public void ChooseIngredients()
+    {
+        ingredientHandler.ResetAllIngredientLists();
+        SetIngredientLists();
+        ingredientHandler.ChooseAllIngredients();
+    }
+
+    public virtual void SetIngredientLists()
+    {
+        ingredientHandler.SetAllIngredientLists();
     }
 
     private IEnumerator SearchIngredient()

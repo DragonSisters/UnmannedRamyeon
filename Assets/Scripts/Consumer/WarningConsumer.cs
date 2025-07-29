@@ -27,6 +27,7 @@ public class WarningConsumer : Consumer
     {
         spawnedTime = Time.time;
     }
+
     internal override void HandleChildExit() { }
 
     internal override IEnumerator HandleChildUpdate()

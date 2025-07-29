@@ -103,13 +103,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73408396c45f9694ba5deaf1799f1191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumerScriptableObject: {fileID: 0}
-  consumerUI: {fileID: 0}
-  warningDuration: 2
-  issueResolvedBonus: 5
-  issueUnresolvedPenalty: 20
-  minUsualTime: 2
-  maxUsualTime: 4
+  consumerScriptableObject: {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
+  allRecipes:
+  - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
+  - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
+  - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -150,7 +148,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec071e00cca309b4aa0bd220901d36c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumerUI: {fileID: 1264228265461581360}
 --- !u!1001 &2917918133184767696
 PrefabInstance:
   m_ObjectHideFlags: 0

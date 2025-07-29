@@ -19,7 +19,7 @@ public class IngredientInfo
 
 public class ConsumerIngredientHandler : MonoBehaviour
 {
-    [SerializeField] private ConsumerUI consumerUI;
+    private ConsumerUI consumerUI;
 
     /// <summary>
     /// 키오스크에 입력한 재료 목록
@@ -46,16 +46,62 @@ public class ConsumerIngredientHandler : MonoBehaviour
     {
         consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
         consumerUI.TransferClickEvent += UpdateCorrectOwnIngredient; // 재료를 클릭하면 isCorrect를 true로 전환해주는 이벤트
+    }
+    public void ResetAllIngredientLists()
+    {
+        targetIngredients.Clear();
+        untargetedIngredients.Clear();
+        neededIngredients.Clear();
+        OwnedIngredients.Clear();
+    }
 
-        ResetAllIngredientLists();
-        SetAllIngredientLists();
-        ChooseAllIngredients();
+    public void SetAllIngredientLists(List<IngredientScriptableObject> ingredientList = null)
+    {
+        // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
+        if (ingredientList == null)
+        {
+            targetIngredients = IngredientManager.Instance.GetTargetIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
+        }
+        else
+        {
+            targetIngredients = ingredientList;
+        }
+
+        // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
+        consumerUI.UpdateIngredientImages(targetIngredients);
+
+        // 필요하지 않은 재료의 리스트를 구합니다.
+        untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);
+    }
+
+    public void SetAllIngredientListsByRecipe(List<IngredientScriptableObject> ingredientList)
+    {
+        targetIngredients = ingredientList;
+
+        consumerUI.UpdateIngredientImages(targetIngredients);
+    }
+
+    private List<IngredientScriptableObject> GetFilteredIngredients(
+        List<IngredientScriptableObject> standardList,
+        List<IngredientScriptableObject> separatedList,
+        List<IngredientScriptableObject> initialList = null)
+    {
+        if (initialList == null) initialList = IngredientManager.Instance.IngredientScriptableObject;
+
+        foreach (IngredientScriptableObject ingredient in initialList)
+        {
+            if (!standardList.Contains(ingredient))
+            {
+                separatedList.Add(ingredient);
+            }
+        }
+        return separatedList;
     }
 
     /// <summary>
     /// 입장과 동시에 가져올 재료를 미리 선정해놓습니다.
     /// </summary>
-    private void ChooseAllIngredients()
+    public void ChooseAllIngredients()
     {
         // 재료를 가져올 순서를 섞습니다.
         var orderList = new List<int> { 0, 1, 2, 3 };
@@ -127,19 +173,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
     }
 
-    private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
-    {
-        return Random.Range(0, ingredientList.Count - 1);
-    }
-
-    private void ResetAllIngredientLists()
-    {
-        targetIngredients.Clear();
-        untargetedIngredients.Clear();
-        neededIngredients.Clear();
-        OwnedIngredients.Clear();
-    }
-
     private void SetAllIngredientLists()
     {
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
@@ -153,21 +186,9 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     }
 
-    private List<IngredientScriptableObject> GetFilteredIngredients(
-        List<IngredientScriptableObject> standardList, 
-        List<IngredientScriptableObject> separatedList,
-        List<IngredientScriptableObject> initialList = null)
+
+    private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {
-        if (initialList == null) initialList = IngredientManager.Instance.IngredientScriptableObject;
-
-        foreach (IngredientScriptableObject ingredient in initialList)
-        {
-            if (!standardList.Contains(ingredient))
-            {
-                separatedList.Add(ingredient);
-            }
-        }
-        return separatedList;
+        return Random.Range(0, ingredientList.Count - 1);
     }
-
 }
