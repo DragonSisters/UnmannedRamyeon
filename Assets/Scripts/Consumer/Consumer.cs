@@ -64,10 +64,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private bool exitCompleted;
 
     // 추상 함수
-    internal abstract void OnEnter();
-    internal abstract void OnExit();
-    internal abstract IEnumerator OnUpdate();
-    internal abstract void OnClick ();
+    internal abstract void HandleChildEnter();
+    internal abstract void HandleChildExit();
+    internal abstract IEnumerator HandleChildUpdate();
+    internal abstract void HandleChildClick();
 
     public void OnSpawn()
     {
@@ -84,7 +84,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public void OnDespawn()
     {
         StopCoroutine(UpdateCustomerBehavior());
-        StopCoroutine(OnUpdate());
+        StopCoroutine(HandleChildUpdate());
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
@@ -138,7 +138,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        StartCoroutine(OnUpdate());
+        StartCoroutine(HandleChildUpdate());
 
         while (!ShouldDespawn())
         {
@@ -185,7 +185,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private IEnumerator OnCustomerEnter()
     {
-        OnEnter();
+        HandleChildEnter();
 
         // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);
@@ -200,7 +200,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private void OnCustomerExit()
     {
-        OnExit();
+        HandleChildExit();
 
         // @charotiti9 TODO: 손님이 출구로 나갔다면 Despawn 되도록 합니다. 지금은 임시로 바로 Despawn합니다.
         exitCompleted = true;
@@ -251,7 +251,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
         if (State == ConsumerState.Issue)
         {
-            OnClick();
+            HandleChildClick();
             return;
         }
 
