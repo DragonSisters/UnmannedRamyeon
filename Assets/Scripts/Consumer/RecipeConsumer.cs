@@ -22,7 +22,7 @@ public class RecipeConsumer : Consumer
     {
     }
 
-    internal override IEnumerator HandleChildUpdate()
+    internal override IEnumerator HandleUpdate()
     {
         yield break;
     }
@@ -42,6 +42,8 @@ public class RecipeConsumer : Consumer
             throw new ArgumentException("리스트가 비어 있습니다.");
         }
         int index = UnityEngine.Random.Range(0, allRecipes.Count);
+
+        Debug.Log($"레시피 {allRecipes[index].Name} 선택");
 
         return allRecipes[index];
     }

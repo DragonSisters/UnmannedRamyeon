@@ -104,6 +104,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   consumerScriptableObject: {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
+  minUsualTime: 2
+  maxUsualTime: 4
+  issueResolvedBonus: 5
+  issueUnresolvedPenalty: 20
+  issueDuration: 20
   allRecipes:
   - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
   - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}

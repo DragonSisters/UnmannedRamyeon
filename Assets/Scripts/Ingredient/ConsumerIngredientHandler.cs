@@ -65,6 +65,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         else
         {
             targetIngredients = ingredientList;
+            Debug.Log($"레시피 손님이 고른 재료 : {string.Join(", ", ingredientList)}");
         }
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
