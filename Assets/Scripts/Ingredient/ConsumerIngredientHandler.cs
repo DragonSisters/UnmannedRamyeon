@@ -102,9 +102,9 @@ public class ConsumerIngredientHandler : MonoBehaviour
             if(ownedIngredient.Index == index)
             {
                 ownedIngredient.IsCorrect = true;
+                Debug.Log($"[{ownedIngredient.Ingredient.Name}] 클릭 완료. 이제 최종가격에 포함됩니다.");
             }
         }
-        Debug.Log($"[{OwnedIngredients[index].Ingredient.Name}] 클릭 완료. 이제 최종가격에 포함됩니다.");
     }
 
     private void GetNeededIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
