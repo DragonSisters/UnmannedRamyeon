@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -70,7 +69,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients)}");
 
         // UI를 업데이트 합니다.
-        consumerUI.DisplayIngredientFeedback(isCorrect, index);
+        consumerUI.ActivateFeedbackUIs(index, isCorrect);
     }
 
     private void GetNeededIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
@@ -112,7 +111,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         targetIngredients = IngredientManager.Instance.GetTargetIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.UpdateIngredientImages(targetIngredients);
+        consumerUI.InitializeIngredintUI(targetIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);

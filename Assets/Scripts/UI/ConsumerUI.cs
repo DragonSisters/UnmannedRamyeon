@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 using TMPro;
 
@@ -8,11 +7,8 @@ public class ConsumerUI : MonoBehaviour
     public GameObject TargetIngredientUI;
     public GameObject SpeechBubbleUI;
 
-    [SerializeField] private Image[] ingredientImages;
-    [SerializeField] private Image[] correctOrWrongImages;
+    [SerializeField] private IngredientUI[] ingredientUis;
     [SerializeField] private TMP_Text speechBubbleText;
-    [SerializeField] private Sprite correctSprite;
-    [SerializeField] private Sprite wrongSprite;
     [SerializeField] private Sprite speechBubbleSprite;
 
     public void ActivateIngredientUI(bool isActive)
@@ -25,39 +21,24 @@ public class ConsumerUI : MonoBehaviour
         SpeechBubbleUI.SetActive(isActive);
     }
 
-    public void UpdateIngredientImages(List<IngredientScriptableObject> ingredients)
+    public void InitializeIngredintUI(List<IngredientScriptableObject> ingredients)
     {
-        for(int ingredientNum = 0; ingredientNum < ingredients.Count; ingredientNum++)
+        for (int i = 0; i < ingredients.Count; i++)
         {
-            ingredientImages[ingredientNum].sprite = ingredients[ingredientNum].Icon;
+            ingredientUis[i].SetIngredientImage(ingredients[i].Icon);
         }
     }
 
-    public void DisplayIngredientFeedback(bool isCorrect, int index)
+    public void ActivateFeedbackUIs(int index, bool isCorrect)
     {
-        Image selectedImage = correctOrWrongImages[index];
-        selectedImage.gameObject.SetActive(true);
-
-        if(isCorrect)
-        {
-            selectedImage.sprite = correctSprite;
-        }
-        else
-        {
-            selectedImage.sprite = wrongSprite;
-        }
+        ingredientUis[index].ActivateFeedbackUI(isCorrect);
     }
 
     public void DeactivateAllFeedbackUIs()
     {
-        foreach(Image image in correctOrWrongImages)
+        foreach (var ui in ingredientUis)
         {
-            image.gameObject.SetActive(false);
+            ui.DeactivateFeedbackUI();
         }
-    }
-
-    public void SpeakNextIngredient(IngredientScriptableObject ingredient)
-    {
-        speechBubbleText.text = StringUtil.KoreanParticle($"음~ {ingredient.Name}을/를 가져와볼까~"); 
     }
 }
