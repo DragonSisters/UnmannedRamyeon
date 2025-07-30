@@ -104,6 +104,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   consumerScriptableObject: {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
+  consumerUI: {fileID: 1264228265461581360}
   minUsualTime: 2
   maxUsualTime: 4
   issueResolvedBonus: 5

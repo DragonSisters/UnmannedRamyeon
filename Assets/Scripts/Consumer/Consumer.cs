@@ -9,7 +9,7 @@ using UnityEngine;
 public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
-    internal ConsumerUI consumerUI;
+    [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
     internal ConsumerPriceCalculator priceCalculator;
@@ -26,6 +26,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
     public ConsumerState State { get; private set; }
+
+    /// <summary>
+    /// 최소/최대 일반상태 유지 시간
+    /// </summary>
+    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
+    [SerializeField] private int issueResolvedBonus = 5;
+    [SerializeField] private int issueUnresolvedPenalty = 20;
+    [SerializeField] internal float issueDuration = 20;
 
     /// <summary>
     /// 클릭할 수 있는 상태인지 반환합니다.
@@ -99,8 +107,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
-        consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
-
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
 
@@ -326,16 +332,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
         consumerUI.ActivateIngredientUI(false);
     }
-
-    
-
-    /// <summary>
-    /// 최소/최대 일반상태 유지 시간
-    /// </summary>
-    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
-    [SerializeField] private int issueResolvedBonus = 5;
-    [SerializeField] private int issueUnresolvedPenalty = 20;
-    [SerializeField] internal float issueDuration = 20;
 
     internal virtual IEnumerator HandleUpdate()
     {
