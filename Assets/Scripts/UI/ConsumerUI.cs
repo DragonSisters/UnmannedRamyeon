@@ -12,8 +12,8 @@ public class ConsumerUI : MonoBehaviour
     [SerializeField] private Sprite speechBubbleSprite;
 
     // IngredientUI의 이벤트를 ConsumerIngredientHandler에게 중계해주는 이벤트입니다.
-    public delegate void ClickEventForwardHandler(int index);
-    public event ClickEventForwardHandler ForwardOnClicked;
+    public delegate void ClickEventTransferHandler(int index);
+    public event ClickEventTransferHandler TransferClickEvent;
 
     public void ActivateIngredientUI(bool isActive)
     {
@@ -50,6 +50,6 @@ public class ConsumerUI : MonoBehaviour
 
     private void ForwardIngredientClick(int index)
     {
-        ForwardOnClicked?.Invoke(index);
+        TransferClickEvent?.Invoke(index);
     }
 }

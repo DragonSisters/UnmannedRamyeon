@@ -45,7 +45,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     public void Initialize()
     {
         consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
-        consumerUI.ForwardOnClicked += UpdateCorrectOwnIngredient; // 재료를 클릭하면 isCorrect를 true로 전환해주는 이벤트
+        consumerUI.TransferClickEvent += UpdateCorrectOwnIngredient; // 재료를 클릭하면 isCorrect를 true로 전환해주는 이벤트
 
         ResetAllIngredientLists();
         SetAllIngredientLists();
