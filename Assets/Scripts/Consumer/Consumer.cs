@@ -15,6 +15,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
+    private const float COOKING_WAITING_TIME = 5f;
+
     /// <summary>
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
@@ -160,8 +162,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     yield return LineUp();
                     break;
                 case ConsumerState.Cooking:
-                    // @charotiti9 TODO: 일정 시간이 지나면 완료되고 Exit으로 넘어가게 만들기. 지금은 임의로 Exit으로 넘깁니다.
-                    SetState(ConsumerState.Exit);
+                    yield return Cooking();
                     break;
                 // 이하로는 외부조정중. 이슈는 모든 상태에서 올 수 있으므로 주의가 필요합니다.
                 case ConsumerState.Issue:
@@ -262,6 +263,17 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         // 자신의 차례가 되면 다음단계로 넘어갑니다.
         SetState(ConsumerState.Cooking);
+    }
+
+    private IEnumerator Cooking()
+    {
+        // 일정 시간이 지나면 완료됩니다.
+        yield return new WaitForSeconds(COOKING_WAITING_TIME);
+
+        // @charotiti9 TODO: 기다리는 동안 게이지가 올라가는 UI가 필요합니다.
+        
+        // 지금은 임의로 Exit으로 넘깁니다.
+        SetState(ConsumerState.Exit);
     }
 
     public void OnSpriteClicked()
