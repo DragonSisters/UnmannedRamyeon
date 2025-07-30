@@ -11,6 +11,7 @@ public class MoveManager : Singleton<MoveManager>
     private const float MOVE_SPEED = 2;
     private const float MOVE_SPEED_RANGE = 0.5f;
     private const float ENTER_POINT_RANGE = 0.5f;
+    private const float EXIT_POINT_RANGE = 0.5f;
 
     public float RandomMoveSpeed => Random.Range(-MOVE_SPEED_RANGE, MOVE_SPEED_RANGE) + MOVE_SPEED;
     public Vector2 RandomEnterPoint
@@ -21,6 +22,16 @@ public class MoveManager : Singleton<MoveManager>
             var randomY = Random.Range(-ENTER_POINT_RANGE, ENTER_POINT_RANGE);
 
             return (Vector2)enterPoint.position + new Vector2(randomX, randomY);
+        }
+    }
+    public Vector2 RandomExitPoint
+    {
+        get
+        {
+            var randomX = Random.Range(-EXIT_POINT_RANGE, EXIT_POINT_RANGE);
+            var randomY = Random.Range(-EXIT_POINT_RANGE, EXIT_POINT_RANGE);
+
+            return (Vector2)exitPoint.position + new Vector2(randomX, randomY);
         }
     }
     [Header("재료")]

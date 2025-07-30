@@ -153,7 +153,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     yield return OnCustomerEnter();
                     break;
                 case ConsumerState.Exit:
-                    OnCustomerExit();
+                    yield return OnCustomerExit();
                     break;
                 case ConsumerState.Search:
                     yield return SearchIngredient();
@@ -198,11 +198,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// <summary>
     /// 손님이 떠날 때 해야하는 행동
     /// </summary>
-    private void OnCustomerExit()
+    private IEnumerator OnCustomerExit()
     {
-        HandleChildExit();
+        var exitPoint = MoveManager.Instance.RandomExitPoint;
+        while (!moveScript.IsCloseEnough(exitPoint))
+        {
+            moveScript.MoveTo(exitPoint);
+            yield return null;
+        }
 
-        // @charotiti9 TODO: 손님이 출구로 나갔다면 Despawn 되도록 합니다. 지금은 임시로 바로 Despawn합니다.
+        HandleChildExit();
         exitCompleted = true;
     }
 
