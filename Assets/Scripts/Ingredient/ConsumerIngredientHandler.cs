@@ -69,7 +69,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.UpdateIngredientImages(targetIngredients);
+        consumerUI.InitializeIngredintUI(targetIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);
@@ -79,7 +79,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     {
         targetIngredients = ingredientList;
 
-        consumerUI.UpdateIngredientImages(targetIngredients);
+        consumerUI.InitializeIngredintUI(targetIngredients);
     }
 
     private List<IngredientScriptableObject> GetFilteredIngredients(
