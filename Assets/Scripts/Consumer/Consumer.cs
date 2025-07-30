@@ -64,10 +64,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private bool exitCompleted;
 
     // 추상 함수
-    internal abstract void OnEnter();
-    internal abstract void OnExit();
-    internal abstract IEnumerator OnUpdate();
-    internal abstract void OnClick ();
+    internal abstract void HandleChildEnter();
+    internal abstract void HandleChildExit();
+    internal abstract IEnumerator HandleChildUpdate();
+    internal abstract void HandleChildClick();
 
     public void OnSpawn()
     {
@@ -84,7 +84,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public void OnDespawn()
     {
         StopCoroutine(UpdateCustomerBehavior());
-        StopCoroutine(OnUpdate());
+        StopCoroutine(HandleChildUpdate());
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
@@ -138,7 +138,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        StartCoroutine(OnUpdate());
+        StartCoroutine(HandleChildUpdate());
 
         while (!ShouldDespawn())
         {
@@ -185,7 +185,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private IEnumerator OnCustomerEnter()
     {
-        OnEnter();
+        HandleChildEnter();
 
         // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);
@@ -200,7 +200,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private void OnCustomerExit()
     {
-        OnExit();
+        HandleChildExit();
 
         // @charotiti9 TODO: 손님이 출구로 나갔다면 Despawn 되도록 합니다. 지금은 임시로 바로 Despawn합니다.
         exitCompleted = true;
@@ -220,7 +220,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         // 필요한 재료를 가져옵니다.
         var neededIngredientInfo = ingredientHandler.GetNeededIngredientInfo();
-        var point = neededIngredientInfo.ingredient.Point;
+        var point = neededIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
         while (!moveScript.IsCloseEnough(point))
@@ -232,7 +232,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
-        ingredientHandler.AddOwnIngredient(neededIngredientInfo.ingredient, neededIngredientInfo.index, neededIngredientInfo.isCorrect);
+        ingredientHandler.AddOwnIngredient(neededIngredientInfo.Ingredient, neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
         
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);
@@ -251,7 +251,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
         if (State == ConsumerState.Issue)
         {
-            OnClick();
+            HandleChildClick();
             return;
         }
 

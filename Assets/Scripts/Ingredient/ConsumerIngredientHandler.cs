@@ -1,7 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+
+public class IngredientInfo
+{
+    public IngredientScriptableObject Ingredient;
+    public int Index;
+    public bool IsCorrect;
+
+    public IngredientInfo(IngredientScriptableObject ingredient, int index, bool isCorrect)
+    {
+        Ingredient = ingredient;
+        Index = index;
+        IsCorrect = isCorrect;
+    }
+}
+
 
 public class ConsumerIngredientHandler : MonoBehaviour
 {
@@ -18,11 +32,11 @@ public class ConsumerIngredientHandler : MonoBehaviour
     /// <summary>
     /// 원하는 재료 목록. 가져왔다면 목록에서 삭제됩니다.
     /// </summary>
-    private Queue<(IngredientScriptableObject ingredient, int index, bool isCorrect)> neededIngredients = new();
+    private Queue<IngredientInfo> neededIngredients = new();
     /// <summary>
     /// 현재 가져온 재료 목록
     /// </summary>
-    public List<(IngredientScriptableObject ingredient, int index, bool isCorrect)> OwnedIngredients = new();
+    public List<IngredientInfo> OwnedIngredients = new();
 
     public bool IsIngredientSelectDone => 
         OwnedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
@@ -31,6 +45,8 @@ public class ConsumerIngredientHandler : MonoBehaviour
     public void Initialize()
     {
         consumerUI = gameObject.GetOrAddComponent<ConsumerUI>();
+        consumerUI.TransferClickEvent += UpdateCorrectOwnIngredient; // 재료를 클릭하면 isCorrect를 true로 전환해주는 이벤트
+
         ResetAllIngredientLists();
         SetAllIngredientLists();
         ChooseAllIngredients();
@@ -51,11 +67,11 @@ public class ConsumerIngredientHandler : MonoBehaviour
             var currentIndex = orderList[i];
             GetNeededIngredient(currentIndex, out var ingredient, out var isCorrect);
             // 이후에 재료를 얻었을 때를 대비해서 미리 저장해둡니다.
-            neededIngredients.Enqueue((ingredient, currentIndex, isCorrect));
+            neededIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
         }
     }
 
-    public (IngredientScriptableObject ingredient, int index, bool isCorrect) GetNeededIngredientInfo()
+    public IngredientInfo GetNeededIngredientInfo()
     {
         var ingredientInfo = neededIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
         return ingredientInfo;
@@ -66,11 +82,29 @@ public class ConsumerIngredientHandler : MonoBehaviour
         // 필요재료 리스트에서 뺍니다
         neededIngredients.Dequeue();
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
-        OwnedIngredients.Add((ingredient, index, isCorrect));
+        OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
         Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients)}");
 
         // UI를 업데이트 합니다.
-        consumerUI.DisplayIngredientFeedback(isCorrect, index);
+        consumerUI.ActivateFeedbackUIs(index, isCorrect);
+    }
+
+    public void UpdateCorrectOwnIngredient(int index)
+    {
+        if(index < 0)
+        {
+            throw new System.Exception($"재료 인덱스 설정이 잘못되었습니다.");
+        }
+
+        // 같은 인덱스를 찾아서 재료 맞게 처리
+        foreach (var ownedIngredient in OwnedIngredients)
+        {
+            if(ownedIngredient.Index == index)
+            {
+                ownedIngredient.IsCorrect = true;
+                Debug.Log($"[{ownedIngredient.Ingredient.Name}] 클릭 완료. 이제 최종가격에 포함됩니다.");
+            }
+        }
     }
 
     private void GetNeededIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
@@ -112,7 +146,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         targetIngredients = IngredientManager.Instance.GetTargetIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.UpdateIngredientImages(targetIngredients);
+        consumerUI.InitializeIngredintUI(targetIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
         untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);

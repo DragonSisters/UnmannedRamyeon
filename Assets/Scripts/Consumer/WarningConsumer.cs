@@ -23,13 +23,13 @@ public class WarningConsumer : Consumer
     /// </summary>
     private float? spawnedTime = null;
 
-    internal override void OnEnter()
+    internal override void HandleChildEnter()
     {
         spawnedTime = Time.time;
     }
-    internal override void OnExit() { }
+    internal override void HandleChildExit() { }
 
-    internal override IEnumerator OnUpdate()
+    internal override IEnumerator HandleChildUpdate()
     {
         var usualTime = Random.Range(minUsualTime, maxUsualTime);
 
@@ -62,7 +62,7 @@ public class WarningConsumer : Consumer
         }
     }
 
-    internal override void OnClick()
+    internal override void HandleChildClick()
     {
         Debug.Log($"Clicked: {gameObject.name}");
 

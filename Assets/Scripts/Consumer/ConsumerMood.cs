@@ -92,7 +92,6 @@ public class ConsumerMood : MonoBehaviour
                 currentAmount = MIN_MOOD;
             }
 
-            Debug.Log($"손님 기분: {Mood}, {currentAmount}");
             yield return new WaitForSeconds(DECREASE_INTERVAL);
         }
     }
