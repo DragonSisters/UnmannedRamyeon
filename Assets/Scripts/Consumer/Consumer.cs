@@ -159,7 +159,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     Debug.LogError($"손님({gameObject.name})의 상태가 설정되지 않았습니다. 확인해주세요.");
                     break;
                 case ConsumerState.Enter:
-                    yield return OnCustomerEnter();
+                    OnCustomerEnter();
                     break;
                 case ConsumerState.Exit:
                     yield return OnCustomerExit();
@@ -191,18 +191,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
-    private IEnumerator OnCustomerEnter()
+    private void OnCustomerEnter()
     {
         HandleChildEnter();
 
         ChooseIngredients();
 
-        // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
-        consumerUI.ActivateIngredientUI(true);
-        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
-        consumerUI.ActivateIngredientUI(false);
-
-        SetState(ConsumerState.Search);
+        StartCoroutine(HandleChildOrderOnUI());
     }
 
     /// <summary>
@@ -226,6 +221,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ingredientHandler.ResetAllIngredientLists();
         SetIngredientLists();
         ingredientHandler.ChooseAllIngredients();
+    }
+
+    public virtual IEnumerator HandleChildOrderOnUI()
+    {
+        // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
+        consumerUI.ActivateIngredientUI(true);
+        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
+        consumerUI.ActivateIngredientUI(false);
+
+        SetState(ConsumerState.Search);
     }
 
     public virtual void SetIngredientLists()

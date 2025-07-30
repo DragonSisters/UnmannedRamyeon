@@ -3,7 +3,7 @@
 public class IngredientClick : MonoBehaviour, IClickableSprite
 {
     public bool IsClickable => isClickable;
-    private bool isClickable = true;
+    private bool isClickable = false;
 
     private void Start()
     {
