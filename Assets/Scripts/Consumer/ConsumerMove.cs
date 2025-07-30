@@ -70,6 +70,7 @@ public class ConsumerMove : MonoBehaviour
     public Vector2 GetWaitingLinePoint()
     {
         MoveManager.Instance.FindFewestLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
+        MoveManager.Instance.PushLineQueue(foundLineIndex, foundLineOrder);
         lineIndex = foundLineIndex;
         lineOrder = foundLineOrder;
         return point;
@@ -78,6 +79,7 @@ public class ConsumerMove : MonoBehaviour
     public Vector2 GetWaitingPointInLine()
     {
         MoveManager.Instance.CalculateWaitingPointInLine(lineIndex, lineOrder, out var point, out var newLineOrder);
+        MoveManager.Instance.PopLineQueue(lineIndex);
         lineOrder = newLineOrder;
         return point;
     }

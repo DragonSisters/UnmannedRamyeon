@@ -42,7 +42,7 @@ public class MoveManager : Singleton<MoveManager>
     [SerializeField] private float lineSpacingFactor = 1f;
     [SerializeField] private Transform[] lineStartingPoint;
     
-    private List<(Queue line, Vector2 startingPoint)> lineList = new();
+    private List<(Queue<int> line, Vector2 startingPoint)> lineList = new();
     private List<IngredientScriptableObject> ingredientScriptableObjects = new();
 
     public void OnGameEnter()
@@ -50,7 +50,7 @@ public class MoveManager : Singleton<MoveManager>
         ingredientScriptableObjects = IngredientManager.Instance.IngredientScriptableObject;
         for (int i = 0; i < lineCount; i++)
         {
-            lineList.Add((new Queue(), lineStartingPoint[i].position));
+            lineList.Add((new Queue<int>(), lineStartingPoint[i].position));
         }
     }
 
@@ -71,6 +71,16 @@ public class MoveManager : Singleton<MoveManager>
         }
 
         return point;
+    }
+
+    public void PushLineQueue(int lineIndex, int lineOrder)
+    {
+        lineList[lineIndex].line.Enqueue(lineOrder);
+    }
+
+    public void PopLineQueue(int lineIndex)
+    {
+        lineList[lineIndex].line.Dequeue();
     }
 
     /// <summary>
