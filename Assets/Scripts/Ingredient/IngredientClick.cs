@@ -5,9 +5,14 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
     public bool IsClickable => isClickable;
     private bool isClickable = true;
 
+    private void Start()
+    {
+
+    }
+
     public void OnSpriteClicked()
     {
-        Debug.LogError($"재료 아이템 {gameObject.name}이 클릭되었습니다.");
+        // RecipeConsumer 일 경우 isClickable = true
     }
 
     public void OnSpriteDeselected()

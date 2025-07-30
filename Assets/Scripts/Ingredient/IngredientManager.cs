@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class IngredientManager : Singleton<IngredientManager>
@@ -9,6 +10,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float UI_DURATION_PREVIEW = 2f;
     public const float CORRECT_INGREDIENT_PROBAILITY = 9f;
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
+    [SerializeField] private GameObject ingredientsParent;
 
     void Start()
     {
@@ -25,7 +27,37 @@ public class IngredientManager : Singleton<IngredientManager>
                 throw new System.Exception($"재료({item.Name})에 문제가 있습니다 scriptable object를 확인해주세요.");
             }
         }
-    }   
+    }
+
+    public void CreateIngredientImageOnPosition()
+    {
+        List<IngredientScriptableObject> ingredientList = IngredientManager.Instance.IngredientScriptableObject;
+        foreach (IngredientScriptableObject ingredient in ingredientList)
+        {
+            GameObject ingredientGameObj = new GameObject(ingredient.name);
+            ingredientGameObj.transform.SetParent(ingredientsParent.transform, false); // 생성할 때는 로컬 좌표 유지
+            ingredientGameObj.transform.position = ingredient.Point; // 각 재료별 좌표로 옮김
+
+            // SpriteRenderer 생성
+            SpriteRenderer spriteRenderer = ingredientGameObj.GetComponent<SpriteRenderer>();
+            if (spriteRenderer == null)
+            {
+                spriteRenderer = ingredientGameObj.AddComponent<SpriteRenderer>();
+            }
+            spriteRenderer.sprite = ingredient.Icon;
+
+            // 박스 콜라이더 추가
+            var boxCollider = ingredientGameObj.GetComponent<BoxCollider2D>();
+            if (boxCollider == null)
+            {
+                boxCollider = ingredientGameObj.AddComponent<BoxCollider2D>();
+            }
+            // 충돌되지 않도록 trigger on
+            boxCollider.isTrigger = true;
+
+            ingredientGameObj.GetOrAddComponent<IngredientClick>();
+        }
+    }
 
     private bool IsValidate(IngredientScriptableObject ingredient)
     {
