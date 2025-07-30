@@ -25,7 +25,7 @@ public class IngredientManager : Singleton<IngredientManager>
                 throw new System.Exception($"재료({item.Name})에 문제가 있습니다 scriptable object를 확인해주세요.");
             }
         }
-    }
+    }   
 
     private bool IsValidate(IngredientScriptableObject ingredient)
     {
