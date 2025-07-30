@@ -20,11 +20,14 @@ public class DebugManager : MonoBehaviour
             return;
         }
 
-        // 손님시스템
-        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer Initialize"))
+        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Game Initialize"))
         {
+            MoveManager.Instance.OnGameEnter();
+            StartCoroutine(UpdateClick());
             ConsumerManager.Instance.InitializePools();
         }
+
+        // 손님시스템
         if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StartSpawn"))
         {
             ConsumerManager.Instance.StartSpawn();
@@ -32,12 +35,6 @@ public class DebugManager : MonoBehaviour
         if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StopSpawn"))
         {
             ConsumerManager.Instance.StopSpawn();
-        }
-
-        // 인풋시스템
-        if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Input UpdateClick"))
-        {
-            StartCoroutine(UpdateClick());
         }
     }
 
