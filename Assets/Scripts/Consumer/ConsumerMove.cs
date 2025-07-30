@@ -8,6 +8,32 @@ public class ConsumerMove : MonoBehaviour
     private NavMeshAgent agent;
     private const float RANGE_THRESHOLD = 0.5f;
 
+    public int LineIndex
+    {
+        get
+        {
+            if(lineIndex == -1)
+            {
+                throw new System.Exception($"아직 초기화되지 않은 LineIndex를 가져오려고 했습니다.");
+            }
+            return lineIndex;
+        }
+    }
+    private int lineIndex = -1;
+    public int LineOrder
+    {
+        get
+        {
+            if (lineOrder == -1)
+            {
+                throw new System.Exception($"아직 초기화되지 않은 LineOrder를 가져오려고 했습니다.");
+            }
+            return lineOrder;
+        }
+    }
+    private int lineOrder = -1;
+
+
     public void Initialize()
     {
         moveSpeed = MoveManager.Instance.RandomMoveSpeed;
@@ -39,5 +65,20 @@ public class ConsumerMove : MonoBehaviour
     {
         float distance = Vector2.Distance(gameObject.transform.position, point);
         return distance <= RANGE_THRESHOLD;
+    }
+
+    public Vector2 GetWaitingLinePoint()
+    {
+        MoveManager.Instance.FindFewestLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
+        lineIndex = foundLineIndex;
+        lineOrder = foundLineOrder;
+        return point;
+    }
+
+    public Vector2 GetWaitingPointInLine()
+    {
+        MoveManager.Instance.CalculateWaitingPointInLine(lineIndex, lineOrder, out var point, out var newLineOrder);
+        lineOrder = newLineOrder;
+        return point;
     }
 }
