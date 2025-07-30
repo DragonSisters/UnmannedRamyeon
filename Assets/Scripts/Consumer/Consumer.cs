@@ -18,9 +18,22 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private const float COOKING_WAITING_TIME = 5f;
 
     /// <summary>
+    /// 스폰된 시간
+    /// </summary>
+    internal float? spawnedTime = null;
+
+    /// <summary>
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
     public ConsumerState State { get; private set; }
+
+    /// <summary>
+    /// 최소/최대 일반상태 유지 시간
+    /// </summary>
+    [SerializeField] private float minUsualTime = 2f, maxUsualTime = 4f;
+    [SerializeField] private int issueResolvedBonus = 5;
+    [SerializeField] private int issueUnresolvedPenalty = 20;
+    [SerializeField] internal float issueDuration = 20;
 
     /// <summary>
     /// 클릭할 수 있는 상태인지 반환합니다.
@@ -68,16 +81,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     // 추상 함수
     internal abstract void HandleChildEnter();
     internal abstract void HandleChildExit();
-    internal abstract IEnumerator HandleChildUpdate();
-    internal abstract void HandleChildClick();
+    internal abstract void HandleChildClick ();
 
     public void OnSpawn()
     {
         Initialize();
-        ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
-        ingredientHandler.Initialize();
-        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
-        priceCalculator.Initialize();
 
         SetState(ConsumerState.Enter);
         StartCoroutine(UpdateCustomerBehavior());
@@ -86,7 +94,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public void OnDespawn()
     {
         StopCoroutine(UpdateCustomerBehavior());
-        StopCoroutine(HandleChildUpdate());
+        StopCoroutine(HandleUpdate());
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
@@ -99,6 +107,12 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
+        ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
+        ingredientHandler.Initialize();
+
+        priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
+        priceCalculator.Initialize();
+
         SetState(ConsumerState.Invalid);
         IsIssueSolved = false;
         exitCompleted = false;
@@ -134,13 +148,12 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         moveScript.Initialize();
     }
 
-
     /// <summary>
     /// 손님이 머무는 동안 해야하는 행동(update)
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        StartCoroutine(HandleChildUpdate());
+        StartCoroutine(HandleUpdate());
 
         while (!ShouldDespawn())
         {
@@ -179,13 +192,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
     }
 
-
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
     private IEnumerator OnCustomerEnter()
     {
         HandleChildEnter();
+
+        ChooseIngredients();
 
         // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);
@@ -209,6 +223,18 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         HandleChildExit();
         exitCompleted = true;
+    }
+
+    public void ChooseIngredients()
+    {
+        ingredientHandler.ResetAllIngredientLists();
+        SetIngredientLists();
+        ingredientHandler.ChooseAllIngredients();
+    }
+
+    public virtual void SetIngredientLists()
+    {
+        ingredientHandler.SetAllIngredientLists();
     }
 
     private IEnumerator SearchIngredient()
@@ -305,5 +331,38 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         isClicked = false;
         // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
         consumerUI.ActivateIngredientUI(false);
+    }
+
+    internal virtual IEnumerator HandleUpdate()
+    {
+        var usualTime = Random.Range(minUsualTime, maxUsualTime);
+
+        yield return new WaitForSeconds(usualTime);
+
+        // 이슈상태 시작
+        SetState(ConsumerState.Issue);
+
+        // 기분이 내려가기 시작합니다
+        moodScript.StartDecrease();
+
+        yield return new WaitUntil(() =>
+        (Time.time - (spawnedTime + usualTime) > issueDuration) // 주의를 주어야하는 기간이라면 기다립니다.
+        || IsIssueSolved); // 이슈가 해결되었다면 바로 넘어갑니다.
+
+        moodScript.StopDecrease();
+
+        // 클릭되었는지 여부를 통해 판단합니다
+        if (IsIssueSolved)
+        {
+            SetState(ConsumerState.IssueSolved);
+            // 이슈가 해결되면 약간 증가시켜줍니다 (보상)
+            moodScript.IncreaseMood(issueResolvedBonus);
+        }
+        else
+        {
+            SetState(ConsumerState.IssueUnsolved);
+            // 이슈가 해결되지 않으면 만족도가 많이 떨어집니다
+            moodScript.DecreaseMood(issueUnresolvedPenalty);
+        }
     }
 }
