@@ -15,6 +15,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
+    private const float COOKING_WAITING_TIME = 5f;
+
     /// <summary>
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
@@ -151,18 +153,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     yield return OnCustomerEnter();
                     break;
                 case ConsumerState.Exit:
-                    OnCustomerExit();
+                    yield return OnCustomerExit();
                     break;
                 case ConsumerState.Search:
                     yield return SearchIngredient();
                     break;
                 case ConsumerState.LineUp:
-                    // @charotiti9 TODO: 자신의 차례가 되었을 때 Cookig으로 상태 넘기기. 지금은 임의로 Cooking으로 넘깁니다.
-                    SetState(ConsumerState.Cooking);
+                    yield return LineUp();
                     break;
                 case ConsumerState.Cooking:
-                    // @charotiti9 TODO: 일정 시간이 지나면 완료되고 Exit으로 넘어가게 만들기. 지금은 임의로 Exit으로 넘깁니다.
-                    SetState(ConsumerState.Exit);
+                    yield return Cooking();
                     break;
                 // 이하로는 외부조정중. 이슈는 모든 상태에서 올 수 있으므로 주의가 필요합니다.
                 case ConsumerState.Issue:
@@ -198,11 +198,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// <summary>
     /// 손님이 떠날 때 해야하는 행동
     /// </summary>
-    private void OnCustomerExit()
+    private IEnumerator OnCustomerExit()
     {
-        HandleChildExit();
+        var exitPoint = MoveManager.Instance.RandomExitPoint;
+        while (!moveScript.IsCloseEnough(exitPoint))
+        {
+            moveScript.MoveTo(exitPoint);
+            yield return null;
+        }
 
-        // @charotiti9 TODO: 손님이 출구로 나갔다면 Despawn 되도록 합니다. 지금은 임시로 바로 Despawn합니다.
+        HandleChildExit();
         exitCompleted = true;
     }
 
@@ -238,6 +243,42 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         consumerUI.ActivateIngredientUI(true);
         yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
         consumerUI.ActivateIngredientUI(false);
+    }
+
+    private IEnumerator LineUp()
+    {
+        // 줄 서러 갑니다.
+        var waitingLinePoint = moveScript.GetWaitingLinePoint();
+
+        while (!moveScript.IsCloseEnough(waitingLinePoint)) 
+        {
+            moveScript.MoveTo(waitingLinePoint);
+            yield return null;
+        }
+
+        var currentLineOrder = moveScript.LineOrder;
+        // 줄이 줄어들면 이동합니다.
+        while (currentLineOrder > 0)
+        {
+            var linePoint = moveScript.GetWaitingPointInLine();
+            moveScript.MoveTo(linePoint);
+            currentLineOrder = moveScript.LineOrder;
+            yield return null;
+        }
+
+        // 자신의 차례가 되면 다음단계로 넘어갑니다.
+        SetState(ConsumerState.Cooking);
+    }
+
+    private IEnumerator Cooking()
+    {
+        // 일정 시간이 지나면 완료됩니다.
+        yield return new WaitForSeconds(COOKING_WAITING_TIME);
+
+        // @charotiti9 TODO: 기다리는 동안 게이지가 올라가는 UI가 필요합니다.
+        
+        // 지금은 임의로 Exit으로 넘깁니다.
+        SetState(ConsumerState.Exit);
     }
 
     public void OnSpriteClicked()

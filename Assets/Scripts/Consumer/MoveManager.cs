@@ -11,6 +11,7 @@ public class MoveManager : Singleton<MoveManager>
     private const float MOVE_SPEED = 2;
     private const float MOVE_SPEED_RANGE = 0.5f;
     private const float ENTER_POINT_RANGE = 0.5f;
+    private const float EXIT_POINT_RANGE = 0.5f;
 
     public float RandomMoveSpeed => Random.Range(-MOVE_SPEED_RANGE, MOVE_SPEED_RANGE) + MOVE_SPEED;
     public Vector2 RandomEnterPoint
@@ -21,6 +22,16 @@ public class MoveManager : Singleton<MoveManager>
             var randomY = Random.Range(-ENTER_POINT_RANGE, ENTER_POINT_RANGE);
 
             return (Vector2)enterPoint.position + new Vector2(randomX, randomY);
+        }
+    }
+    public Vector2 RandomExitPoint
+    {
+        get
+        {
+            var randomX = Random.Range(-EXIT_POINT_RANGE, EXIT_POINT_RANGE);
+            var randomY = Random.Range(-EXIT_POINT_RANGE, EXIT_POINT_RANGE);
+
+            return (Vector2)exitPoint.position + new Vector2(randomX, randomY);
         }
     }
     [Header("재료")]
@@ -42,7 +53,7 @@ public class MoveManager : Singleton<MoveManager>
     [SerializeField] private float lineSpacingFactor = 1f;
     [SerializeField] private Transform[] lineStartingPoint;
     
-    private List<(Queue line, Vector2 startingPoint)> lineList = new();
+    private List<(Queue<int> line, Vector2 startingPoint)> lineList = new();
     private List<IngredientScriptableObject> ingredientScriptableObjects = new();
 
     public void OnGameEnter()
@@ -50,7 +61,7 @@ public class MoveManager : Singleton<MoveManager>
         ingredientScriptableObjects = IngredientManager.Instance.IngredientScriptableObject;
         for (int i = 0; i < lineCount; i++)
         {
-            lineList.Add((new Queue(), lineStartingPoint[i].position));
+            lineList.Add((new Queue<int>(), lineStartingPoint[i].position));
         }
     }
 
@@ -73,32 +84,48 @@ public class MoveManager : Singleton<MoveManager>
         return point;
     }
 
+    public void PushLineQueue(int lineIndex, int lineOrder)
+    {
+        lineList[lineIndex].line.Enqueue(lineOrder);
+    }
+
+    public void PopLineQueue(int lineIndex)
+    {
+        lineList[lineIndex].line.Dequeue();
+    }
+
     /// <summary>
     /// 손님이 처음에 줄을 고를 때, 어디 서있어야 하는지 계산하여 반환해줍니다.
     /// </summary>
     /// <returns></returns>
-    public Vector2 SelectWaitingLine()
+    public void FindFewestLinePoint(out int lineIndex, out int lineOrder, out Vector2 point)
     {
-        var lineIndex = FindLineWithFewestConsumers();
-        return CalculateWaitingPositionInLine(lineIndex);
+        lineIndex = FindLineWithFewestConsumers();
+        lineOrder = lineList[lineIndex].line.Count;
+        CalculateWaitingPointInLine(lineIndex, lineOrder, out point, out var newLineOrder);
     }
 
     /// <summary>
     /// 줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
     /// </summary>
     /// <returns></returns>
-    public Vector2 CalculateWaitingPositionInLine(int lineIndex)
+    public void CalculateWaitingPointInLine(int lineIndex, int lineOrder, out Vector2 waitingPosition, out int newLineOrder)
     {
         var startingPoint = lineList[lineIndex].startingPoint;
-        var waitingPosition = startingPoint;
+        waitingPosition = startingPoint;
 
-        // 손님이 줄서있는 수만큼 fator를 더해 뒤에 섭니다.
-        for (int i = 0; i < lineList[lineIndex].line.Count; i++)
+        // 자신이 몇번째로 서있는지에 따라 fator를 더해 뒤에 섭니다.
+        for (int i = 0; i < lineOrder; i++)
         {
             waitingPosition.x += lineSpacingFactor;
         }
 
-        return waitingPosition;
+        // 새로 몇번째로 서있는지 갱신해둡니다
+        newLineOrder = lineOrder - 1;
+        if(newLineOrder < 0)
+        {
+            newLineOrder = 0;
+        }
     }
 
     /// <summary>
@@ -107,7 +134,7 @@ public class MoveManager : Singleton<MoveManager>
     private int FindLineWithFewestConsumers()
     {
         var minConsumerCount = int.MaxValue;
-        var minLineIndex = -1;
+        var minLineIndex = lineList.Count == 0 ? 0 : -1;
         for (int i = 0; i < lineList.Count; i++)
         {
             var consumerCount = lineList[i].line.Count;
