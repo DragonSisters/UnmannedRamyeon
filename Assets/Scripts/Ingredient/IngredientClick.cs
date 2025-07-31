@@ -16,6 +16,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
 
     public void OnSpriteDeselected()
     {
+        
     }
 
     public void SetClickable(bool isClickable)

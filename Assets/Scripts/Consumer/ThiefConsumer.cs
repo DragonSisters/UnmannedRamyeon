@@ -14,4 +14,9 @@ public class ThiefConsumer : Consumer
     {
         yield break;
     }
+
+    internal override void HandleChildUnclicked()
+    {
+        throw new System.NotImplementedException();
+    }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Unity.IO.LowLevel.Unsafe;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -66,6 +67,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal abstract void HandleChildExit();
     internal abstract IEnumerator HandleChildUpdate();
     internal abstract void HandleChildClick();
+    internal abstract void HandleChildUnclicked();
 
     public void OnSpawn()
     {
@@ -311,22 +313,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ConsumerManager.Instance.DeselectOtherConsumers();
 
         isClicked = true;
-        // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
-        if (State == ConsumerState.Issue)
-        {
-            HandleChildClick();
-            return;
-        }
 
-        // 이슈상태가 아니라면 재료가 보이도록 합니다.
-        consumerUI.ActivateIngredientUI(true);
+        HandleChildClick();
     }
 
     public void OnSpriteDeselected()
     {
         isClicked = false;
-        // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
-        consumerUI.ActivateIngredientUI(false);
+
+        HandleChildUnclicked();
     }
 
     public void WrongIngredientSpeech(int tmp = 0)

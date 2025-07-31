@@ -27,9 +27,15 @@ public class IngredientManager : Singleton<IngredientManager>
             {
                 OnIngredientSelectMode?.Invoke();
             }
+
+            if(!isIngredientSelectMode)
+            {
+                OnIngredientDeselectMode?.Invoke();
+            }
         }
     }
     public event System.Action OnIngredientSelectMode;
+    public event System.Action OnIngredientDeselectMode;
 
     void Start()
     {
@@ -48,6 +54,7 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         OnIngredientSelectMode += HandleIngredientSelectMode;
+        OnIngredientDeselectMode += HandleIngredientDeselectMode;
     }
 
     public void CreateIngredientObjOnPosition()
@@ -97,12 +104,19 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
-        Debug.LogWarning("이벤트 받았다");
+        Debug.Log("셀렉트 이벤트 받았다");
         // ingredient 클릭 활성화
         SwitchClickable(true);
         // 다른 데 클릭하면 다시 일반 모드로 돌아가야 됨
         // 클릭해서 네 개 다 맞는 재료 클릭하면 성공 -> 파이낸스 매니저에 보냄
         // 아니면 실패 -> 그냥 바로 퇴장
+    }
+
+    private void HandleIngredientDeselectMode()
+    {
+        Debug.Log("디셀렉트 이벤트 받았다");
+        // ingredient 클릭 활성화
+        SwitchClickable(false);
     }
 
     private bool IsValidate(IngredientScriptableObject ingredient)
