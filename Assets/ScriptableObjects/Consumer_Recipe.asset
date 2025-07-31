@@ -24,8 +24,8 @@ MonoBehaviour:
   - state: 2
     line:
     - "\uC5B4\uB528\uC9C0..."
-    - "{0}\uAC00 \uC5B4\uB528\uC9C0?"
-    - "{0} \uCC3E\uC558\uB2E4"
+    - "\uC5B4\uB528\uC9C0?"
+    - "\uC544 \uCC3E\uC558\uB2E4"
   - state: 3
     line:
     - "\uC904\uC11C\uB7EC \uAC00\uC57C\uACA0\uB2E4"
@@ -46,6 +46,5 @@ MonoBehaviour:
     - "\uBCC4\uB860\uB370?"
   - state: 7
     line:
-    - "\uC640 \uB2E4\uC74C\uC5D0 \uB610\uC640\uC57C\uACA0\uB2E4"
     - "\uAC10\uC0AC\uD569\uB2C8\uB2E4~"
   appearDate: 0
