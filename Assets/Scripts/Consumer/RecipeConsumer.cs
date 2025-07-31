@@ -22,7 +22,7 @@ public class RecipeConsumer : Consumer
     {
     }
 
-    internal override IEnumerator HandleUpdate()
+    internal override IEnumerator HandleChildUpdate()
     {
         yield break;
     }
