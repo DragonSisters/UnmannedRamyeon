@@ -12,6 +12,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
+    internal ConsumerSpeech speechScript;
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
@@ -65,14 +66,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
 
         State = newState;
-
-        // Invalid 초기화일 때는 대사를 건너뜁니다.
-        if (State == ConsumerState.Invalid)
+        if (newState != ConsumerState.Invalid)
         {
-            return;
+            speechScript.Speech(consumerScriptableObject, newState);
         }
-        var line = consumerScriptableObject.GetDialogueFromState(newState);
-        print($"손님{gameObject.name}: {string.Join(", ", line)}");
     }
 
     internal bool IsIssueSolved;
@@ -113,10 +110,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
         priceCalculator.Initialize();
 
-        SetState(ConsumerState.Invalid);
-        IsIssueSolved = false;
-        exitCompleted = false;
-
         // 스프라이트 렌더러 추가
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
@@ -146,6 +139,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             moveScript = gameObject.AddComponent<ConsumerMove>();
         }
         moveScript.Initialize();
+        // 손님 말하기 스크립트 추가
+        speechScript = gameObject.GetComponent<ConsumerSpeech>();
+        if (speechScript == null)
+        {
+            speechScript = gameObject.AddComponent<ConsumerSpeech>();
+        }
+
+        SetState(ConsumerState.Invalid);
+        IsIssueSolved = false;
+        exitCompleted = false;
     }
 
     /// <summary>
