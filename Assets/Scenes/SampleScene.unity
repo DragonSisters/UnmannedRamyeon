@@ -961,6 +961,7 @@ MonoBehaviour:
   spawnParent: {fileID: 1094846348}
   consumerPrefabs:
   - {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
+  - {fileID: 7357440723094547320, guid: 9dd112f23f16df24eb1f4b75ab04b729, type: 3}
   poolSize: 10
   maxActiveCount: 3
   minSpawnInterval: 1
