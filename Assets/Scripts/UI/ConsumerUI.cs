@@ -43,7 +43,7 @@ public class ConsumerUI : MonoBehaviour
         {
             ingredientUis[i].Initialize(i);
             ingredientUis[i].SetIngredientImage(ingredients[i].Icon);
-            ingredientUis[i].OnClicked += ForwardIngredientClick;
+            ingredientUis[i].OnClicked += TransferIngredientClick;
         }
     }
 
@@ -60,7 +60,7 @@ public class ConsumerUI : MonoBehaviour
         }
     }
 
-    private void ForwardIngredientClick(int index)
+    private void TransferIngredientClick(int index)
     {
         TransferClickEvent?.Invoke(index);
     }
