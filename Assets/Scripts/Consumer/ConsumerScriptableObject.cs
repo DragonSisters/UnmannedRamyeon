@@ -44,31 +44,39 @@ public class ConsumerScriptableObject : ScriptableObject
 
     public string GetRandomDialogueFromState(ConsumerState state)
     {
-        var lines = GetStateLines(state);
-        return lines[Random.Range(0, lines.Count)];
+        if (TryGetStateLines(state, out var lines))
+        {
+            return lines[Random.Range(0, lines.Count)];
+        }
+        return "";
     }
 
     public string GetDialogueFromState(ConsumerState state, int index)
     {
-        var lines = GetStateLines(state);
-        if(index > lines.Count)
+        if(TryGetStateLines(state, out var lines))
         {
-            throw new System.Exception($"손님의 대사 중 {state}에서 {index}번째 대사는 존재하지 않습니다.");
+            if (index > lines.Count)
+            {
+                throw new System.Exception($"손님의 대사 중 {state}에서 {index}번째 대사는 존재하지 않습니다.");
+            }
+            return lines[index];
         }
-        return lines[index];
+        return "";
     }
 
 
-    private List<string> GetStateLines(ConsumerState state)
+    private bool TryGetStateLines(ConsumerState state, out List<string> lines)
     {
         foreach (var dialogue in dialogues)
         {
             if (dialogue.state == state)
             {
-                return dialogue.line;
+                lines = dialogue.line;
+                return true;
             }
         }
 
-        throw new System.Exception($"손님의 대사 설정 중 {state} 상태로 설정된 대사가 없습니다.");
+        lines = null;
+        return false;
     }
 }

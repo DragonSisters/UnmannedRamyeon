@@ -33,7 +33,12 @@ public class ConsumerSpeech : MonoBehaviour
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
         var line = consumerScriptableObject.GetRandomDialogueFromState(state);
-        SpeechCoroutine = StartCoroutine(Speech(line));
+
+        // 해당 state에 대사가 있었을 경우에만 재생합니다.
+        if (!string.IsNullOrEmpty(line))
+        {
+            SpeechCoroutine = StartCoroutine(Speech(line));
+        }
     }
 
     public void StartIndexSpeech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state, int index)
@@ -44,7 +49,12 @@ public class ConsumerSpeech : MonoBehaviour
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
         var line = consumerScriptableObject.GetDialogueFromState(state, index);
-        SpeechCoroutine = StartCoroutine(Speech(line));
+
+        // 해당 state에 대사가 있었을 경우에만 재생합니다.
+        if (!string.IsNullOrEmpty(line))
+        {
+            SpeechCoroutine = StartCoroutine(Speech(line));
+        }
     }
 
     private IEnumerator Speech(string line)
