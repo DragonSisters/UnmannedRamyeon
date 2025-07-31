@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -12,6 +11,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     [SerializeField] internal ConsumerUI consumerUI;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
+    internal ConsumerSpeech speechScript;
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
@@ -65,14 +65,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
 
         State = newState;
-
-        // Invalid 초기화일 때는 대사를 건너뜁니다.
-        if (State == ConsumerState.Invalid)
+        if (newState != ConsumerState.Invalid)
         {
-            return;
+            // 손님 상태가 변할 때 말하는 것은 모두 Random처리합니다.
+            speechScript.StartRandomSpeech(consumerScriptableObject, newState);
         }
-        var line = consumerScriptableObject.GetDialogueFromState(newState);
-        print($"손님{gameObject.name}: {string.Join(", ", line)}");
     }
 
     internal bool IsIssueSolved;
@@ -113,10 +110,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
         priceCalculator.Initialize();
 
-        SetState(ConsumerState.Invalid);
-        IsIssueSolved = false;
-        exitCompleted = false;
-
         // 스프라이트 렌더러 추가
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
@@ -146,6 +139,17 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             moveScript = gameObject.AddComponent<ConsumerMove>();
         }
         moveScript.Initialize();
+        // 손님 말하기 스크립트 추가
+        speechScript = gameObject.GetComponent<ConsumerSpeech>();
+        if (speechScript == null)
+        {
+            speechScript = gameObject.AddComponent<ConsumerSpeech>();
+        }
+        speechScript.Initialize(consumerUI);
+
+        SetState(ConsumerState.Invalid);
+        IsIssueSolved = false;
+        exitCompleted = false;
     }
 
     /// <summary>

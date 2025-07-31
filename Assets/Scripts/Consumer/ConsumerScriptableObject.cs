@@ -27,7 +27,7 @@ public class ConsumerScriptableObject : ScriptableObject
     public struct Dialogue
     {
         public ConsumerState state;
-        public string line;
+        public List<string> line;
     }
     /// <summary>
     /// 상황에 따른 대사
@@ -37,20 +37,46 @@ public class ConsumerScriptableObject : ScriptableObject
     /// <summary>
     /// 찾아오는 최소 날짜(단계)
     /// </summary>
+    public int AppearDate => appearDate;
     [SerializeField] private int appearDate;
 
     public Sprite Appearance => appearance;
-    public string GetDialogueFromState(ConsumerState state)
+
+    public string GetRandomDialogueFromState(ConsumerState state)
+    {
+        if (TryGetStateLines(state, out var lines))
+        {
+            return lines[Random.Range(0, lines.Count)];
+        }
+        return "";
+    }
+
+    public string GetDialogueFromState(ConsumerState state, int index)
+    {
+        if(TryGetStateLines(state, out var lines))
+        {
+            if (index > lines.Count)
+            {
+                throw new System.Exception($"손님의 대사 중 {state}에서 {index}번째 대사는 존재하지 않습니다.");
+            }
+            return lines[index];
+        }
+        return "";
+    }
+
+
+    private bool TryGetStateLines(ConsumerState state, out List<string> lines)
     {
         foreach (var dialogue in dialogues)
         {
             if (dialogue.state == state)
             {
-                return dialogue.line;
+                lines = dialogue.line;
+                return true;
             }
         }
 
-        throw new System.Exception($"손님의 대사 설정 중 {state} 상태로 설정된 대사가 없습니다.");
+        lines = null;
+        return false;
     }
-    public int AppearDate => appearDate;
 }
