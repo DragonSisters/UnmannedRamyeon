@@ -57,7 +57,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         if (newState != ConsumerState.Invalid)
         {
             // 손님 상태가 변할 때 말하는 것은 모두 Random + Non-Format처리합니다.
-            speechScript.StartSpeech(consumerScriptableObject, newState, true, false);
+            speechScript.StartSpeechFromState(consumerScriptableObject, newState, true, false);
         }
     }
 
@@ -326,6 +326,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     public void WrongIngredientSpeech(int tmp = 0)
     {
-        speechScript.StartSpeech(consumerScriptableObject, State, true, false);
+        speechScript.StartSpeechFromState(consumerScriptableObject, State, true, false);
     }
 }

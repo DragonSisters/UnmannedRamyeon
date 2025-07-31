@@ -25,7 +25,7 @@ public class ConsumerSpeech : MonoBehaviour
         consumerUI.ActivateSpeechBubbleUI(false);
     }
 
-    public void StartSpeech(
+    public void StartSpeechFromState(
         ConsumerScriptableObject consumerScriptableObject, 
         ConsumerState state, 
         bool isRandom, 
