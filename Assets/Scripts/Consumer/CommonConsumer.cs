@@ -6,7 +6,25 @@ using UnityEngine;
 /// </summary>
 public class CommonConsumer : Consumer
 {
-    internal override void HandleChildEnter() { }
+    [SerializeField] internal int issueResolvedBonus = 5;
+    [SerializeField] internal int issueUnresolvedPenalty = 20;
+    [SerializeField] internal float issueDuration = 20;
+    /// <summary>
+    /// 주의를 주어야하는 기간. 짧을수록 어렵다.
+    /// </summary>
+    [SerializeField] private float warningDuration = 2f;
+
+    internal bool IsIssueSolved;
+
+    /// <summary>
+    /// 스폰된 시간
+    /// </summary>
+    internal float? spawnedTime = null;
+
+    internal override void HandleChildEnter()
+    {
+        spawnedTime = Time.time;
+    }
 
     internal override void HandleChildExit() { }
 
