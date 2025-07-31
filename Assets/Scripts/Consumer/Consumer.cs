@@ -326,6 +326,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     public void WrongIngredientSpeech(int tmp = 0)
     {
-        speechScript.StartSpeechFromState(consumerScriptableObject, State, true, false);
+        speechScript.StartSpeechFromSituation(consumerScriptableObject, ConsumerSituation.WrongIngredientDetected, true, false);
     }
 }

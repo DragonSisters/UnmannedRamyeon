@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,6 +24,39 @@ public class ConsumerSpeech : MonoBehaviour
             StopCoroutine(SpeechCoroutine);
         }
         consumerUI.ActivateSpeechBubbleUI(false);
+    }
+
+    public void StartSpeechFromSituation(
+        ConsumerScriptableObject consumerScriptableObject, 
+        ConsumerSituation situation,
+        bool isRandom,
+        bool hasFormat,
+        int index = -1,
+        string format = "")
+    {
+        // Invalid 초기화일 때는 대사를 건너뜁니다.
+        if (situation == ConsumerSituation.Invalid)
+        {
+            throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
+        }
+        if (!isRandom && index >= 0)
+        {
+            throw new System.Exception($"랜덤이 아닌데 인덱스를 설정하지 않았습니다.");
+        }
+        if (hasFormat && string.IsNullOrEmpty(format))
+        {
+            throw new System.Exception($"format이 있는데 매개변수를 설정하지 않았습니다.");
+        }
+
+        var line = isRandom ?
+            consumerScriptableObject.GetRandomDialogueFromSituation(situation, format)
+            : consumerScriptableObject.GetDialogueFromSituation(situation, index, format);
+
+        // 해당 state에 대사가 있었을 경우에만 재생합니다.
+        if (!string.IsNullOrEmpty(line))
+        {
+            SpeechCoroutine = StartCoroutine(Speech(line));
+        }
     }
 
     public void StartSpeechFromState(
