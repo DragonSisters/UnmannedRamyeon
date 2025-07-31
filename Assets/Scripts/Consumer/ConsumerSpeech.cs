@@ -8,20 +8,47 @@ public class ConsumerSpeech : MonoBehaviour
     private const float SPEECH_INTERVAL = 0.1f;
     private const float SPEECH_END_WAIT_TIME = 3f;
 
+    Coroutine SpeechCoroutine;
+
     public void Initialize(in ConsumerUI consumerUI) // in키워드 = call by ref
     {
         this.consumerUI = consumerUI;
+        SpeechCoroutine = null;
     }
 
-    public IEnumerator Speech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state)
+    public void StopSpeech()
+    {
+        if (SpeechCoroutine != null)
+        {
+            StopCoroutine(SpeechCoroutine);
+        }
+        consumerUI.ActivateSpeechBubbleUI(false);
+    }
+
+    public void StartRandomSpeech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state)
     {
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (state == ConsumerState.Invalid)
         {
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
-        var line = consumerScriptableObject.GetDialogueFromState(state);
+        var line = consumerScriptableObject.GetRandomDialogueFromState(state);
+        SpeechCoroutine = StartCoroutine(Speech(line));
+    }
 
+    public void StartIndexSpeech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state, int index)
+    {
+        // Invalid 초기화일 때는 대사를 건너뜁니다.
+        if (state == ConsumerState.Invalid)
+        {
+            throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
+        }
+        var line = consumerScriptableObject.GetDialogueFromState(state, index);
+        SpeechCoroutine = StartCoroutine(Speech(line));
+    }
+
+    private IEnumerator Speech(string line)
+    {
         consumerUI.ActivateSpeechBubbleUI(true);
 
         // 한글자씩 말하게 합니다.
