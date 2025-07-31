@@ -15,19 +15,37 @@ MonoBehaviour:
   appearance: {fileID: 21300000, guid: bdb7c058655e85a4a9e1cc770e5af79f, type: 3}
   dialogues:
   - state: 0
-    line: "\uC774\uBAB8 \uB4F1\uC7A5"
+    line:
+    - "\uB77C\uBA74 \uBA39\uC5B4\uC57C\uC9C0"
   - state: 1
-    line: "\uAC00\uC790\uAC00\uC790"
+    line:
+    - "\uAC00\uC57C\uC9C0"
+    - "\uAC00\uC790\uAC00\uC790"
   - state: 2
-    line: "\uBB58  \uACE8\uB77C\uBCF4\uC9C0~"
+    line:
+    - "\uC5B4\uB528\uC9C0..."
+    - "{0}\uAC00 \uC5B4\uB528\uC9C0?"
+    - "{0} \uCC3E\uC558\uB2E4"
   - state: 3
-    line: "\uC904\uC11C\uC57C\uC9C0"
+    line:
+    - "\uC904\uC11C\uB7EC \uAC00\uC57C\uACA0\uB2E4"
   - state: 4
-    line: "\uB9DB\uC788\uACA0\uB2E4!"
+    line:
+    - "\uB9DB\uC788\uACA0\uB2E4!"
+    - "\uC544 \uBC30\uACE0\uD30C"
+    - "\uB0C4\uC0C8 \uB300\uBC15"
   - state: 5
-    line: "\uC308\uC7A5 \uC5B4\uB528\uC9C0?"
+    line:
+    - "\uC800\uAE30\uC694 \uC800 {0} \uBA39\uACE0\uC2F6\uC740\uB370 \uBB50 \uD544\uC694\uD574\uC694?"
+    - "{0} \uBA39\uACE0\uC2F6\uC740\uB370..."
+    - "{0}\uAC00 \uB9DB\uC788\uB2E4\uB294\uB370 \uC5B4\uB5BB\uAC8C \uD558\uB294\uAC70\uC5D0\uC694?"
   - state: 6
-    line: "\uBB50\uC57C... \uC5C6\uC796\uC544"
+    line:
+    - "\uC74C... \uC544\uB2CC\uAC70\uAC19\uC740\uB370"
+    - "\uBB50\uC57C"
+    - "\uBCC4\uB860\uB370?"
   - state: 7
-    line: "\uAC10\uC0AC\uD569\uB2C8\uB2E4!"
+    line:
+    - "\uC640 \uB2E4\uC74C\uC5D0 \uB610\uC640\uC57C\uACA0\uB2E4"
+    - "\uAC10\uC0AC\uD569\uB2C8\uB2E4~"
   appearDate: 0
