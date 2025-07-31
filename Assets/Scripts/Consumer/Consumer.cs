@@ -133,6 +133,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             speechScript = gameObject.AddComponent<ConsumerSpeech>();
         }
         speechScript.Initialize(consumerUI);
+        consumerUI.TransferClickEvent += WrongIngredientSpeech;
 
         SetState(ConsumerState.Invalid);
         exitCompleted = false;
@@ -321,5 +322,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         isClicked = false;
         // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
         consumerUI.ActivateIngredientUI(false);
+    }
+
+    public void WrongIngredientSpeech(int tmp = 0)
+    {
+        speechScript.StartSpeech(consumerScriptableObject, State, true, false);
     }
 }
