@@ -24,6 +24,7 @@ public class CommonConsumer : Consumer
     internal override void HandleChildEnter()
     {
         spawnedTime = Time.time;
+        IsIssueSolved = false;
     }
 
     internal override void HandleChildExit() { }

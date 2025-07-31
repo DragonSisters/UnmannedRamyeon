@@ -135,7 +135,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         speechScript.Initialize(consumerUI);
 
         SetState(ConsumerState.Invalid);
-        IsIssueSolved = false;
         exitCompleted = false;
     }
 
