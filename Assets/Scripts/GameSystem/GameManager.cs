@@ -13,8 +13,6 @@ public class GameManager : Singleton<GameManager>
     [Header("인게임 화면 관련 게임 오브젝트")]
     [SerializeField] private GameObject inGameCanvas;
 
-    
-
     [Header("EndCanvas 관련 게임 오브젝트")]
     [SerializeField] private GameObject endCanvas;
     [SerializeField] private GameObject img_Success;
