@@ -9,6 +9,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 {
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
+
+    [SerializeField] internal int issueResolvedBonus = 5;
+    [SerializeField] internal int issueUnresolvedPenalty = 20;
+    [SerializeField] internal float issueDuration = 20;
+    /// <summary>
+    /// 주의를 주어야하는 기간. 짧을수록 어렵다.
+    /// </summary>
+    [SerializeField] private float warningDuration = 2f;
+
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
     internal ConsumerSpeech speechScript;
@@ -97,6 +106,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
+        spawnedTime = Time.time;
+
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
 
