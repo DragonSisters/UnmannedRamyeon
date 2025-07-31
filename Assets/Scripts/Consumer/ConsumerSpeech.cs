@@ -11,6 +11,8 @@ public class ConsumerSpeech : MonoBehaviour
 
     Coroutine SpeechCoroutine;
 
+    private bool isSpeaking;
+
     public void Initialize(in ConsumerUI consumerUI) // in키워드 = call by ref
     {
         this.consumerUI = consumerUI;
@@ -24,6 +26,7 @@ public class ConsumerSpeech : MonoBehaviour
             StopCoroutine(SpeechCoroutine);
         }
         consumerUI.ActivateSpeechBubbleUI(false);
+        isSpeaking = false;
     }
 
     public void StartSpeechFromSituation(
@@ -34,6 +37,11 @@ public class ConsumerSpeech : MonoBehaviour
         int index = -1,
         string format = "")
     {
+        // 말하고 있는게 있다면 멈추고 말하게 합니다.
+        if(isSpeaking)
+        {
+            StopSpeech();
+        }
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (situation == ConsumerSituation.Invalid)
         {
@@ -67,6 +75,11 @@ public class ConsumerSpeech : MonoBehaviour
         int index = -1,
         string format = "")
     {
+        // 말하고 있는게 있다면 멈추고 말하게 합니다.
+        if (isSpeaking)
+        {
+            StopSpeech();
+        }
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (state == ConsumerState.Invalid)
         {
@@ -94,6 +107,8 @@ public class ConsumerSpeech : MonoBehaviour
 
     private IEnumerator Speech(string line)
     {
+        isSpeaking = true;
+
         consumerUI.ActivateSpeechBubbleUI(true);
 
         // 한글자씩 말하게 합니다.
@@ -109,5 +124,7 @@ public class ConsumerSpeech : MonoBehaviour
         // 다 말하면 n초 기다리고 사라집니다.
         yield return new WaitForSeconds(SPEECH_END_WAIT_TIME);
         consumerUI.ActivateSpeechBubbleUI(false);
+
+        isSpeaking = false;
     }
 }
