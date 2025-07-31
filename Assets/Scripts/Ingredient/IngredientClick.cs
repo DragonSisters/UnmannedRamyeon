@@ -5,18 +5,21 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
     public bool IsClickable => isClickable;
     private bool isClickable = false;
 
-    private void Start()
+    public void Initialize()
     {
-
     }
 
     public void OnSpriteClicked()
     {
-        // RecipeConsumer 일 경우 isClickable = true
+        
     }
 
     public void OnSpriteDeselected()
     {
-        throw new System.NotImplementedException();
+    }
+
+    public void SetClickable(bool isClickable)
+    {
+        this.isClickable = isClickable;
     }
 }

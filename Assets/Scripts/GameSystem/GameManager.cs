@@ -13,23 +13,7 @@ public class GameManager : Singleton<GameManager>
     [Header("인게임 화면 관련 게임 오브젝트")]
     [SerializeField] private GameObject inGameCanvas;
 
-    private bool isIngredientSelectMode;
-    public bool IsIngredientSelectMode
-    {
-        get => isIngredientSelectMode;
-        set
-        {
-            if (isIngredientSelectMode == value) return;
-
-            isIngredientSelectMode = value;
-
-            if (isIngredientSelectMode)
-            {
-                OnIngredientSelectMode?.Invoke();
-            }
-        }
-    }
-    public event Action OnIngredientSelectMode;
+    
 
     [Header("EndCanvas 관련 게임 오브젝트")]
     [SerializeField] private GameObject endCanvas;
@@ -46,7 +30,6 @@ public class GameManager : Singleton<GameManager>
         // @charotiti9 TODO: 손님 풀을 미리 만들어두어야합니다. 지금은 자리가 마땅치 않아서 게임 시작 버튼을 누르면 생성하도록 만들었습니다.
         // 추후 더 괜찮은 자리가 나오면 자리를 옮겨줍시다.
         ConsumerManager.Instance.InitializePools();
-        OnIngredientSelectMode += HandleIngredientSelectMode;
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
@@ -71,7 +54,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(UpdateGame());
 
         ConsumerManager.Instance.StartSpawn();
-        IngredientManager.Instance.CreateIngredientImageOnPosition();
+        IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
     }
 
@@ -82,11 +65,6 @@ public class GameManager : Singleton<GameManager>
             SpriteClickHandler.Instance.UpdateHandler();
             yield return null;
         }
-    }
-
-    private void HandleIngredientSelectMode()
-    {
-        Debug.LogWarning("이벤트 받았다");
     }
 
     public void EndGame()

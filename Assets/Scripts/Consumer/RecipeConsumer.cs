@@ -16,7 +16,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildClick()
     {
         //ingredients 들 클릭 활성화
-        GameManager.Instance.IsIngredientSelectMode = true;
+        IngredientManager.Instance.IsIngredientSelectMode = true;
     }
 
     internal override void HandleChildEnter()
