@@ -10,14 +10,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
 
-    [SerializeField] internal int issueResolvedBonus = 5;
-    [SerializeField] internal int issueUnresolvedPenalty = 20;
-    [SerializeField] internal float issueDuration = 20;
-    /// <summary>
-    /// 주의를 주어야하는 기간. 짧을수록 어렵다.
-    /// </summary>
-    [SerializeField] private float warningDuration = 2f;
-
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
     internal ConsumerSpeech speechScript;
@@ -25,11 +17,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal ConsumerIngredientHandler ingredientHandler;
 
     private const float COOKING_WAITING_TIME = 5f;
-
-    /// <summary>
-    /// 스폰된 시간
-    /// </summary>
-    internal float? spawnedTime = null;
 
     /// <summary>
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
@@ -47,6 +34,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public bool IsClicked => isClicked;
     private bool isClicked = false;
 
+    private bool exitCompleted;
     /// <summary>
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
@@ -72,9 +60,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             speechScript.StartRandomSpeech(consumerScriptableObject, newState);
         }
     }
-
-    internal bool IsIssueSolved;
-    private bool exitCompleted;
 
     // 추상 함수
     internal abstract void HandleChildEnter();
@@ -106,8 +91,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
-        spawnedTime = Time.time;
-
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
 
