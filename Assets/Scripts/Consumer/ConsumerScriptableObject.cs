@@ -42,16 +42,19 @@ public class ConsumerScriptableObject : ScriptableObject
 
     public Sprite Appearance => appearance;
 
-    public string GetRandomDialogueFromState(ConsumerState state)
+    public string GetRandomDialogueFromState(ConsumerState state, string format = "")
     {
         if (TryGetStateLines(state, out var lines))
         {
-            return lines[Random.Range(0, lines.Count)];
+            var randomLine = lines[Random.Range(0, lines.Count)];
+            // format이 있다면 적용합니다
+            randomLine = string.Format(randomLine, format);
+            return randomLine;
         }
         return "";
     }
 
-    public string GetDialogueFromState(ConsumerState state, int index)
+    public string GetDialogueFromState(ConsumerState state, int index, string format = "")
     {
         if(TryGetStateLines(state, out var lines))
         {
@@ -59,7 +62,10 @@ public class ConsumerScriptableObject : ScriptableObject
             {
                 throw new System.Exception($"손님의 대사 중 {state}에서 {index}번째 대사는 존재하지 않습니다.");
             }
-            return lines[index];
+            var line = lines[index];
+            // format이 있다면 적용합니다
+            line = string.Format(line, format);
+            return line;
         }
         return "";
     }

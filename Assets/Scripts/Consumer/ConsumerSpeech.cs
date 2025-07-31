@@ -25,30 +25,31 @@ public class ConsumerSpeech : MonoBehaviour
         consumerUI.ActivateSpeechBubbleUI(false);
     }
 
-    public void StartRandomSpeech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state)
+    public void StartSpeech(
+        ConsumerScriptableObject consumerScriptableObject, 
+        ConsumerState state, 
+        bool isRandom, 
+        bool hasFormat,
+        int index = -1,
+        string format = "")
     {
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (state == ConsumerState.Invalid)
         {
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
-        var line = consumerScriptableObject.GetRandomDialogueFromState(state);
-
-        // 해당 state에 대사가 있었을 경우에만 재생합니다.
-        if (!string.IsNullOrEmpty(line))
+        if (!isRandom && index >= 0) 
         {
-            SpeechCoroutine = StartCoroutine(Speech(line));
+            throw new System.Exception($"랜덤이 아닌데 인덱스를 설정하지 않았습니다.");
         }
-    }
-
-    public void StartIndexSpeech(ConsumerScriptableObject consumerScriptableObject, ConsumerState state, int index)
-    {
-        // Invalid 초기화일 때는 대사를 건너뜁니다.
-        if (state == ConsumerState.Invalid)
+        if(hasFormat && string.IsNullOrEmpty(format))
         {
-            throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
+            throw new System.Exception($"format이 있는데 매개변수를 설정하지 않았습니다.");
         }
-        var line = consumerScriptableObject.GetDialogueFromState(state, index);
+
+        var line = isRandom ? 
+            consumerScriptableObject.GetRandomDialogueFromState(state, format) 
+            : consumerScriptableObject.GetDialogueFromState(state, index, format);
 
         // 해당 state에 대사가 있었을 경우에만 재생합니다.
         if (!string.IsNullOrEmpty(line))
