@@ -68,7 +68,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         State = newState;
         if (newState != ConsumerState.Invalid)
         {
-            speechScript.Speech(consumerScriptableObject, newState);
+            StartCoroutine(speechScript.Speech(consumerScriptableObject, newState));
         }
     }
 
@@ -145,6 +145,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         {
             speechScript = gameObject.AddComponent<ConsumerSpeech>();
         }
+        speechScript.Initialize(consumerUI);
 
         SetState(ConsumerState.Invalid);
         IsIssueSolved = false;

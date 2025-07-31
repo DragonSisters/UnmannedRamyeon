@@ -25,6 +25,11 @@ public class ConsumerUI : MonoBehaviour
         SpeechBubbleUI.SetActive(isActive);
     }
 
+    public void SetSpeechBubbleText(string message)
+    {
+        speechBubbleText.text = message;
+    }
+
     public void InitializeIngredintUI(List<IngredientScriptableObject> ingredients)
     {
         for (int i = 0; i < ingredients.Count; i++)
