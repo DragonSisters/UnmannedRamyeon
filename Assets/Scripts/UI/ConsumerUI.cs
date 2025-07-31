@@ -22,6 +22,13 @@ public class ConsumerUI : MonoBehaviour
 
     public void ActivateSpeechBubbleUI(bool isActive)
     {
+        // speechBubbleText가 설정되지 않았다면 무조건 비활성화합니다.
+        if(string.IsNullOrEmpty(speechBubbleText.text))
+        {
+            Debug.LogWarning($"speechBubbleText가 설정되지 않았기 때문에 말풍선을 비활성화 처리했습니다.");
+            SpeechBubbleUI.SetActive(false);
+        }
+
         SpeechBubbleUI.SetActive(isActive);
     }
 
