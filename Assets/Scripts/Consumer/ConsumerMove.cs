@@ -36,7 +36,6 @@ public class ConsumerMove : MonoBehaviour
     public void Initialize()
     {
         moveSpeed = MoveManager.Instance.RandomMoveSpeed;
-        gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
 
         agent = gameObject.GetComponent<NavMeshAgent>();
         if (agent == null)
@@ -49,6 +48,8 @@ public class ConsumerMove : MonoBehaviour
         agent.radius = 0.3f;
         agent.height = 0.1f;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+
+        gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
     }
 
     public Vector2 GetIngredientPoint(IngredientScriptableObject ingredient)
