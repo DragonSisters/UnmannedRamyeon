@@ -225,8 +225,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         consumerUI.ActivateIngredientUI(true);
         yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
         consumerUI.ActivateIngredientUI(false);
-
-        SetState(ConsumerState.Search);
     }
 
     public virtual void SetIngredientLists()

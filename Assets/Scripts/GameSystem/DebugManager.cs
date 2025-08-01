@@ -25,6 +25,7 @@ public class DebugManager : MonoBehaviour
             MoveManager.Instance.OnGameEnter();
             StartCoroutine(UpdateClick());
             ConsumerManager.Instance.InitializePools();
+            IngredientManager.Instance.CreateIngredientObjOnPosition();
         }
 
         // 손님시스템
