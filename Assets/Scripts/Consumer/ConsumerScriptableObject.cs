@@ -15,6 +15,13 @@ public enum ConsumerState
     IssueSolved, // 이슈처리 성공
 }
 
+public enum ConsumerSituation
+{
+    Invalid = -1, // 설정이 되지 않은, 정상이 아닌 상태입니다. 예외처리해야합니다.
+
+    WrongIngredientDetected, // 틀린 재료를 지적당했을 때
+
+}
 [CreateAssetMenu(fileName = "Consumer", menuName = "Scriptable Objects/Consumer")]
 public class ConsumerScriptableObject : ScriptableObject
 {
@@ -24,15 +31,22 @@ public class ConsumerScriptableObject : ScriptableObject
     [SerializeField] private Sprite appearance;
 
     [System.Serializable]
-    public struct Dialogue
+    public struct StateDialogue
     {
         public ConsumerState state;
+        public List<string> line;
+    }
+    [System.Serializable]
+    public struct SituationDialogue
+    {
+        public ConsumerSituation situation;
         public List<string> line;
     }
     /// <summary>
     /// 상황에 따른 대사
     /// </summary>
-    public List<Dialogue> dialogues = new();
+    public List<StateDialogue> stateDialogues = new();
+    public List<SituationDialogue> situationDialogues = new();
 
     /// <summary>
     /// 찾아오는 최소 날짜(단계)
@@ -70,12 +84,54 @@ public class ConsumerScriptableObject : ScriptableObject
         return "";
     }
 
+    public string GetRandomDialogueFromSituation(ConsumerSituation situation, string format = "")
+    {
+        if (TryGetSituationLines(situation, out var lines))
+        {
+            var randomLine = lines[Random.Range(0, lines.Count)];
+            // format이 있다면 적용합니다
+            randomLine = string.Format(randomLine, format);
+            return randomLine;
+        }
+        return "";
+    }
+
+    public string GetDialogueFromSituation(ConsumerSituation situation, int index, string format = "")
+    {
+        if (TryGetSituationLines(situation, out var lines))
+        {
+            if (index > lines.Count)
+            {
+                throw new System.Exception($"손님의 대사 중 {situation}에서 {index}번째 대사는 존재하지 않습니다.");
+            }
+            var line = lines[index];
+            // format이 있다면 적용합니다
+            line = string.Format(line, format);
+            return line;
+        }
+        return "";
+    }
 
     private bool TryGetStateLines(ConsumerState state, out List<string> lines)
     {
-        foreach (var dialogue in dialogues)
+        foreach (var dialogue in stateDialogues)
         {
             if (dialogue.state == state)
+            {
+                lines = dialogue.line;
+                return true;
+            }
+        }
+
+        lines = null;
+        return false;
+    }
+
+    private bool TryGetSituationLines(ConsumerSituation situation, out List<string> lines)
+    {
+        foreach (var dialogue in situationDialogues)
+        {
+            if (dialogue.situation == situation)
             {
                 lines = dialogue.line;
                 return true;

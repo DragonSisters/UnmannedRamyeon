@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Consumer_Common
   m_EditorClassIdentifier: 
   appearance: {fileID: 21300000, guid: bdb7c058655e85a4a9e1cc770e5af79f, type: 3}
-  dialogues:
+  stateDialogues:
   - state: 0
     line:
     - "\uBC30\uACE0\uD30C \uBC30\uACE0\uD30C"
@@ -33,15 +33,16 @@ MonoBehaviour:
   - state: 3
     line:
     - "\uB053\uC774\uB7EC \uAC00\uC57C\uC9C0"
+    - "\uC774\uC815\uB3C4\uBA74 \uB410\uB2E4"
   - state: 4
     line:
     - "\uC9C4\uC9DC \uB9DB\uC788\uACA0\uB2E4..."
     - "\uB0C4\uC0C8 \uC9C4\uC9DC \uC88B\uB2E4"
     - "\uBC30\uACE0\uD504\uB124"
-  - state: 5
-    line: []
-  - state: 6
-    line: []
-  - state: 7
-    line: []
+  situationDialogues:
+  - situation: 0
+    line:
+    - "\uC557.. \uC8C4\uC1A1\uD569\uB2C8\uB2E4."
+    - "\uC544 \uC798\uBABB \uACE8\uB790\uB124\uC694..."
+    - "\uC774\uAC8C \uC65C \uB4E4\uC5B4\uC788\uC9C0?"
   appearDate: 0
