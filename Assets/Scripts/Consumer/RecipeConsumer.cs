@@ -50,6 +50,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
         consumerUI.OrderByRecipeOnUI(myRecipe.name);
         SetState(ConsumerState.Issue);
         yield return new WaitForSeconds(recipeOrderDuration);
+        consumerUI.SetSpeechBubbleUI(false);
     }
 
     internal override void HandleChildClick()

@@ -17,6 +17,5 @@ public class ThiefConsumer : Consumer
 
     internal override void HandleChildUnclicked()
     {
-        throw new System.NotImplementedException();
     }
 }

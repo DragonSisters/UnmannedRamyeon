@@ -25,7 +25,7 @@ public class ConsumerSpeech : MonoBehaviour
         {
             StopCoroutine(SpeechCoroutine);
         }
-        consumerUI.ActivateSpeechBubbleUI(false);
+        consumerUI.SetSpeechBubbleUI(false);
         isSpeaking = false;
     }
 
@@ -109,7 +109,7 @@ public class ConsumerSpeech : MonoBehaviour
     {
         isSpeaking = true;
 
-        consumerUI.ActivateSpeechBubbleUI(true);
+        consumerUI.SetSpeechBubbleUI(true);
 
         // 한글자씩 말하게 합니다.
         var queue = new Queue<char>(line);
@@ -123,7 +123,7 @@ public class ConsumerSpeech : MonoBehaviour
        
         // 다 말하면 n초 기다리고 사라집니다.
         yield return new WaitForSeconds(SPEECH_END_WAIT_TIME);
-        consumerUI.ActivateSpeechBubbleUI(false);
+        consumerUI.SetSpeechBubbleUI(false);
 
         isSpeaking = false;
     }

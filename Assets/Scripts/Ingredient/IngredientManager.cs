@@ -27,8 +27,7 @@ public class IngredientManager : Singleton<IngredientManager>
             {
                 OnIngredientSelectMode?.Invoke();
             }
-
-            if(!isIngredientSelectMode)
+            else
             {
                 OnIngredientDeselectMode?.Invoke();
             }
