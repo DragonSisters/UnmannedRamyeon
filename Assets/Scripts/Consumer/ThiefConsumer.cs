@@ -14,4 +14,8 @@ public class ThiefConsumer : Consumer
     {
         yield break;
     }
+
+    internal override void HandleChildUnclicked()
+    {
+    }
 }

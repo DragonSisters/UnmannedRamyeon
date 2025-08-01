@@ -20,7 +20,7 @@ public class ConsumerUI : MonoBehaviour
         TargetIngredientUI.SetActive(isActive);
     }
 
-    public void ActivateSpeechBubbleUI(bool isActive)
+    public void SetSpeechBubbleUI(bool isActive)
     {
         // speechBubbleText가 설정되지 않았다면 무조건 비활성화합니다.
         if(string.IsNullOrEmpty(speechBubbleText.text))
@@ -64,4 +64,11 @@ public class ConsumerUI : MonoBehaviour
     {
         TransferClickEvent?.Invoke(index);
     }
+    
+    public void OrderByRecipeOnUI(string name)
+    {
+        SpeechBubbleUI.SetActive(true);
+        SpeechBubbleUI.GetComponentInChildren<TMP_Text>().text = StringUtil.KoreanParticle($"{name} 주세요!");
+    }
 }
+

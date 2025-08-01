@@ -29,13 +29,27 @@ public class CommonConsumer : Consumer
 
     internal override void HandleChildExit() { }
 
-    internal override void HandleChildClick() { }
+    internal override void HandleChildClick() 
+    {
+        // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
+        if (State == ConsumerState.Issue)
+        {
+            return;
+        }
+
+        // 이슈상태가 아니라면 재료가 보이도록 합니다.
+        consumerUI.ActivateIngredientUI(true);
+    }
+    internal override void HandleChildUnclicked()
+    {
+        // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
+        consumerUI.ActivateIngredientUI(false);
+    }
 
     internal override IEnumerator HandleChildUpdate() 
     {
         yield break;
     }
-
 
     // @charotiti9 TODO: 불이 나는 등의 무드가 떨어질 일이 생기면 
     // Consumer에 IsAllIssueState(임시명) 등의 변수를 HandleChildUpdate에서 보고 TickMoodPenalty를 적용시킬 것.

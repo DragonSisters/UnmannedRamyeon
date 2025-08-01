@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(UpdateGame());
 
         ConsumerManager.Instance.StartSpawn();
+        IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
     }
 

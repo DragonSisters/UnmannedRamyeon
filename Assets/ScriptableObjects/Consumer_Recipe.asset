@@ -12,38 +12,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ff02a0d89e29b41afd711a699e5118, type: 3}
   m_Name: Consumer_Recipe
   m_EditorClassIdentifier: 
-  appearance: {fileID: 21300000, guid: bdb7c058655e85a4a9e1cc770e5af79f, type: 3}
-  stateDialogues:
+  appearance: {fileID: 21300000, guid: aa84d9b693460c440bbddc400affa518, type: 3}
+  dialogues:
   - state: 0
     line:
-    - "\uC8FC\uBCC0\uC5D0 \uC788\uB7F0 \uB370\uAC00 \uC788\uC5C8\uB124"
+    - "\uB77C\uBA74 \uBA39\uC5B4\uC57C\uC9C0"
   - state: 1
     line:
-    - "\uC5B4\uB514 \uD55C \uBC88 \uBA39\uC5B4\uBCFC\uAE4C"
+    - "\uAC00\uC57C\uC9C0"
+    - "\uAC00\uC790\uAC00\uC790"
   - state: 2
     line:
-    - "\uC5B4\uB514\uC788\uC9C0?"
+    - "\uC5B4\uB528\uC9C0..."
+    - "\uC5B4\uB528\uC9C0?"
+    - "\uC544 \uCC3E\uC558\uB2E4"
   - state: 3
     line:
-    - "\uB053\uC774\uB7EC\uAC00\uC790"
+    - "\uC904\uC11C\uB7EC \uAC00\uC57C\uACA0\uB2E4"
   - state: 4
     line:
     - "\uB9DB\uC788\uACA0\uB2E4!"
+    - "\uC544 \uBC30\uACE0\uD30C"
+    - "\uB0C4\uC0C8 \uB300\uBC15"
   - state: 5
     line:
-    - "\uD639\uC2DC {0} \uC5B4\uB5BB\uAC8C \uB9CC\uB4E4\uC5B4\uC694?"
-    - "{0} \uBA39\uACE0\uC2F6\uC740\uB370 \uC5B4\uB5BB\uAC8C \uB9CC\uB4DC\uB294\uC9C0
-      \uBAA8\uB974\uACA0\uB2E4..."
-    - "{0} \uB9CC\uB4DC\uB294 \uBC95 \uC54C\uC544\uC694?"
+    - "\uC800\uAE30\uC694 \uC800 {0} \uBA39\uACE0\uC2F6\uC740\uB370 \uBB50 \uD544\uC694\uD574\uC694?"
+    - "{0} \uBA39\uACE0\uC2F6\uC740\uB370..."
+    - "{0}\uAC00 \uB9DB\uC788\uB2E4\uB294\uB370 \uC5B4\uB5BB\uAC8C \uD558\uB294\uAC70\uC5D0\uC694?"
   - state: 6
     line:
-    - "\uC798 \uBAA8\uB974\uC2DC\uB294\uAD6C\uB098..."
-    - "\uC774\uAC70 \uB9DE\uB098..."
-    - "\uC544\uB2CC\uAC70 \uAC19\uC740\uB370"
+    - "\uC74C... \uC544\uB2CC\uAC70\uAC19\uC740\uB370"
+    - "\uBB50\uC57C"
+    - "\uBCC4\uB860\uB370?"
   - state: 7
     line:
-    - "\uAC10\uC0AC\uD569\uB2C8\uB2E4!"
-    - "\uC774\uAC70 \uB9DE\uB294 \uAC70 \uAC19\uC544\uC694"
-    - "\uC6B0\uC640"
-  situationDialogues: []
+    - "\uAC10\uC0AC\uD569\uB2C8\uB2E4~"
   appearDate: 0

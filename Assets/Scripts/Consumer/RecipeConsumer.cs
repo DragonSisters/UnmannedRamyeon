@@ -2,17 +2,16 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 /// <summary>
 /// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
 /// </summary>
-public class RecipeConsumer : Consumer
+public class RecipeConsumer : Consumer, IClickableSprite
 {
-    [SerializeField] List<RecipeScriptableObject> allRecipes;
-
-    internal override void HandleChildClick()
-    {
-    }
+    [SerializeField] private List<RecipeScriptableObject> allRecipes;
+    private RecipeScriptableObject myRecipe;
+    [SerializeField] private float recipeOrderDuration = 2f;
 
     internal override void HandleChildEnter()
     {
@@ -29,8 +28,8 @@ public class RecipeConsumer : Consumer
 
     public override void SetIngredientLists()
     {
-        RecipeScriptableObject recipe = GetRandomRecipe();
-        List<IngredientScriptableObject> ingredients = recipe.Ingredients;
+        myRecipe = GetRandomRecipe();
+        List<IngredientScriptableObject> ingredients = myRecipe.Ingredients;
         ingredientHandler.SetAllIngredientLists(ingredients);
     }
 
@@ -43,8 +42,25 @@ public class RecipeConsumer : Consumer
         }
         int index = UnityEngine.Random.Range(0, allRecipes.Count);
 
-        Debug.Log($"레시피 {allRecipes[index].Name} 선택");
-
         return allRecipes[index];
+    }
+
+    public override IEnumerator HandleChildOrderOnUI()
+    {
+        consumerUI.OrderByRecipeOnUI(myRecipe.name);
+        SetState(ConsumerState.Issue);
+        yield return new WaitForSeconds(recipeOrderDuration);
+        consumerUI.SetSpeechBubbleUI(false);
+    }
+
+    internal override void HandleChildClick()
+    {
+        //ingredients 들 클릭 활성화
+        IngredientManager.Instance.IsIngredientSelectMode = true;
+    }
+
+    internal override void HandleChildUnclicked()
+    {
+        IngredientManager.Instance.IsIngredientSelectMode = false;
     }
 }

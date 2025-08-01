@@ -66,6 +66,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal abstract void HandleChildExit();
     internal abstract IEnumerator HandleChildUpdate();
     internal abstract void HandleChildClick();
+    internal abstract void HandleChildUnclicked();
 
     public void OnSpawn()
     {
@@ -154,7 +155,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     Debug.LogError($"손님({gameObject.name})의 상태가 설정되지 않았습니다. 확인해주세요.");
                     break;
                 case ConsumerState.Enter:
-                    yield return OnCustomerEnter();
+                    OnCustomerEnter();
                     break;
                 case ConsumerState.Exit:
                     yield return OnCustomerExit();
@@ -186,18 +187,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// <summary>
     /// 손님이 들어올 때 해야하는 행동
     /// </summary>
-    private IEnumerator OnCustomerEnter()
+    private void OnCustomerEnter()
     {
         HandleChildEnter();
 
         ChooseIngredients();
 
-        // 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
-        consumerUI.ActivateIngredientUI(true);
-        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
-        consumerUI.ActivateIngredientUI(false);
-
-        SetState(ConsumerState.Search);
+        StartCoroutine(HandleChildOrderOnUI());
     }
 
     /// <summary>
@@ -221,6 +217,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ingredientHandler.ResetAllIngredientLists();
         SetIngredientLists();
         ingredientHandler.ChooseAllIngredients();
+    }
+
+    public virtual IEnumerator HandleChildOrderOnUI()
+    {
+        // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
+        consumerUI.ActivateIngredientUI(true);
+        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
+        consumerUI.ActivateIngredientUI(false);
+
+        SetState(ConsumerState.Search);
     }
 
     public virtual void SetIngredientLists()
@@ -306,22 +312,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ConsumerManager.Instance.DeselectOtherConsumers();
 
         isClicked = true;
-        // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
-        if (State == ConsumerState.Issue)
-        {
-            HandleChildClick();
-            return;
-        }
 
-        // 이슈상태가 아니라면 재료가 보이도록 합니다.
-        consumerUI.ActivateIngredientUI(true);
+        HandleChildClick();
     }
 
     public void OnSpriteDeselected()
     {
         isClicked = false;
-        // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
-        consumerUI.ActivateIngredientUI(false);
+
+        HandleChildUnclicked();
     }
 
     public void WrongIngredientSpeech(int tmp = 0)
