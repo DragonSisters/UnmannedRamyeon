@@ -193,7 +193,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         ChooseIngredients();
 
-        StartCoroutine(HandleChildOrderOnUI());
+        StartCoroutine(HandleOrderOnUI());
     }
 
     /// <summary>
@@ -219,7 +219,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ingredientHandler.ChooseAllIngredients();
     }
 
-    public virtual IEnumerator HandleChildOrderOnUI()
+    public virtual IEnumerator HandleOrderOnUI()
     {
         // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);

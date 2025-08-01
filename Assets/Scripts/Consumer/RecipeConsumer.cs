@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 
 /// <summary>
 /// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
@@ -31,10 +32,15 @@ public class RecipeConsumer : Consumer, IClickableSprite
     public bool IsAllCorrect => isAllCorrect;
     private Coroutine checkCoroutine;
 
+    // 기타 변수
+    [SerializeField] private Vector2 waitingPoint = new Vector2(7, 2); // @anditsoon TODO: 나중에 키오스크 근처로 위치 조정합니다.
+    Coroutine moveToWaitingPoint;
+
     internal override void HandleChildEnter()
     {
         consumerId = GetNextId();
         Debug.LogError($"아이디는 {consumerId}입니다.");
+        moveToWaitingPoint = StartCoroutine(MoveToWaitingArea());
     }
 
     internal override void HandleChildExit()
@@ -51,6 +57,15 @@ public class RecipeConsumer : Consumer, IClickableSprite
     private static int GetNextId()
     {
         return nextId++;
+    }
+
+    private IEnumerator MoveToWaitingArea()
+    {
+        while (!moveScript.IsCloseEnough(waitingPoint))
+        {
+            moveScript.MoveTo(waitingPoint);
+            yield return null;
+        }
     }
 
     public override void SetIngredientLists()
@@ -72,9 +87,9 @@ public class RecipeConsumer : Consumer, IClickableSprite
         return allRecipes[index];
     }
 
-    public override IEnumerator HandleChildOrderOnUI()
+    public override IEnumerator HandleOrderOnUI()
     {
-        consumerUI.OrderByRecipeOnUI(myRecipe.name);
+        consumerUI.OrderByRecipeOnUI(myRecipe.Name);
         SetState(ConsumerState.Issue);
         yield return new WaitForSeconds(recipeOrderDuration);
         consumerUI.SetSpeechBubbleUI(false);
