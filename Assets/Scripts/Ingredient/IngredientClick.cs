@@ -8,6 +8,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
     public void OnSpriteClicked()
     {
         string IngredientName = SendClickedIngredient();
+        Debug.LogError(IngredientName);
     }
 
     public void OnSpriteDeselected()
