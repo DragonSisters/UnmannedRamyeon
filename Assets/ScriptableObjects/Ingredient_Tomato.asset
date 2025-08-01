@@ -15,4 +15,4 @@ MonoBehaviour:
   name: TomatoRamyeon
   icon: {fileID: -8113185096396602001, guid: ce16d0b695f7f53418b5109598c4eea2, type: 3}
   price: 800
-  point: {x: 0, y: 0}
+  point: {x: 2, y: -3}

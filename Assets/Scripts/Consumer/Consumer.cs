@@ -105,14 +105,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
         spriteRenderer.sprite = consumerScriptableObject.Appearance;
-        // 박스 콜라이더 추가
-        var boxCollider = gameObject.GetComponent<BoxCollider2D>();
-        if (boxCollider == null)
+        // 콜라이더 추가
+        var collider = gameObject.GetComponent<PolygonCollider2D>();
+        if (collider == null)
         {
-            boxCollider = gameObject.AddComponent<BoxCollider2D>();
+            collider = gameObject.AddComponent<PolygonCollider2D>();
         }
         // 충돌되지 않도록 trigger on
-        boxCollider.isTrigger = true;
+        collider.isTrigger = true;
         // 손님 기분 스크립트 추가
         moodScript = gameObject.GetComponent<ConsumerMood>();
         if (moodScript == null)
@@ -225,8 +225,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         consumerUI.ActivateIngredientUI(true);
         yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
         consumerUI.ActivateIngredientUI(false);
-
-        SetState(ConsumerState.Search);
     }
 
     public virtual void SetIngredientLists()
