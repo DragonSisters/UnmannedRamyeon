@@ -76,14 +76,14 @@ public class IngredientManager : Singleton<IngredientManager>
             }
             spriteRenderer.sprite = ingredient.Icon;
 
-            // 박스 콜라이더 추가
-            var boxCollider = ingredientGameObj.GetComponent<BoxCollider2D>();
-            if (boxCollider == null)
+            // 콜라이더 추가
+            var collider = gameObject.GetComponent<PolygonCollider2D>();
+            if (collider == null)
             {
-                boxCollider = ingredientGameObj.AddComponent<BoxCollider2D>();
+                collider = gameObject.AddComponent<PolygonCollider2D>();
             }
             // 충돌되지 않도록 trigger on
-            boxCollider.isTrigger = true;
+            collider.isTrigger = true;
 
             IngredientClick ingredientClick = ingredientGameObj.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);
@@ -172,9 +172,8 @@ public class IngredientManager : Singleton<IngredientManager>
     public void ReceiveRecipeCx(int index, RecipeConsumer recipeConsumer)
     {
         activeRecipeConsumers[index] = recipeConsumer;
-        Debug.LogError("레시피 컨슈머 저장~");
 
-        Debug.LogError(string.Join(", ", activeRecipeConsumers.Keys));
+        Debug.Log($"레시피 컨슈머 저장~ Key : {string.Join(", ", activeRecipeConsumers.Keys)}");
     }
 
     public void DeleteRecipeCx(int index)
@@ -186,8 +185,7 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         activeRecipeConsumers.Remove(index);
-        Debug.LogError("레시피 컨슈머 삭제~");
 
-        Debug.LogError(string.Join(", ", activeRecipeConsumers.Keys));
+        Debug.Log($"레시피 컨슈머 삭제~ Key : {string.Join(", ", activeRecipeConsumers.Keys)}");
     }
 }
