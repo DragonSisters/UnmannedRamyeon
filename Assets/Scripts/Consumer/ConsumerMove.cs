@@ -48,6 +48,7 @@ public class ConsumerMove : MonoBehaviour
         agent.speed = moveSpeed;
         agent.radius = 0.3f;
         agent.height = 0.1f;
+        agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
     }
 
     public Vector2 GetIngredientPoint(IngredientScriptableObject ingredient)
