@@ -16,14 +16,6 @@ public class RecipeConsumer : Consumer, IClickableSprite
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
 
-    // 레시피 베이스로 옳은 재료를 선택하는지 검증 관련 변수
-    [SerializeField] private float selectTimeLimit = 3f;
-    private int correctClickCount = 0;
-    private bool isChecking = false;
-    private bool isAllCorrect = false;
-    public bool IsAllCorrect => isAllCorrect;
-    private Coroutine checkCoroutine;
-
     // 기타 변수
     [SerializeField] private Vector2 waitingPoint = new Vector2(7, 2); // @anditsoon TODO: 나중에 키오스크 근처로 위치 조정합니다.
 
