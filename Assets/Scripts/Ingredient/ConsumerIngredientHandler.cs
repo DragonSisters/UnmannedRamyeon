@@ -16,31 +16,30 @@ public class IngredientInfo
     }
 }
 
-
 public class ConsumerIngredientHandler : MonoBehaviour
 {
     private ConsumerUI consumerUI;
 
     /// <summary>
-    /// 키오스크에 입력한 재료 목록
+    /// 주문한 (결제한) 재료 목록
     /// </summary>
-    private List<IngredientScriptableObject> targetIngredients = new List<IngredientScriptableObject>();
+    private List<IngredientScriptableObject> paidIngredients = new List<IngredientScriptableObject>();
     /// <summary>
-    /// 키오스크에 입력하지 않은 재료 목록 모두
+    /// 주문하지 (결제하지 않은) 않은 재료 목록
     /// </summary>
-    private List<IngredientScriptableObject> untargetedIngredients = new List<IngredientScriptableObject>();
+    private List<IngredientScriptableObject> unpaidIngredients = new List<IngredientScriptableObject>();
     /// <summary>
-    /// 원하는 재료 목록. 가져왔다면 목록에서 삭제됩니다.
+    /// 실제로 가져오려는 재료 목록. 가져왔다면 목록에서 삭제됩니다.
     /// </summary>
-    private Queue<IngredientInfo> neededIngredients = new();
+    private Queue<IngredientInfo> attemptIngredients = new();
     /// <summary>
-    /// 현재 가져온 재료 목록
+    /// 현재 갖고 있는 재료 목록
     /// </summary>
-    public List<IngredientInfo> OwnedIngredients = new();
+    public List<IngredientInfo> ownedIngredients = new();
 
     public bool IsIngredientSelectDone => 
-        OwnedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
-        && neededIngredients.Count == 0;
+        ownedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
+        && attemptIngredients.Count == 0;
 
     public void Initialize()
     {
@@ -49,10 +48,10 @@ public class ConsumerIngredientHandler : MonoBehaviour
     }
     public void ResetAllIngredientLists()
     {
-        targetIngredients.Clear();
-        untargetedIngredients.Clear();
-        neededIngredients.Clear();
-        OwnedIngredients.Clear();
+        paidIngredients.Clear();
+        unpaidIngredients.Clear();
+        attemptIngredients.Clear();
+        ownedIngredients.Clear();
     }
 
     public void SetAllIngredientLists(List<IngredientScriptableObject> ingredientList = null)
@@ -60,26 +59,19 @@ public class ConsumerIngredientHandler : MonoBehaviour
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
         if (ingredientList == null)
         {
-            targetIngredients = IngredientManager.Instance.GetTargetIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
+            paidIngredients = IngredientManager.Instance.GetPaidIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
         }
         else
         {
-            targetIngredients = ingredientList;
+            paidIngredients = ingredientList;
             Debug.Log($"레시피 손님이 고른 재료 : {string.Join(", ", ingredientList)}");
         }
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.InitializeIngredintUI(targetIngredients);
+        consumerUI.InitializeIngredintUI(paidIngredients);
 
         // 필요하지 않은 재료의 리스트를 구합니다.
-        untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);
-    }
-
-    public void SetAllIngredientListsByRecipe(List<IngredientScriptableObject> ingredientList)
-    {
-        targetIngredients = ingredientList;
-
-        consumerUI.InitializeIngredintUI(targetIngredients);
+        unpaidIngredients = GetFilteredIngredients(paidIngredients, unpaidIngredients);
     }
 
     private List<IngredientScriptableObject> GetFilteredIngredients(
@@ -112,28 +104,40 @@ public class ConsumerIngredientHandler : MonoBehaviour
         for (int i = 0; i < IngredientManager.MAX_INGREDIENT_NUMBER; i++)
         {
             var currentIndex = orderList[i];
-            GetNeededIngredient(currentIndex, out var ingredient, out var isCorrect);
+            GetAttemptIngredient(currentIndex, out var ingredient, out var isCorrect);
             // 이후에 재료를 얻었을 때를 대비해서 미리 저장해둡니다.
-            neededIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
+            attemptIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
         }
     }
 
-    public IngredientInfo GetNeededIngredientInfo()
+    public IngredientInfo GetAttemptIngredientInfo()
     {
-        var ingredientInfo = neededIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
+        var ingredientInfo = attemptIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
         return ingredientInfo;
+    }
+
+    public void AddAttemptIngredients(IngredientScriptableObject ingredient)
+    {
+        bool isCorrect = paidIngredients.Contains(ingredient);
+        IngredientInfo info = new IngredientInfo(ingredient, -1, isCorrect);
+        for (int i = 0; i < paidIngredients.Count; i++)
+        {
+            if (ingredient.Equals(paidIngredients[i]))
+            {
+                info.Index = i;
+            }
+        }
+        attemptIngredients.Enqueue(info);
+        Debug.Log($"{ingredient.Name} 재료가 선택되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
     }
 
     public void AddOwnIngredient(IngredientScriptableObject ingredient, int index, bool isCorrect)
     {
         // 필요재료 리스트에서 뺍니다
-        neededIngredients.Dequeue();
+        attemptIngredients.Dequeue();
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
-        OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients)}");
-
-        // UI를 업데이트 합니다.
-        consumerUI.ActivateFeedbackUIs(index, isCorrect);
+        ownedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
     }
 
     public void UpdateCorrectOwnIngredient(int index)
@@ -144,7 +148,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
 
         // 같은 인덱스를 찾아서 재료 맞게 처리
-        foreach (var ownedIngredient in OwnedIngredients)
+        foreach (var ownedIngredient in ownedIngredients)
         {
             if(ownedIngredient.Index == index)
             {
@@ -154,39 +158,25 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
     }
 
-    private void GetNeededIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
+    private void GetAttemptIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
     {
         // 확률에 따라 가져오는 재료가 다릅니다.
         int probability = Random.Range(0, 10);
 
         if (probability < IngredientManager.CORRECT_INGREDIENT_PROBAILITY)
         {
-            ingredient = targetIngredients[index];
+            ingredient = paidIngredients[index];
             isCorrect = true;
             Debug.Log($"올바른 재료! : {ingredient.Name}");
         }
         else
         {
-            int randomIndex = GetRandomIndex(untargetedIngredients);
-            ingredient = untargetedIngredients[randomIndex];
+            int randomIndex = GetRandomIndex(unpaidIngredients);
+            ingredient = unpaidIngredients[randomIndex];
             isCorrect = false;
             Debug.Log($"틀린 재료! : {ingredient.Name}");
         }
     }
-
-    private void SetAllIngredientLists()
-    {
-        // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
-        targetIngredients = IngredientManager.Instance.GetTargetIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
-
-        // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
-        consumerUI.InitializeIngredintUI(targetIngredients);
-
-        // 필요하지 않은 재료의 리스트를 구합니다.
-        untargetedIngredients = GetFilteredIngredients(targetIngredients, untargetedIngredients);
-
-    }
-
 
     private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -245,7 +246,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
 
         // 필요한 재료를 가져옵니다.
-        var neededIngredientInfo = ingredientHandler.GetNeededIngredientInfo();
+        var neededIngredientInfo = ingredientHandler.GetAttemptIngredientInfo();
         var point = neededIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
@@ -259,7 +260,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
         ingredientHandler.AddOwnIngredient(neededIngredientInfo.Ingredient, neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
-        
+        // UI를 업데이트 합니다.
+        consumerUI.ActivateFeedbackUIs(neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
+
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);
         yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);

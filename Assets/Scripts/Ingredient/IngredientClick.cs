@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Unity.VisualScripting;
+using UnityEngine;
 
 public class IngredientClick : MonoBehaviour, IClickableSprite
 {
@@ -7,8 +8,12 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
 
     public void OnSpriteClicked()
     {
-        string IngredientName = SendClickedIngredient();
-        Debug.LogError(IngredientName);
+        // 클릭된 IngredientScriptableObject 찾기
+        string ingredientName = gameObject.name;
+        IngredientScriptableObject matchingIngredient = IngredientManager.Instance.FindMatchingIngredient(ingredientName);
+
+        // 해당 recipeConsumer 의 ingredientHandler 에 보내기
+        IngredientManager.Instance.SendIngredientToCorrectCx(matchingIngredient);
     }
 
     public void OnSpriteDeselected()
@@ -19,10 +24,5 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
     public void SetClickable(bool isClickable)
     {
         this.isClickable = isClickable;
-    }
-
-    private string SendClickedIngredient()
-    {
-        return gameObject.name;
     }
 }

@@ -10,18 +10,10 @@ using System.Drawing;
 /// </summary>
 public class RecipeConsumer : Consumer, IClickableSprite
 {
-    // 아이디 생성 관련 변수
-    private int consumerId;
-    public int ConsumerId
-    {
-        get => consumerId;
-        private set => consumerId = value;
-    }
-    private static int nextId = 0; // static 써서 같은 ID 카운터 공유
-
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     private RecipeScriptableObject myRecipe;
+    List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
 
     // 레시피 베이스로 옳은 재료를 선택하는지 검증 관련 변수
@@ -42,8 +34,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     internal override void HandleChildExit()
     {
-        Debug.LogError($"저 나가욥");
-        IngredientManager.Instance.DeleteRecipeCx(consumerId);
+        IngredientManager.Instance.DeleteRecipeCx();
     }
 
     internal override IEnumerator HandleChildUpdate()
@@ -51,16 +42,8 @@ public class RecipeConsumer : Consumer, IClickableSprite
         yield break;
     }
 
-    private static int GetNextId()
-    {
-        return nextId++;
-    }
-
     private IEnumerator EnterCoroutine()
     {
-        consumerId = GetNextId();
-        Debug.LogError($"아이디는 {consumerId}입니다.");
-        
         while (!moveScript.IsCloseEnough(waitingPoint))
         {
             moveScript.MoveTo(waitingPoint);
@@ -71,8 +54,8 @@ public class RecipeConsumer : Consumer, IClickableSprite
     public override void SetIngredientLists()
     {
         myRecipe = GetRandomRecipe();
-        List<IngredientScriptableObject> ingredients = myRecipe.Ingredients;
-        ingredientHandler.SetAllIngredientLists(ingredients);
+        recipeIngredients = myRecipe.Ingredients;
+        ingredientHandler.SetAllIngredientLists(recipeIngredients);
     }
 
     // 레시피 중 하나를 선택
@@ -102,9 +85,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.IsIngredientSelectMode = true;
 
         // IngredientManager 에 내 정보 보냄
-        IngredientManager.Instance.ReceiveRecipeCx(consumerId, this);
-
-        StartChecking();
+        IngredientManager.Instance.ReceiveRecipeCx(this);
     }
 
     internal override void HandleChildUnclicked()
@@ -113,22 +94,6 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.IsIngredientSelectMode = false;
 
         // IngredientManager 에 내 정보 삭제 요청
-        IngredientManager.Instance.DeleteRecipeCx(consumerId);
-    }
-
-    private void StartChecking()
-    {
-        if (isChecking) return;
-
-        correctClickCount = 0;
-        isChecking = true;
-        checkCoroutine = StartCoroutine(SelectIngredientRoutine());
-    }
-
-    public IEnumerator SelectIngredientRoutine()
-    {
-        yield return new WaitForSeconds(selectTimeLimit);
-
-        isChecking = false;
+        IngredientManager.Instance.DeleteRecipeCx();
     }
 }

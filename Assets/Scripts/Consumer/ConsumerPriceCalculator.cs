@@ -17,7 +17,7 @@ public class ConsumerPriceCalculator : MonoBehaviour
     {
         float price = 0;
 
-        List<IngredientInfo> ingredientInfos = ingredientHandler.OwnedIngredients;
+        List<IngredientInfo> ingredientInfos = ingredientHandler.ownedIngredients;
 
         foreach(var ingredientInfo in ingredientInfos)
         {
