@@ -105,11 +105,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumerScriptableObject: {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
   consumerUI: {fileID: 1264228265461581360}
-  warningDuration: 5
   issueResolvedBonus: 5
   issueUnresolvedPenalty: 20
-  minUsualTime: 5
-  maxUsualTime: 7
+  issueDuration: 20
+  warningDuration: 5
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -143,7 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec071e00cca309b4aa0bd220901d36c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumerUI: {fileID: 1264228265461581360}
 --- !u!1001 &2917918133184767696
 PrefabInstance:
   m_ObjectHideFlags: 0
