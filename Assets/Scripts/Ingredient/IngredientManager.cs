@@ -36,8 +36,8 @@ public class IngredientManager : Singleton<IngredientManager>
     public event System.Action OnIngredientSelectMode;
     public event System.Action OnIngredientDeselectMode;
 
-    [Header("현재 처리하고 있는 레시피 손님들")] // @anditsoon TODO: 테스트를 위해 보이게 처리한 것, 나중에 지울 것.
-    [SerializeField] private Dictionary<int, RecipeConsumer> recipeConsumers = new Dictionary<int, RecipeConsumer>();
+    // 현재 처리하고 있는 레시피 손님들
+    private Dictionary<int, RecipeConsumer> activeRecipeConsumers = new Dictionary<int, RecipeConsumer>();
 
     void Start()
     {
@@ -171,23 +171,23 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeCx(int index, RecipeConsumer recipeConsumer)
     {
-        recipeConsumers[index] = recipeConsumer;
+        activeRecipeConsumers[index] = recipeConsumer;
         Debug.LogError("레시피 컨슈머 저장~");
 
-        Debug.LogError(string.Join(", ", recipeConsumers.Keys));
+        Debug.LogError(string.Join(", ", activeRecipeConsumers.Keys));
     }
 
     public void DeleteRecipeCx(int index)
     {
-        if (!recipeConsumers.ContainsKey(index))
+        if (!activeRecipeConsumers.ContainsKey(index))
         {
             Debug.LogWarning($"해당 인덱스({index})가 딕셔너리에 존재하지 않습니다.");
             return;
         }
 
-        recipeConsumers.Remove(index);
+        activeRecipeConsumers.Remove(index);
         Debug.LogError("레시피 컨슈머 삭제~");
 
-        Debug.LogError(string.Join(", ", recipeConsumers.Keys));
+        Debug.LogError(string.Join(", ", activeRecipeConsumers.Keys));
     }
 }

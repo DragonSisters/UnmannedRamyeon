@@ -34,13 +34,10 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     // 기타 변수
     [SerializeField] private Vector2 waitingPoint = new Vector2(7, 2); // @anditsoon TODO: 나중에 키오스크 근처로 위치 조정합니다.
-    Coroutine moveToWaitingPoint;
 
     internal override void HandleChildEnter()
     {
-        consumerId = GetNextId();
-        Debug.LogError($"아이디는 {consumerId}입니다.");
-        moveToWaitingPoint = StartCoroutine(MoveToWaitingArea());
+        StartCoroutine(EnterCoroutine());
     }
 
     internal override void HandleChildExit()
@@ -59,8 +56,11 @@ public class RecipeConsumer : Consumer, IClickableSprite
         return nextId++;
     }
 
-    private IEnumerator MoveToWaitingArea()
+    private IEnumerator EnterCoroutine()
     {
+        consumerId = GetNextId();
+        Debug.LogError($"아이디는 {consumerId}입니다.");
+        
         while (!moveScript.IsCloseEnough(waitingPoint))
         {
             moveScript.MoveTo(waitingPoint);
@@ -89,6 +89,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     public override IEnumerator HandleOrderOnUI()
     {
+        // @anditsoon TODO: 지금은 들어오자마자 주문을 외치고 있습니다. 나중에 주문하는 시점이 정해지면 거기서 호출해야 합니다.
         consumerUI.OrderByRecipeOnUI(myRecipe.Name);
         SetState(ConsumerState.Issue);
         yield return new WaitForSeconds(recipeOrderDuration);
