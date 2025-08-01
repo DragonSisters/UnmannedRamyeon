@@ -36,6 +36,9 @@ public class IngredientManager : Singleton<IngredientManager>
     public event System.Action OnIngredientSelectMode;
     public event System.Action OnIngredientDeselectMode;
 
+    [Header("현재 처리하고 있는 레시피 손님들")] // @anditsoon TODO: 테스트를 위해 보이게 처리한 것, 나중에 지울 것.
+    [SerializeField] private Dictionary<int, RecipeConsumer> recipeConsumers = new Dictionary<int, RecipeConsumer>();
+
     void Start()
     {
         if(IngredientScriptableObject.Count <= 0)
@@ -106,7 +109,6 @@ public class IngredientManager : Singleton<IngredientManager>
         Debug.Log("셀렉트 이벤트 받았다");
         // ingredient 클릭 활성화
         SwitchClickable(true);
-        // 다른 데 클릭하면 다시 일반 모드로 돌아가야 됨
         // 클릭해서 네 개 다 맞는 재료 클릭하면 성공 -> 파이낸스 매니저에 보냄
         // 아니면 실패 -> 그냥 바로 퇴장
     }
@@ -114,7 +116,7 @@ public class IngredientManager : Singleton<IngredientManager>
     private void HandleIngredientDeselectMode()
     {
         Debug.Log("디셀렉트 이벤트 받았다");
-        // ingredient 클릭 활성화
+        // ingredient 클릭 비활성화
         SwitchClickable(false);
     }
 
@@ -165,5 +167,27 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         return shuffledList;
+    }
+
+    public void ReceiveRecipeCx(int index, RecipeConsumer recipeConsumer)
+    {
+        recipeConsumers[index] = recipeConsumer;
+        Debug.LogError("레시피 컨슈머 저장~");
+
+        Debug.LogError(string.Join(", ", recipeConsumers.Keys));
+    }
+
+    public void DeleteRecipeCx(int index)
+    {
+        if (!recipeConsumers.ContainsKey(index))
+        {
+            Debug.LogWarning($"해당 인덱스({index})가 딕셔너리에 존재하지 않습니다.");
+            return;
+        }
+
+        recipeConsumers.Remove(index);
+        Debug.LogError("레시피 컨슈머 삭제~");
+
+        Debug.LogError(string.Join(", ", recipeConsumers.Keys));
     }
 }

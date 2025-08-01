@@ -559,6 +559,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c64a017040e7f904db63a7f265add602, type: 2}
   - {fileID: 11400000, guid: 10e7096c5bb9493468c784907e73c43e, type: 2}
   - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
+  - {fileID: 11400000, guid: 3aef26de493908f44b1d28c213d8739f, type: 2}
   ingredientsParent: {fileID: 1894710029}
 --- !u!4 &398594475
 Transform:
