@@ -54,16 +54,19 @@ public class MoveManager : Singleton<MoveManager>
     [SerializeField] private Transform orderLineStartingPoint;
     [SerializeField] private Transform[] cookingLineStartingPoint;
 
-    private Queue<int> orderLineQueue = new Queue<int>();
-    private List<(Queue<int> line, Vector2 startingPoint)> cookingLineList = new();
+    private Queue<Consumer> orderLine = new();
+    private List<Queue<Consumer>> cookingLines = new();
+    private Dictionary<int, Queue<Consumer>> cookingLineList = new(); // lineIndex, lineCount
     private List<IngredientScriptableObject> ingredientScriptableObjects = new();
 
     public void OnGameEnter()
     {
         ingredientScriptableObjects = IngredientManager.Instance.IngredientScriptableObject;
+
         for (int i = 0; i < lineCount; i++)
         {
-            cookingLineList.Add((new Queue<int>(), cookingLineStartingPoint[i].position));
+            cookingLines.Add(new Queue<Consumer>());
+            cookingLineList.Add(i, cookingLines[i]);
         }
     }
 
@@ -86,50 +89,83 @@ public class MoveManager : Singleton<MoveManager>
         return point;
     }
 
-    public void PushOrderLineQueue(int lineTurn)
-
-    public void PushCookingLineQueue(int lineIndex, int lineTurn)
+    /// <summary>
+    /// 손님이 처음 계산줄에 설 때 어디 서야하는지 알려줍니다.
+    /// </summary>
+    /// <param name="lineTurn"></param>
+    /// <returns></returns>
+    public void PushAndGetOrderLine(Consumer consumer, out Vector2 waitingPosition, out int lineTurn)
     {
-        cookingLineList[lineIndex].line.Enqueue(lineTurn);
+        orderLine.Enqueue(consumer);
+        lineTurn = orderLine.Count - 1;
+        var startingPoint = orderLineStartingPoint.position;
+        waitingPosition = startingPoint;
+        // 자신의 차례가 아니라면 좀 떨어져있습니다
+        waitingPosition.x += lineTurn == 0 ? 0 : lineSpacingFactor;
+    }
+
+    /// <summary>
+    /// 손님이 계산 줄에서 나갈 때 호출됩니다
+    /// </summary>
+    public void PopOrderLineQueue()
+    {
+        orderLine.Dequeue();
+
+        // 다른 기다리는 consumer들은 대기순번을 1씩 내립니다
+        foreach (var consumer in orderLine)
+        {
+            consumer.moveScript.ReduceOrderLine();
+        }
+    }
+
+    public Vector2 GetOrderPoint()
+    {
+        return orderLineStartingPoint.position;
+    }
+
+    /// <summary>
+    /// 본인이 계산할 차례인지를 보고, 서 있어야하는 위치를 반환합니다.
+    /// </summary>
+    /// <param name="lineTurn"></param>
+    /// <returns></returns>
+    public void PushAndGetCookingLine(Consumer consumer, out int lineIndex, out int lineTurn, out Vector2 waitingPoint)
+    {
+        lineIndex = FindLineWithFewestConsumers();
+        cookingLineList[lineIndex].Enqueue(consumer);
+        lineTurn = cookingLineList[lineIndex].Count - 1;
+
+        waitingPoint = GetPointInCookingLine(lineIndex, lineTurn);
     }
 
     public void PopCookingLineQueue(int lineIndex)
     {
-        cookingLineList[lineIndex].line.Dequeue();
+        cookingLineList[lineIndex].Dequeue();
+
+        // 다른 기다리는 consumer들은 대기순번을 1씩 내립니다
+        foreach (var consumer in cookingLineList[lineIndex])
+        {
+            consumer.moveScript.ReduceCookingLine();
+        }
     }
 
-    /// <summary>
-    /// 손님이 처음에 요리줄을 고를 때, 어디 서있어야 하는지 계산하여 반환해줍니다.
-    /// </summary>
-    /// <returns></returns>
-    public void FindFewestCookingLinePoint(out int lineIndex, out int lineTurn, out Vector2 point)
+    public Vector2 GetCookingPoint(int lineIndex)
     {
-        lineIndex = FindLineWithFewestConsumers();
-        lineTurn = cookingLineList[lineIndex].line.Count;
-        CalculateWaitingPointInCookingLine(lineIndex, lineTurn, out point, out var newLineOrder);
+        return cookingLineStartingPoint[lineIndex].position;
     }
 
     /// <summary>
     /// 요리줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
     /// </summary>
     /// <returns></returns>
-    public void CalculateWaitingPointInCookingLine(int lineIndex, int lineTurn, out Vector2 waitingPosition, out int newLineTurn)
+    public Vector2 GetPointInCookingLine(int lineIndex, int lineTurn)
     {
-        var startingPoint = cookingLineList[lineIndex].startingPoint;
-        waitingPosition = startingPoint;
+        var startingPoint = cookingLineStartingPoint[lineIndex].position;
+        var waitingPosition = startingPoint;
 
-        // 자신이 몇번째로 서있는지에 따라 fator를 더해 뒤에 섭니다.
-        for (int i = 0; i < lineTurn; i++)
-        {
-            waitingPosition.x += lineSpacingFactor;
-        }
+        // 자신의 차례가 아니라면 좀 떨어져있습니다
+        waitingPosition.x += lineTurn == 0 ? 0 : lineSpacingFactor;
 
-        // 새로 몇번째로 서있는지 갱신해둡니다
-        newLineTurn = lineTurn - 1;
-        if(newLineTurn < 0)
-        {
-            newLineTurn = 0;
-        }
+        return waitingPosition;
     }
 
     /// <summary>
@@ -141,7 +177,7 @@ public class MoveManager : Singleton<MoveManager>
         var minLineIndex = cookingLineList.Count == 0 ? 0 : -1;
         for (int i = 0; i < cookingLineList.Count; i++)
         {
-            var consumerCount = cookingLineList[i].line.Count;
+            var consumerCount = cookingLineList[i].Count;
             if (consumerCount < minConsumerCount)
             {
                 minLineIndex = i;
