@@ -102,14 +102,14 @@ public class MoveManager : Singleton<MoveManager>
     {
         lineIndex = FindLineWithFewestConsumers();
         lineOrder = lineList[lineIndex].line.Count;
-        CalculateWaitingPointInLine(lineIndex, lineOrder, out point, out var newLineOrder);
+        CalculateWaitingPointInCookingLine(lineIndex, lineOrder, out point, out var newLineOrder);
     }
 
     /// <summary>
     /// 줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
     /// </summary>
     /// <returns></returns>
-    public void CalculateWaitingPointInLine(int lineIndex, int lineOrder, out Vector2 waitingPosition, out int newLineOrder)
+    public void CalculateWaitingPointInCookingLine(int lineIndex, int lineOrder, out Vector2 waitingPosition, out int newLineOrder)
     {
         var startingPoint = lineList[lineIndex].startingPoint;
         waitingPosition = startingPoint;

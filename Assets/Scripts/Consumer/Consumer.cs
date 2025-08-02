@@ -272,7 +272,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private IEnumerator LineUp()
     {
         // 줄 서러 갑니다.
-        var waitingLinePoint = moveScript.GetWaitingLinePoint();
+        var waitingLinePoint = moveScript.GetCookingLinePoint();
 
         while (!moveScript.IsCloseEnough(waitingLinePoint)) 
         {
@@ -284,7 +284,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 줄이 줄어들면 이동합니다.
         while (currentLineOrder > 0)
         {
-            var linePoint = moveScript.GetWaitingPointInLine();
+            var linePoint = moveScript.GetWaitingPointInCookingLine();
             moveScript.MoveTo(linePoint);
             currentLineOrder = moveScript.LineOrder;
             yield return null;

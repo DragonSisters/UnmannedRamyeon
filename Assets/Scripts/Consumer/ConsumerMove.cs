@@ -68,7 +68,7 @@ public class ConsumerMove : MonoBehaviour
         return distance <= RANGE_THRESHOLD;
     }
 
-    public Vector2 GetWaitingLinePoint()
+    public Vector2 GetCookingLinePoint()
     {
         MoveManager.Instance.FindFewestLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
         MoveManager.Instance.PushLineQueue(foundLineIndex, foundLineOrder);
@@ -77,9 +77,9 @@ public class ConsumerMove : MonoBehaviour
         return point;
     }
 
-    public Vector2 GetWaitingPointInLine()
+    public Vector2 GetWaitingPointInCookingLine()
     {
-        MoveManager.Instance.CalculateWaitingPointInLine(lineIndex, lineOrder, out var point, out var newLineOrder);
+        MoveManager.Instance.CalculateWaitingPointInCookingLine(lineIndex, lineOrder, out var point, out var newLineOrder);
         MoveManager.Instance.PopLineQueue(lineIndex);
         lineOrder = newLineOrder;
         return point;
