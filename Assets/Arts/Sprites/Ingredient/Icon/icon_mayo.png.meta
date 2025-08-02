@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e87cff69fe3e7034d8abe3b4415c1034
+guid: 2222e2a7fa7569b4d839f6723dbedf02
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5538571805556515561
-    second: ingredient box_red_0
+      213: 1891813823238675463
+    second: icon_mayo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ingredient box_red_0
+      name: icon_mayo_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 145
-        height: 91
+        x: 68
+        y: 8
+        width: 119
+        height: 233
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71d5fc6994a0323b0800000000000000
-      internalID: -5538571805556515561
+      spriteID: 70c905326a2114a10800000000000000
+      internalID: 1891813823238675463
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ingredient box_red_0: -5538571805556515561
+      icon_mayo_0: 1891813823238675463
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
