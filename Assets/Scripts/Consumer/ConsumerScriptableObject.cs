@@ -7,6 +7,7 @@ public enum ConsumerState
     
     Enter, // 입장
     Exit, // 퇴장
+    Leave, // 주문 실패해서 가게를 떠남
     Order, // 주문하기
     Search, // 재료 찾기
     LineUp, // 줄서기

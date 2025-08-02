@@ -31,7 +31,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     /// <summary>
     /// 실제로 가져오려는 재료 목록. 가져왔다면 목록에서 삭제됩니다.
     /// </summary>
-    private Queue<IngredientInfo> attemptIngredients = new();
+    public Queue<IngredientInfo> AttemptIngredients = new();
     /// <summary>
     /// 현재 갖고 있는 재료 목록
     /// </summary>
@@ -39,7 +39,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     public bool IsIngredientSelectDone => 
         OwnedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
-        && attemptIngredients.Count == 0;
+        && AttemptIngredients.Count == 0;
 
     public void Initialize()
     {
@@ -50,7 +50,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     {
         paidIngredients.Clear();
         unpaidIngredients.Clear();
-        attemptIngredients.Clear();
+        AttemptIngredients.Clear();
         OwnedIngredients.Clear();
     }
 
@@ -106,13 +106,13 @@ public class ConsumerIngredientHandler : MonoBehaviour
             var currentIndex = orderList[i];
             GetAttemptIngredient(currentIndex, out var ingredient, out var isCorrect);
             // 이후에 재료를 얻었을 때를 대비해서 미리 저장해둡니다.
-            attemptIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
+            AttemptIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
         }
     }
 
     public IngredientInfo GetAttemptIngredientInfo()
     {
-        var ingredientInfo = attemptIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
+        var ingredientInfo = AttemptIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
         return ingredientInfo;
     }
 
@@ -127,17 +127,17 @@ public class ConsumerIngredientHandler : MonoBehaviour
                 info.Index = i;
             }
         }
-        attemptIngredients.Enqueue(info);
+        AttemptIngredients.Enqueue(info);
         Debug.Log($"{ingredient.Name} 재료가 선택되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
     }
 
     public void AddOwnIngredient(IngredientScriptableObject ingredient, int index, bool isCorrect)
     {
         // 필요재료 리스트에서 뺍니다
-        attemptIngredients.Dequeue();
+        AttemptIngredients.Dequeue();
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
         OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients)}");
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", ingredient.Name)}");
     }
 
     public void UpdateCorrectOwnIngredient(int index)

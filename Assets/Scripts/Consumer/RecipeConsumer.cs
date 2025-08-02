@@ -27,6 +27,20 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.DeleteRecipeConsumer();
     }
 
+    public override void HandleOrder()
+    {
+        foreach(IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
+        {
+            if(ingredient.Index < 0)
+            {
+                SetState(ConsumerState.IssueUnsolved);
+                return;
+            }
+        }
+
+        SetState(ConsumerState.Search);
+    }
+
     internal override IEnumerator HandleChildUpdate()
     {
         yield break;
