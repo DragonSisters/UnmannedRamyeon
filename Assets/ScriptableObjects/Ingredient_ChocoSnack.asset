@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Ingredient_ChocoSnack
   m_EditorClassIdentifier: 
   name: "\uCD08\uCF54\uACFC\uC790"
-  icon: {fileID: 5453257846363357924, guid: 95acbdc560efcda4ab3ddcd4f3b969e6, type: 3}
+  bgSprite: {fileID: 21300000, guid: 0c18b6594a51f6a41807c1a5a30f3637, type: 3}
+  icon: {fileID: 21300000, guid: 95acbdc560efcda4ab3ddcd4f3b969e6, type: 3}
   price: 300
+  ingredientCreatePosition: {x: -4, y: -3.5}
   point: {x: -8, y: 3}

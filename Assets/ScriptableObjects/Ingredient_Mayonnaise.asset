@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bf5ce1d0f2c5446b45c9fc567fd3eb, type: 3}
   m_Name: Ingredient_Mayonnaise
   m_EditorClassIdentifier: 
-  name: "\uB9C8\uC694\uB124\uC988"
-  icon: {fileID: 1891813823238675463, guid: 2222e2a7fa7569b4d839f6723dbedf02, type: 3}
+  name: "\uB9C8\uC694"
+  bgSprite: {fileID: 21300000, guid: e80c6ce8422edfc49ac78d7b8833ecb3, type: 3}
+  icon: {fileID: 21300000, guid: 2222e2a7fa7569b4d839f6723dbedf02, type: 3}
+  isOutsideBox: 1
   price: 500
+  ingredientCreatePosition: {x: 1.2, y: 4.4}
   point: {x: -3, y: -3}

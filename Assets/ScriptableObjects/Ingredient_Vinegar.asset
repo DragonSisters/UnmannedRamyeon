@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Ingredient_Vinegar
   m_EditorClassIdentifier: 
   name: "\uC2DD\uCD08"
-  icon: {fileID: 3343686612855394388, guid: 314c06fb56269814e8101f87bcddb20f, type: 3}
+  bgSprite: {fileID: 21300000, guid: e4b87af977abaa647bc2ca96e293e2ed, type: 3}
+  icon: {fileID: 21300000, guid: 314c06fb56269814e8101f87bcddb20f, type: 3}
+  isOutsideBox: 1
   price: 500
+  ingredientCreatePosition: {x: 0, y: 4.4}
   point: {x: 4.5, y: -3}

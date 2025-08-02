@@ -196,7 +196,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 3
   m_TargetDisplay: 0
 --- !u!114 &9193097195674055289
 MonoBehaviour:
@@ -248,6 +248,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3324278900702734271}
   - component: {fileID: 2910185633973640315}
+  - component: {fileID: 2829575884352255003}
   m_Layer: 0
   m_Name: ingredient box_red_0
   m_TagString: Untagged
@@ -315,8 +316,8 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: -5538571805556515561, guid: e87cff69fe3e7034d8abe3b4415c1034, type: 3}
+  m_SortingOrder: 3
+  m_Sprite: {fileID: 21300000, guid: e87cff69fe3e7034d8abe3b4415c1034, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -327,6 +328,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &2829575884352255003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6884520253379185263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d716ef6d11d50384295fa12dd7c068bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BoxSprite: {fileID: 2910185633973640315}
+  ingredientSprite: {fileID: 69713760922492490}
+  ingredientNameUI: {fileID: 913258103267841361}
 --- !u!1 &8132464980412222452
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +418,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 4
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
