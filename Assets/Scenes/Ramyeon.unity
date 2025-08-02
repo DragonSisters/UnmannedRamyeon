@@ -1326,7 +1326,6 @@ Transform:
   m_Children:
   - {fileID: 1763879980}
   - {fileID: 1614331479}
-  - {fileID: 1248950596}
   - {fileID: 985893699}
   - {fileID: 2086347238}
   - {fileID: 1817767190}
@@ -1405,7 +1404,7 @@ Transform:
   m_GameObject: {fileID: 985893698}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9, y: 4, z: 0}
+  m_LocalPosition: {x: 9.5, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2751,10 +2750,6 @@ PrefabInstance:
       propertyPath: leavePoint
       value: 
       objectReference: {fileID: 985893699}
-    - target: {fileID: 2288192841932699637, guid: 290c43ad695386f4081baea47b1c421f, type: 3}
-      propertyPath: shoutPoint
-      value: 
-      objectReference: {fileID: 1248950596}
     - target: {fileID: 2288192841932699637, guid: 290c43ad695386f4081baea47b1c421f, type: 3}
       propertyPath: orderLineStartingPoint
       value: 

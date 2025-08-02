@@ -265,6 +265,12 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 줄을 줄입니다
         MoveManager.Instance.PopOrderLineQueue();
 
+        HandleOrder();   
+    }
+
+    public virtual void HandleOrder()
+    {
+        // 대부분의 손님의 경우 주문을 다했다면 다음 차례로 넘어갑니다.
         SetState(ConsumerState.Search);
     }
 
