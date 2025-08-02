@@ -7,6 +7,8 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
 
     public void OnSpriteClicked()
     {
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
+
         // 클릭된 IngredientScriptableObject 찾기
         string ingredientName = gameObject.name;
         IngredientScriptableObject matchingIngredient = IngredientManager.Instance.FindMatchingIngredient(ingredientName);
@@ -17,7 +19,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
 
     public void OnSpriteDeselected()
     {
-
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
     }
 
     public void SetClickable(bool isClickable)

@@ -43,10 +43,12 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
         if (isAllIngredientCorrect)
         {
+            SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
             SetState(ConsumerState.Order);
         }
         else
         {
+            SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             SetState(ConsumerState.Leave);
         }
     }

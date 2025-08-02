@@ -75,5 +75,7 @@ public class GameManager : Singleton<GameManager>
         endCanvas.SetActive(true);
         // @anditsoon TODO: 현재는 성공 화면이 자동으로 나오게 해 놓았으나, 나중에는 게임 결과에 따라 성공/실패 화면이 구분되어 나오게 구현해야 합니다.
         img_Success.SetActive(true);
+
+        SoundManager.Instance.PlayBgmSound(BgmSoundType.End);
     }
 }

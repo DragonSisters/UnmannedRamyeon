@@ -379,6 +379,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public void OnSpriteClicked()
     {
         Debug.Log($"손님{gameObject.GetInstanceID()}가 클릭되었습니다.");
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
 
         // 모든 Consumer 검사하여 다른 손님은 Click해제
         ConsumerManager.Instance.DeselectOtherConsumers();
@@ -390,6 +391,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     public void OnSpriteDeselected()
     {
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
+
         isClicked = false;
 
         HandleChildUnclicked();
