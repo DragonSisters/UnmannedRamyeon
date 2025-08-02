@@ -15,6 +15,7 @@ MonoBehaviour:
   name: "\uB9CC\uB450"
   bgSprite: {fileID: 21300000, guid: b753f7c2cd275564598219c773799541, type: 3}
   icon: {fileID: 21300000, guid: b11680f12e3882c41a24eb8d826c582c, type: 3}
+  isOutsideBox: 0
   price: 1500
   ingredientCreatePosition: {x: 0, y: -3.5}
-  point: {x: -3, y: 3}
+  point: {x: 0, y: 0.6}
