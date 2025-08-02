@@ -105,16 +105,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumerScriptableObject: {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
   consumerUI: {fileID: 1264228265461581360}
-  minUsualTime: 2
-  maxUsualTime: 4
-  issueResolvedBonus: 5
-  issueUnresolvedPenalty: 20
-  issueDuration: 20
   allRecipes:
   - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
   - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
-  ingredients: {fileID: 0}
+  recipeOrderDuration: 2
+  selectTimeLimit: 3
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -364,8 +360,16 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8183307709943396222, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8602633846562956558, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602633846562956558, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

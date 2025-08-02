@@ -36,6 +36,11 @@ public class IngredientManager : Singleton<IngredientManager>
     public event System.Action OnIngredientSelectMode;
     public event System.Action OnIngredientDeselectMode;
 
+    // 현재 처리하고 있는 레시피 손님
+    private RecipeConsumer currentRecipeConsumers = null;
+    // 레시피 손님이 가져간 재료 수
+    private int currPickCount = 0;
+
     void Start()
     {
         if(IngredientScriptableObject.Count <= 0)
@@ -73,14 +78,14 @@ public class IngredientManager : Singleton<IngredientManager>
             }
             spriteRenderer.sprite = ingredient.Icon;
 
-            // 박스 콜라이더 추가
-            var boxCollider = ingredientGameObj.GetComponent<BoxCollider2D>();
-            if (boxCollider == null)
+            // 콜라이더 추가
+            var collider = gameObject.GetComponent<PolygonCollider2D>();
+            if (collider == null)
             {
-                boxCollider = ingredientGameObj.AddComponent<BoxCollider2D>();
+                collider = ingredientGameObj.AddComponent<PolygonCollider2D>();
             }
             // 충돌되지 않도록 trigger on
-            boxCollider.isTrigger = true;
+            collider.isTrigger = true;
 
             IngredientClick ingredientClick = ingredientGameObj.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);
@@ -106,15 +111,12 @@ public class IngredientManager : Singleton<IngredientManager>
         Debug.Log("셀렉트 이벤트 받았다");
         // ingredient 클릭 활성화
         SwitchClickable(true);
-        // 다른 데 클릭하면 다시 일반 모드로 돌아가야 됨
-        // 클릭해서 네 개 다 맞는 재료 클릭하면 성공 -> 파이낸스 매니저에 보냄
-        // 아니면 실패 -> 그냥 바로 퇴장
     }
 
     private void HandleIngredientDeselectMode()
     {
         Debug.Log("디셀렉트 이벤트 받았다");
-        // ingredient 클릭 활성화
+        // ingredient 클릭 비활성화
         SwitchClickable(false);
     }
 
@@ -135,7 +137,7 @@ public class IngredientManager : Singleton<IngredientManager>
         return true;
     }
 
-    public List<IngredientScriptableObject> GetTargetIngredients(int count)
+    public List<IngredientScriptableObject> GetPaidIngredients(int count)
     {
         if (count > IngredientScriptableObject.Count)
         {
@@ -165,5 +167,50 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         return shuffledList;
+    }
+
+    public void ReceiveRecipeConsumer(RecipeConsumer recipeConsumer)
+    {
+        currentRecipeConsumers = recipeConsumer;
+    }
+
+    public void DeleteRecipeConsumer()
+    {
+        if (currentRecipeConsumers == null)
+        {
+            Debug.LogWarning($"현재 돕고 있는 손님이 없습니다");
+            return;
+        }
+
+        currentRecipeConsumers = null;
+        currPickCount = 0;
+    }
+
+    public IngredientScriptableObject FindMatchingIngredient(string ingredientName)
+    {
+        foreach(IngredientScriptableObject ingredient in IngredientScriptableObject)
+        {
+            if(ingredient.name == ingredientName)
+            {
+                return ingredient;
+            }
+        }
+
+        throw new System.Exception($"{ingredientName}이라는 이름과 일치하는 재료가 없습니다.");
+    }
+
+    public void SendIngredientToCorrectCx(IngredientScriptableObject ingredient)
+    {
+        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumers.gameObject.GetComponent<ConsumerIngredientHandler>();
+        ingredientHandler.AddAttemptIngredients(ingredient);
+        currPickCount++;
+
+        // @anditsoon TODO: 나중에는 재료를 다 골라서 RecipeConsumer 가 Order 상태로 가는 기능을 추가해야 합니다.
+        if (currPickCount >= MAX_INGREDIENT_NUMBER)
+        {
+            Debug.Log("주문하러 갑니다");
+            currPickCount = 0;
+            IsIngredientSelectMode = false;
+        }
     }
 }

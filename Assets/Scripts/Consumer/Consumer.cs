@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         ChooseIngredients();
 
-        StartCoroutine(HandleChildOrderOnUI());
+        StartCoroutine(HandleOrderOnUI());
     }
 
     /// <summary>
@@ -219,7 +220,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         ingredientHandler.ChooseAllIngredients();
     }
 
-    public virtual IEnumerator HandleChildOrderOnUI()
+    public virtual IEnumerator HandleOrderOnUI()
     {
         // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
         consumerUI.ActivateIngredientUI(true);
@@ -245,7 +246,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
 
         // 필요한 재료를 가져옵니다.
-        var neededIngredientInfo = ingredientHandler.GetNeededIngredientInfo();
+        var neededIngredientInfo = ingredientHandler.GetAttemptIngredientInfo();
         var point = neededIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
@@ -259,7 +260,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
         ingredientHandler.AddOwnIngredient(neededIngredientInfo.Ingredient, neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
-        
+        // UI를 업데이트 합니다.
+        consumerUI.ActivateFeedbackUIs(neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
+
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);
         yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
