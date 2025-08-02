@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e87cff69fe3e7034d8abe3b4415c1034
+guid: 689fe592f2401f24698513d2d9873ef4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5538571805556515561
-    second: ingredient box_red_0
+      213: 4060404907731003071
+    second: icon_depa_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ingredient box_red_0
+      name: icon_depa_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 145
-        height: 91
+        x: 22
+        y: 8
+        width: 225
+        height: 243
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71d5fc6994a0323b0800000000000000
-      internalID: -5538571805556515561
+      spriteID: fb62f8920c4795830800000000000000
+      internalID: 4060404907731003071
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ingredient box_red_0: -5538571805556515561
+      icon_depa_0: 4060404907731003071
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

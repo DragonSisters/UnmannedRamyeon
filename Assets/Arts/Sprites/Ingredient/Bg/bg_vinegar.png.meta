@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: e87cff69fe3e7034d8abe3b4415c1034
+guid: e4b87af977abaa647bc2ca96e293e2ed
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5538571805556515561
-    second: ingredient box_red_0
+      213: -8437741638334160043
+    second: bg_vinegar_0
+  - first:
+      213: -2599895825505952690
+    second: bg_vinegar_1
+  - first:
+      213: -5022228973279299377
+    second: bg_vinegar_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +132,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: ingredient box_red_0
+      name: bg_vinegar_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 145
-        height: 91
+        y: 6
+        width: 28
+        height: 46
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +147,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 71d5fc6994a0323b0800000000000000
-      internalID: -5538571805556515561
+      spriteID: 553e19c5fae17ea80800000000000000
+      internalID: -8437741638334160043
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg_vinegar_1
+      rect:
+        serializedVersion: 2
+        x: 15
+        y: 49
+        width: 29
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e4c52b385805bebd0800000000000000
+      internalID: -2599895825505952690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bg_vinegar_2
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 0
+        width: 28
+        height: 45
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: fc833039b557d4ab0800000000000000
+      internalID: -5022228973279299377
       vertices: []
       indices: 
       edges: []
@@ -161,7 +211,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      ingredient box_red_0: -5538571805556515561
+      bg_vinegar_0: -8437741638334160043
+      bg_vinegar_1: -2599895825505952690
+      bg_vinegar_2: -5022228973279299377
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
