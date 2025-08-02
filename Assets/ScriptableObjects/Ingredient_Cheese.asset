@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Ingredient_Cheese
   m_EditorClassIdentifier: 
   name: "\uCE58\uC988"
-  icon: {fileID: -8102381326602482772, guid: a3d6de28d0118f34aaa356d7b0a8d658, type: 3}
+  bgSprite: {fileID: 21300000, guid: 38ee116955a6eb0498978f8d4d48cac6, type: 3}
+  icon: {fileID: 21300000, guid: a3d6de28d0118f34aaa356d7b0a8d658, type: 3}
   price: 500
+  ingredientCreatePosition: {x: -6, y: -3.5}
   point: {x: 4.5, y: -3}

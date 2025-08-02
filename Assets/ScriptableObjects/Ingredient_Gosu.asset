@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Ingredient_Gosu
   m_EditorClassIdentifier: 
   name: "\uACE0\uC218"
-  icon: {fileID: -5394999333778371504, guid: 06c7fcc1b7d1c4f4bb321f289ba87a9f, type: 3}
+  bgSprite: {fileID: 21300000, guid: c7e8654dd0e01224d81f1a8f38e1ada6, type: 3}
+  icon: {fileID: 21300000, guid: 06c7fcc1b7d1c4f4bb321f289ba87a9f, type: 3}
+  isOutsideBox: 0
   price: 1000
+  ingredientCreatePosition: {x: -5, y: 4.4}
   point: {x: 4.5, y: -3}
