@@ -51,17 +51,22 @@ public class MoveManager : Singleton<MoveManager>
     [Header("줄서기")]
     [SerializeField] private int lineCount = 4;
     [SerializeField] private float lineSpacingFactor = 1f;
-    [SerializeField] private Transform[] lineStartingPoint;
-    
-    private List<(Queue<int> line, Vector2 startingPoint)> lineList = new();
+    [SerializeField] private Transform orderLineStartingPoint;
+    [SerializeField] private Transform[] cookingLineStartingPoint;
+
+    private Queue<Consumer> orderLine = new();
+    private List<Queue<Consumer>> cookingLines = new();
+    private Dictionary<int, Queue<Consumer>> cookingLineList = new(); // lineIndex, lineCount
     private List<IngredientScriptableObject> ingredientScriptableObjects = new();
 
     public void OnGameEnter()
     {
         ingredientScriptableObjects = IngredientManager.Instance.IngredientScriptableObject;
+
         for (int i = 0; i < lineCount; i++)
         {
-            lineList.Add((new Queue<int>(), lineStartingPoint[i].position));
+            cookingLines.Add(new Queue<Consumer>());
+            cookingLineList.Add(i, cookingLines[i]);
         }
     }
 
@@ -84,60 +89,95 @@ public class MoveManager : Singleton<MoveManager>
         return point;
     }
 
-    public void PushLineQueue(int lineIndex, int lineOrder)
+    /// <summary>
+    /// 손님이 처음 계산줄에 설 때 어디 서야하는지 알려줍니다.
+    /// </summary>
+    /// <param name="lineTurn"></param>
+    /// <returns></returns>
+    public void PushAndGetOrderLine(Consumer consumer, out Vector2 waitingPosition, out int lineTurn)
     {
-        lineList[lineIndex].line.Enqueue(lineOrder);
-    }
-
-    public void PopLineQueue(int lineIndex)
-    {
-        lineList[lineIndex].line.Dequeue();
+        orderLine.Enqueue(consumer);
+        lineTurn = orderLine.Count - 1;
+        var startingPoint = orderLineStartingPoint.position;
+        waitingPosition = startingPoint;
+        // 자신의 차례가 아니라면 좀 떨어져있습니다
+        waitingPosition.x += lineTurn == 0 ? 0 : lineSpacingFactor;
     }
 
     /// <summary>
-    /// 손님이 처음에 줄을 고를 때, 어디 서있어야 하는지 계산하여 반환해줍니다.
+    /// 손님이 계산 줄에서 나갈 때 호출됩니다
     /// </summary>
+    public void PopOrderLineQueue()
+    {
+        orderLine.Dequeue();
+
+        // 다른 기다리는 consumer들은 대기순번을 1씩 내립니다
+        foreach (var consumer in orderLine)
+        {
+            consumer.moveScript.ReduceOrderLine();
+        }
+    }
+
+    public Vector2 GetOrderPoint()
+    {
+        return orderLineStartingPoint.position;
+    }
+
+    /// <summary>
+    /// 본인이 계산할 차례인지를 보고, 서 있어야하는 위치를 반환합니다.
+    /// </summary>
+    /// <param name="lineTurn"></param>
     /// <returns></returns>
-    public void FindFewestLinePoint(out int lineIndex, out int lineOrder, out Vector2 point)
+    public void PushAndGetCookingLine(Consumer consumer, out int lineIndex, out int lineTurn, out Vector2 waitingPoint)
     {
         lineIndex = FindLineWithFewestConsumers();
-        lineOrder = lineList[lineIndex].line.Count;
-        CalculateWaitingPointInLine(lineIndex, lineOrder, out point, out var newLineOrder);
+        cookingLineList[lineIndex].Enqueue(consumer);
+        lineTurn = cookingLineList[lineIndex].Count - 1;
+
+        waitingPoint = GetPointInCookingLine(lineIndex, lineTurn);
+    }
+
+    public void PopCookingLineQueue(int lineIndex)
+    {
+        cookingLineList[lineIndex].Dequeue();
+
+        // 다른 기다리는 consumer들은 대기순번을 1씩 내립니다
+        foreach (var consumer in cookingLineList[lineIndex])
+        {
+            consumer.moveScript.ReduceCookingLine();
+        }
+    }
+
+    public Vector2 GetCookingPoint(int lineIndex)
+    {
+        return cookingLineStartingPoint[lineIndex].position;
     }
 
     /// <summary>
-    /// 줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
+    /// 요리줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
     /// </summary>
     /// <returns></returns>
-    public void CalculateWaitingPointInLine(int lineIndex, int lineOrder, out Vector2 waitingPosition, out int newLineOrder)
+    public Vector2 GetPointInCookingLine(int lineIndex, int lineTurn)
     {
-        var startingPoint = lineList[lineIndex].startingPoint;
-        waitingPosition = startingPoint;
+        var startingPoint = cookingLineStartingPoint[lineIndex].position;
+        var waitingPosition = startingPoint;
 
-        // 자신이 몇번째로 서있는지에 따라 fator를 더해 뒤에 섭니다.
-        for (int i = 0; i < lineOrder; i++)
-        {
-            waitingPosition.x += lineSpacingFactor;
-        }
+        // 자신의 차례가 아니라면 좀 떨어져있습니다
+        waitingPosition.x += lineTurn == 0 ? 0 : lineSpacingFactor;
 
-        // 새로 몇번째로 서있는지 갱신해둡니다
-        newLineOrder = lineOrder - 1;
-        if(newLineOrder < 0)
-        {
-            newLineOrder = 0;
-        }
+        return waitingPosition;
     }
 
     /// <summary>
-    /// 가장 수가 적은 줄을 찾아줍니다
+    /// 가장 수가 적은 요리줄을 찾아줍니다
     /// </summary>
     private int FindLineWithFewestConsumers()
     {
         var minConsumerCount = int.MaxValue;
-        var minLineIndex = lineList.Count == 0 ? 0 : -1;
-        for (int i = 0; i < lineList.Count; i++)
+        var minLineIndex = cookingLineList.Count == 0 ? 0 : -1;
+        for (int i = 0; i < cookingLineList.Count; i++)
         {
-            var consumerCount = lineList[i].line.Count;
+            var consumerCount = cookingLineList[i].Count;
             if (consumerCount < minConsumerCount)
             {
                 minLineIndex = i;

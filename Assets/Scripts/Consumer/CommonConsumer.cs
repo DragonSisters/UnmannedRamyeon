@@ -25,7 +25,7 @@ public class CommonConsumer : Consumer
     {
         spawnedTime = Time.time;
         IsIssueSolved = false;
-        SetState(ConsumerState.Search);
+        SetState(ConsumerState.Order);
     }
 
     internal override void HandleChildExit() { }

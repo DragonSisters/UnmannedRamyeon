@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -17,6 +18,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
 
+    private const float ORDER_WAITING_TIME = 1f;
     private const float COOKING_WAITING_TIME = 5f;
 
     /// <summary>
@@ -161,6 +163,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                 case ConsumerState.Exit:
                     yield return OnCustomerExit();
                     break;
+                case ConsumerState.Order:
+                    yield return Order();
+                    break;
                 case ConsumerState.Search:
                     yield return SearchIngredient();
                     break;
@@ -211,6 +216,37 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
         HandleChildExit();
         exitCompleted = true;
+    }
+
+    private IEnumerator Order()
+    {
+        // 줄 서러 갑니다
+        var waitingPoint = moveScript.GetOrderWaitingPoint(this);
+        while (!moveScript.IsCloseEnough(waitingPoint))
+        {
+            moveScript.MoveTo(waitingPoint);
+            yield return null;
+        }
+
+        // 내 차례가 될때까지 대기합니다.
+        yield return new WaitUntil(() => moveScript.IsMyTurnToOrder);
+
+        // 주문하러 갑니다
+        var orderPoint = MoveManager.Instance.GetOrderPoint();
+        while (!moveScript.IsCloseEnough(orderPoint))
+        {
+            moveScript.MoveTo(orderPoint);
+            yield return null;
+        }
+
+        // 주문하는 시간
+        yield return new WaitForSeconds(ORDER_WAITING_TIME);
+
+        // 줄을 줄입니다
+        MoveManager.Instance.PopOrderLineQueue();
+
+        // 주문을 다했다면 다음 차례로 넘어갑니다.
+        SetState(ConsumerState.Search);
     }
 
     public void ChooseIngredients()
@@ -272,7 +308,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private IEnumerator LineUp()
     {
         // 줄 서러 갑니다.
-        var waitingLinePoint = moveScript.GetWaitingLinePoint();
+        var waitingLinePoint = moveScript.GetCookingWaitingPoint(this);
 
         while (!moveScript.IsCloseEnough(waitingLinePoint)) 
         {
@@ -280,17 +316,21 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             yield return null;
         }
 
-        var currentLineOrder = moveScript.LineOrder;
-        // 줄이 줄어들면 이동합니다.
-        while (currentLineOrder > 0)
+        // 내 차례가 될때까지 대기합니다.
+        yield return new WaitUntil(() => moveScript.IsMyTurnToCooking);
+
+        // 요리하러 갑니다
+        var cookingPoint = moveScript.GetCookingPoint();
+        while (!moveScript.IsCloseEnough(cookingPoint))
         {
-            var linePoint = moveScript.GetWaitingPointInLine();
-            moveScript.MoveTo(linePoint);
-            currentLineOrder = moveScript.LineOrder;
+            moveScript.MoveTo(cookingPoint);
             yield return null;
         }
 
-        // 자신의 차례가 되면 다음단계로 넘어갑니다.
+        // 줄을 줄입니다
+        moveScript.GoToCooking();
+
+        // 주문을 다했다면 다음 차례로 넘어갑니다.
         SetState(ConsumerState.Cooking);
     }
 
@@ -300,7 +340,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         yield return new WaitForSeconds(COOKING_WAITING_TIME);
 
         // @charotiti9 TODO: 기다리는 동안 게이지가 올라가는 UI가 필요합니다.
-        
+
         // 지금은 임의로 Exit으로 넘깁니다.
         SetState(ConsumerState.Exit);
     }

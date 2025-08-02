@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using UnityEditor;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class ConsumerMove : MonoBehaviour
@@ -7,30 +8,12 @@ public class ConsumerMove : MonoBehaviour
     private NavMeshAgent agent;
     private const float RANGE_THRESHOLD = 0.5f;
 
-    public int LineIndex
-    {
-        get
-        {
-            if(lineIndex == -1)
-            {
-                throw new System.Exception($"아직 초기화되지 않은 LineIndex를 가져오려고 했습니다.");
-            }
-            return lineIndex;
-        }
-    }
-    private int lineIndex = -1;
-    public int LineOrder
-    {
-        get
-        {
-            if (lineOrder == -1)
-            {
-                throw new System.Exception($"아직 초기화되지 않은 LineOrder를 가져오려고 했습니다.");
-            }
-            return lineOrder;
-        }
-    }
-    private int lineOrder = -1;
+    public bool IsMyTurnToOrder => orderTurn == 0;
+    private int orderTurn = -1;
+
+    public bool IsMyTurnToCooking => cookingTurn == 0;
+    private int cookingTurn = -1;
+    private int cookingLineIndex = -1;
 
 
     public void Initialize()
@@ -68,20 +51,49 @@ public class ConsumerMove : MonoBehaviour
         return distance <= RANGE_THRESHOLD;
     }
 
-    public Vector2 GetWaitingLinePoint()
+    public Vector2 GetOrderWaitingPoint(Consumer consumer)
     {
-        MoveManager.Instance.FindFewestLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
-        MoveManager.Instance.PushLineQueue(foundLineIndex, foundLineOrder);
-        lineIndex = foundLineIndex;
-        lineOrder = foundLineOrder;
-        return point;
+        MoveManager.Instance.PushAndGetOrderLine(consumer, out var waitingLinePoint, out var lineTurn);
+        orderTurn = lineTurn;
+        return waitingLinePoint;
     }
 
-    public Vector2 GetWaitingPointInLine()
+
+    public void ReduceOrderLine()
     {
-        MoveManager.Instance.CalculateWaitingPointInLine(lineIndex, lineOrder, out var point, out var newLineOrder);
-        MoveManager.Instance.PopLineQueue(lineIndex);
-        lineOrder = newLineOrder;
-        return point;
+        orderTurn--;
+    }
+
+    /// <summary>
+    /// 처음 요리줄 서러 갔을 때의 position을 반환합니다.
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetCookingWaitingPoint(Consumer consumer)
+    {
+        MoveManager.Instance.PushAndGetCookingLine(consumer, out var lineIndex, out var lineTurn, out var waitingPoint);
+        cookingLineIndex = lineIndex;
+        cookingTurn = lineTurn;
+        return waitingPoint;
+    }
+
+    /// <summary>
+    /// 줄이 줄어들면 줄어든 줄에 따라 이동하는 자리를 반환합니다.
+    /// </summary>
+    /// <returns></returns>
+    public Vector2 GetCookingPoint()
+    {
+        return MoveManager.Instance.GetPointInCookingLine(cookingLineIndex, cookingTurn);
+    }
+    /// <summary>
+    /// 요리가 끝나면 줄을 줄입니다.
+    /// </summary>
+    public void ReduceCookingLine()
+    {
+        cookingTurn--;
+    }
+
+    public void GoToCooking()
+    {
+        MoveManager.Instance.PopCookingLineQueue(cookingLineIndex);
     }
 }
