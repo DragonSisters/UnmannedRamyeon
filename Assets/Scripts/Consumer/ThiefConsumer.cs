@@ -18,4 +18,9 @@ public class ThiefConsumer : Consumer
     internal override void HandleChildUnclicked()
     {
     }
+
+    internal override IEnumerator HandleChildIssue()
+    {
+        yield break;
+    }
 }
