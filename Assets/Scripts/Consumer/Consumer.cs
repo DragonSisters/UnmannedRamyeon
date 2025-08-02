@@ -280,13 +280,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             yield return null;
         }
 
-        var currentLineOrder = moveScript.LineOrder;
+        var currentCookingLineOrder = moveScript.CookingLineTurn;
         // 줄이 줄어들면 이동합니다.
-        while (currentLineOrder > 0)
+        while (currentCookingLineOrder > 0)
         {
             var linePoint = moveScript.GetWaitingPointInCookingLine();
             moveScript.MoveTo(linePoint);
-            currentLineOrder = moveScript.LineOrder;
+            currentCookingLineOrder = moveScript.CookingLineTurn;
             yield return null;
         }
 

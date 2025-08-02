@@ -12,25 +12,30 @@ public class ConsumerMove : MonoBehaviour
         get
         {
             if(lineIndex == -1)
-            {
-                throw new System.Exception($"아직 초기화되지 않은 LineIndex를 가져오려고 했습니다.");
-            }
-            return lineIndex;
-        }
-    }
-    private int lineIndex = -1;
-    public int LineOrder
+    public int CookingLineIndex
     {
         get
         {
-            if (lineOrder == -1)
+            if(cookingLineIndex == -1)
+            {
+                throw new System.Exception($"아직 초기화되지 않은 LineIndex를 가져오려고 했습니다.");
+            }
+            return cookingLineIndex;
+        }
+    }
+    private int cookingLineIndex = -1;
+    public int CookingLineTurn
+    {
+        get
+        {
+            if (cookingLineTurn == -1)
             {
                 throw new System.Exception($"아직 초기화되지 않은 LineOrder를 가져오려고 했습니다.");
             }
-            return lineOrder;
+            return cookingLineTurn;
         }
     }
-    private int lineOrder = -1;
+    private int cookingLineTurn = -1;
 
 
     public void Initialize()
@@ -70,18 +75,18 @@ public class ConsumerMove : MonoBehaviour
 
     public Vector2 GetCookingLinePoint()
     {
-        MoveManager.Instance.FindFewestLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
-        MoveManager.Instance.PushLineQueue(foundLineIndex, foundLineOrder);
-        lineIndex = foundLineIndex;
-        lineOrder = foundLineOrder;
+        MoveManager.Instance.FindFewestCookingLinePoint(out var foundLineIndex, out var foundLineOrder, out var point);
+        MoveManager.Instance.PushCookingLineQueue(foundLineIndex, foundLineOrder);
+        cookingLineIndex = foundLineIndex;
+        cookingLineTurn = foundLineOrder;
         return point;
     }
 
     public Vector2 GetWaitingPointInCookingLine()
     {
-        MoveManager.Instance.CalculateWaitingPointInCookingLine(lineIndex, lineOrder, out var point, out var newLineOrder);
-        MoveManager.Instance.PopLineQueue(lineIndex);
-        lineOrder = newLineOrder;
+        MoveManager.Instance.CalculateWaitingPointInCookingLine(cookingLineIndex, cookingLineTurn, out var point, out var newLineOrder);
+        MoveManager.Instance.PopCookingLineQueue(cookingLineIndex);
+        cookingLineTurn = newLineOrder;
         return point;
     }
 }
