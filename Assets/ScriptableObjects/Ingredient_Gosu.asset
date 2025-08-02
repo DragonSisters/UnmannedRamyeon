@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 89bf5ce1d0f2c5446b45c9fc567fd3eb, type: 3}
-  m_Name: Ingredient_ChocoSnack
+  m_Name: Ingredient_Gosu
   m_EditorClassIdentifier: 
-  name: "\uCD08\uCF54\uACFC\uC790"
-  icon: {fileID: 5453257846363357924, guid: 95acbdc560efcda4ab3ddcd4f3b969e6, type: 3}
-  price: 300
-  point: {x: -8, y: 3}
+  name: "\uACE0\uC218"
+  icon: {fileID: -5394999333778371504, guid: 06c7fcc1b7d1c4f4bb321f289ba87a9f, type: 3}
+  price: 1000
+  point: {x: 4.5, y: -3}

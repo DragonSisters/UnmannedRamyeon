@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ingredient_Mayonnaise
   m_EditorClassIdentifier: 
   name: "\uB9C8\uC694\uB124\uC988"
-  icon: {fileID: 21300000, guid: 1123433c27de505429de7b18f809ddc9, type: 3}
+  icon: {fileID: 1891813823238675463, guid: 2222e2a7fa7569b4d839f6723dbedf02, type: 3}
   price: 500
   point: {x: -3, y: -3}
