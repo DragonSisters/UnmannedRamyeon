@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -116,7 +117,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         return ingredientInfo;
     }
 
-    public void AddAttemptIngredients(IngredientScriptableObject ingredient)
+    public void AddAttemptIngredients(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
         bool isCorrect = paidIngredients.Contains(ingredient);
         IngredientInfo info = new IngredientInfo(ingredient, -1, isCorrect);
@@ -127,8 +128,18 @@ public class ConsumerIngredientHandler : MonoBehaviour
                 info.Index = i;
             }
         }
-        AttemptIngredients.Enqueue(info);
-        Debug.Log($"{ingredient.Name} 재료가 선택되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
+
+        if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
+        {
+            gameObject.GetComponent<ConsumerSpeech>().StartSpeechFromSituation(gameObject.GetComponent<Consumer>().consumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, true, false);
+            isNoDuplicate = false;
+            Debug.Log("중복된 재료입니다!");
+            return;
+        }
+
+        AttemptIngredients.Enqueue(info); 
+        Debug.Log($"{ingredient.Name} 재료가 attemptedIngredients 리스트에 추가되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
+        isNoDuplicate = true;
     }
 
     public void AddOwnIngredient(IngredientScriptableObject ingredient, int index, bool isCorrect)

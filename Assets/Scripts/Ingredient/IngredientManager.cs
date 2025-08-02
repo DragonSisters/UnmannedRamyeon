@@ -40,7 +40,7 @@ public class IngredientManager : Singleton<IngredientManager>
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumers = null;
     // 레시피 손님이 가져간 재료 수
-    private int currPickCount = 0;
+    public int currPickCount = 0;
 
     void Start()
     {
@@ -195,12 +195,12 @@ public class IngredientManager : Singleton<IngredientManager>
     public void SendIngredientToCorrectCx(IngredientScriptableObject ingredient)
     {
         ConsumerIngredientHandler ingredientHandler = currentRecipeConsumers.gameObject.GetComponent<ConsumerIngredientHandler>();
-        ingredientHandler.AddAttemptIngredients(ingredient);
-        currPickCount++;
+        ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
+        if(isNoDuplicate) currPickCount++;
 
         if (currPickCount >= MAX_INGREDIENT_NUMBER)
         {
-            currentRecipeConsumers.gameObject.GetComponent<Consumer>().SetState(ConsumerState.Order);
+            currentRecipeConsumers.IsAllIngredientSelected = true;
             currPickCount = 0;
             IsIngredientSelectMode = false;
         }

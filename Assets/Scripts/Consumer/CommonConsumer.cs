@@ -31,6 +31,11 @@ public class CommonConsumer : Consumer
 
     internal override void HandleChildExit() { }
 
+    internal override IEnumerator HandleChildIssue()
+    {
+        yield break;
+    }
+
     internal override void HandleChildClick() 
     {
         // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
@@ -86,5 +91,4 @@ public class CommonConsumer : Consumer
             moodScript.DecreaseMood(issueUnresolvedPenalty);
         }
     }
-
 }

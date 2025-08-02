@@ -13,13 +13,13 @@ public class RecipeConsumer : Consumer, IClickableSprite
     private RecipeScriptableObject myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
-
-    // 기타 변수
-    [SerializeField] private Vector2 waitingPoint = new Vector2(7, 2); // @anditsoon TODO: 나중에 키오스크 근처로 위치 조정합니다.
+    [SerializeField] private float recipeOrderTimeLimit = 10f;
+    public bool IsAllIngredientSelected = false;
 
     internal override void HandleChildEnter()
     {
         StartCoroutine(EnterCoroutine());
+        SetState(ConsumerState.Issue);
     }
 
     internal override void HandleChildExit()
@@ -27,18 +27,28 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.DeleteRecipeConsumer();
     }
 
-    public override void HandleOrder()
+    internal override IEnumerator HandleChildIssue()
     {
-        foreach(IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
+        HandleOrderOnUI();
+        yield return new WaitUntil(() => IsAllIngredientSelected);
+
+        bool isAllIngredientCorrect = true;
+        foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
         {
-            if(ingredient.Index < 0)
+            if (ingredient.Index < 0)
             {
-                SetState(ConsumerState.IssueUnsolved);
-                return;
+                isAllIngredientCorrect = false;
             }
         }
 
-        SetState(ConsumerState.Search);
+        if (isAllIngredientCorrect)
+        {
+            SetState(ConsumerState.Order);
+        }
+        else
+        {
+            SetState(ConsumerState.Leave);
+        }
     }
 
     internal override IEnumerator HandleChildUpdate()
@@ -48,11 +58,14 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     private IEnumerator EnterCoroutine()
     {
+        var waitingPoint = MoveManager.Instance.RandomShoutPoint;
         while (!moveScript.IsCloseEnough(waitingPoint))
         {
             moveScript.MoveTo(waitingPoint);
             yield return null;
         }
+
+        yield return new WaitForSeconds(2f);
     }
 
     public override void SetIngredientLists()
@@ -76,11 +89,8 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     public override IEnumerator HandleOrderOnUI()
     {
-        // @anditsoon TODO: 지금은 들어오자마자 주문을 외치고 있습니다. 나중에 주문하는 시점이 정해지면 거기서 호출해야 합니다.
-        consumerUI.OrderByRecipeOnUI(myRecipe.Name);
-        SetState(ConsumerState.Issue);
+        speechScript.StartSpeechFromSituation(consumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, -1, $"{myRecipe.Name}");
         yield return new WaitForSeconds(recipeOrderDuration);
-        consumerUI.SetSpeechBubbleUI(false);
     }
 
     internal override void HandleChildClick()
@@ -100,4 +110,5 @@ public class RecipeConsumer : Consumer, IClickableSprite
         // IngredientManager 에 내 정보 삭제 요청
         IngredientManager.Instance.DeleteRecipeConsumer();
     }
+
 }

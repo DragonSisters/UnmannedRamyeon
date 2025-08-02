@@ -43,12 +43,15 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
     private ConsumerState cachedStateBeforeIssue = ConsumerState.Invalid;
+    Coroutine previousCoroutine;
 
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
     /// </summary>
     internal void SetState(ConsumerState newState)
     {
+        Debug.Log($"[SetState] {gameObject.name} 상태 변경: {State} → {newState}");
+
         // 이슈와 관련된 상태가 아니라면 cache해놓습니다.
         if (newState != ConsumerState.Issue 
             && newState != ConsumerState.IssueSolved 
@@ -68,6 +71,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     // 추상 함수
     internal abstract void HandleChildEnter();
     internal abstract void HandleChildExit();
+    internal abstract IEnumerator HandleChildIssue();
     internal abstract IEnumerator HandleChildUpdate();
     internal abstract void HandleChildClick();
     internal abstract void HandleChildUnclicked();
@@ -182,6 +186,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                     break;
                 // 이하로는 외부조정중. 이슈는 모든 상태에서 올 수 있으므로 주의가 필요합니다.
                 case ConsumerState.Issue:
+                    yield return HandleChildIssue();
                     break;
                 case ConsumerState.IssueUnsolved:
                     OnIssueUnsolved();
@@ -202,10 +207,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// </summary>
     private void OnCustomerEnter()
     {
-        HandleChildEnter();
-
         ChooseIngredients();
-
+        HandleChildEnter();
         StartCoroutine(HandleOrderOnUI());
     }
 
@@ -267,12 +270,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 줄을 줄입니다
         MoveManager.Instance.PopOrderLineQueue();
 
-        HandleOrder();   
-    }
-
-    public virtual void HandleOrder()
-    {
-        // 대부분의 손님의 경우 주문을 다했다면 다음 차례로 넘어갑니다.
         SetState(ConsumerState.Search);
     }
 
