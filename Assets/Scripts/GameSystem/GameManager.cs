@@ -35,6 +35,7 @@ public class GameManager : Singleton<GameManager>
     // 1초 뒤 게임 시작 UI 가 사라지고 인게임 UI 가 나타납니다.
     private IEnumerator UnableStartUI()
     {
+        SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         btn_Start.SetActive(false);
         img_Start.SetActive(true);
         yield return new WaitForSeconds(1f);
