@@ -7,11 +7,20 @@ public class ConsumerMove : MonoBehaviour
     private NavMeshAgent agent;
     private const float RANGE_THRESHOLD = 0.5f;
 
-    public int LineIndex
+    public int OrderLineTurn
     {
         get
         {
-            if(lineIndex == -1)
+            if (orderLineTurn == -1)
+            {
+                throw new System.Exception($"아직 초기화되지 않은 LineOrder를 가져오려고 했습니다.");
+            }
+            return orderLineTurn;
+        }
+    }
+    private int orderLineTurn = -1;
+
+
     public int CookingLineIndex
     {
         get

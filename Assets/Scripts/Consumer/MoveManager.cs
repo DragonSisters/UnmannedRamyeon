@@ -86,11 +86,11 @@ public class MoveManager : Singleton<MoveManager>
         return point;
     }
 
-    public void PushLineQueue(int lineIndex, int lineOrder)
+    public void PushOrderLineQueue(int lineTurn)
 
-    public void PushCookingLineQueue(int lineIndex, int lineOrder)
+    public void PushCookingLineQueue(int lineIndex, int lineTurn)
     {
-        cookingLineList[lineIndex].line.Enqueue(lineOrder);
+        cookingLineList[lineIndex].line.Enqueue(lineTurn);
     }
 
     public void PopCookingLineQueue(int lineIndex)
@@ -102,33 +102,33 @@ public class MoveManager : Singleton<MoveManager>
     /// 손님이 처음에 요리줄을 고를 때, 어디 서있어야 하는지 계산하여 반환해줍니다.
     /// </summary>
     /// <returns></returns>
-    public void FindFewestCookingLinePoint(out int lineIndex, out int lineOrder, out Vector2 point)
+    public void FindFewestCookingLinePoint(out int lineIndex, out int lineTurn, out Vector2 point)
     {
         lineIndex = FindLineWithFewestConsumers();
-        lineOrder = cookingLineList[lineIndex].line.Count;
-        CalculateWaitingPointInCookingLine(lineIndex, lineOrder, out point, out var newLineOrder);
+        lineTurn = cookingLineList[lineIndex].line.Count;
+        CalculateWaitingPointInCookingLine(lineIndex, lineTurn, out point, out var newLineOrder);
     }
 
     /// <summary>
     /// 요리줄이 줄어들면 해당 줄에서 어디에 서있어야하는지 계산해줍니다.
     /// </summary>
     /// <returns></returns>
-    public void CalculateWaitingPointInCookingLine(int lineIndex, int lineOrder, out Vector2 waitingPosition, out int newLineOrder)
+    public void CalculateWaitingPointInCookingLine(int lineIndex, int lineTurn, out Vector2 waitingPosition, out int newLineTurn)
     {
         var startingPoint = cookingLineList[lineIndex].startingPoint;
         waitingPosition = startingPoint;
 
         // 자신이 몇번째로 서있는지에 따라 fator를 더해 뒤에 섭니다.
-        for (int i = 0; i < lineOrder; i++)
+        for (int i = 0; i < lineTurn; i++)
         {
             waitingPosition.x += lineSpacingFactor;
         }
 
         // 새로 몇번째로 서있는지 갱신해둡니다
-        newLineOrder = lineOrder - 1;
-        if(newLineOrder < 0)
+        newLineTurn = lineTurn - 1;
+        if(newLineTurn < 0)
         {
-            newLineOrder = 0;
+            newLineTurn = 0;
         }
     }
 
