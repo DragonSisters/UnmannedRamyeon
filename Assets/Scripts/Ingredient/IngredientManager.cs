@@ -10,7 +10,8 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float UI_DURATION_PREVIEW = 2f;
     public const float CORRECT_INGREDIENT_PROBAILITY = 9f;
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
-    [SerializeField] private GameObject ingredientsParent;
+    [SerializeField] private Transform ingredientsParent;
+    [SerializeField] private GameObject ingredientBoxPrefab;
     List<IngredientClick> ingredientsClickable = new List<IngredientClick>();
 
     private bool isIngredientSelectMode;
@@ -63,29 +64,21 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void CreateIngredientObjOnPosition()
     {
-        List<IngredientScriptableObject> ingredientList = IngredientManager.Instance.IngredientScriptableObject;
-        foreach (IngredientScriptableObject ingredient in ingredientList)
+        foreach (IngredientScriptableObject ingredient in IngredientScriptableObject)
         {
-            GameObject ingredientGameObj = new GameObject(ingredient.name);
-            ingredientGameObj.transform.SetParent(ingredientsParent.transform, false); // 생성할 때는 로컬 좌표 유지
-            ingredientGameObj.transform.position = ingredient.Point; // 각 재료별 좌표로 옮김
+            GameObject ingredientGameObj = Instantiate(ingredientBoxPrefab, ingredientsParent);
 
-            // SpriteRenderer 생성
-            SpriteRenderer spriteRenderer = ingredientGameObj.GetComponent<SpriteRenderer>();
-            if (spriteRenderer == null)
-            {
-                spriteRenderer = ingredientGameObj.AddComponent<SpriteRenderer>();
-            }
-            spriteRenderer.sprite = ingredient.Icon;
+            ingredientGameObj.transform.position = ingredient.IngredientCreatePosition; // 각 재료별 좌표로 옮김
 
-            // 콜라이더 추가
-            var collider = gameObject.GetComponent<PolygonCollider2D>();
-            if (collider == null)
+            IngredientBox ingredientBox = ingredientGameObj.GetComponent<IngredientBox>();
+            if (ingredientBox == null)
             {
-                collider = ingredientGameObj.AddComponent<PolygonCollider2D>();
+                Debug.Log($"재료 박스 프리팹에 스크립트가 부착되지 않았습니다.");
             }
-            // 충돌되지 않도록 trigger on
-            collider.isTrigger = true;
+            ingredientBox.SetIngredientSprite(ingredient.BgSprite);
+            ingredientBox.SetIngredientName(ingredient.Name);
+            ingredientBox.GetOrAddCollision();
+            ingredientBox.SetBoxVisible(ingredient.IsOutsideBox);
 
             IngredientClick ingredientClick = ingredientGameObj.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);
