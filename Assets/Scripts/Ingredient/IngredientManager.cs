@@ -111,8 +111,6 @@ public class IngredientManager : Singleton<IngredientManager>
         Debug.Log("셀렉트 이벤트 받았다");
         // ingredient 클릭 활성화
         SwitchClickable(true);
-        // 클릭해서 네 개 다 맞는 재료 클릭하면 성공 -> 파이낸스 매니저에 보냄
-        // 아니면 실패 -> 그냥 바로 퇴장
     }
 
     private void HandleIngredientDeselectMode()
@@ -185,6 +183,7 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         currentRecipeConsumers = null;
+        currPickCount = 0;
     }
 
     public IngredientScriptableObject FindMatchingIngredient(string ingredientName)

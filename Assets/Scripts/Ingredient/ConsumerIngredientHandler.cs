@@ -35,10 +35,10 @@ public class ConsumerIngredientHandler : MonoBehaviour
     /// <summary>
     /// 현재 갖고 있는 재료 목록
     /// </summary>
-    public List<IngredientInfo> ownedIngredients = new();
+    public List<IngredientInfo> OwnedIngredients = new();
 
     public bool IsIngredientSelectDone => 
-        ownedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
+        OwnedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
         && attemptIngredients.Count == 0;
 
     public void Initialize()
@@ -51,7 +51,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         paidIngredients.Clear();
         unpaidIngredients.Clear();
         attemptIngredients.Clear();
-        ownedIngredients.Clear();
+        OwnedIngredients.Clear();
     }
 
     public void SetAllIngredientLists(List<IngredientScriptableObject> ingredientList = null)
@@ -136,19 +136,19 @@ public class ConsumerIngredientHandler : MonoBehaviour
         // 필요재료 리스트에서 뺍니다
         attemptIngredients.Dequeue();
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
-        ownedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", ownedIngredients)}");
+        OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients)}");
     }
 
     public void UpdateCorrectOwnIngredient(int index)
     {
         if(index < 0)
         {
-            throw new System.Exception($"재료 인덱스 설정이 잘못되었습니다.");
+            gameObject.GetComponent<Consumer>().SetState(ConsumerState.Exit);
         }
 
         // 같은 인덱스를 찾아서 재료 맞게 처리
-        foreach (var ownedIngredient in ownedIngredients)
+        foreach (var ownedIngredient in OwnedIngredients)
         {
             if(ownedIngredient.Index == index)
             {
