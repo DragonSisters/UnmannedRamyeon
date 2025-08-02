@@ -205,10 +205,9 @@ public class IngredientManager : Singleton<IngredientManager>
         ingredientHandler.AddAttemptIngredients(ingredient);
         currPickCount++;
 
-        // @anditsoon TODO: 나중에는 재료를 다 골라서 RecipeConsumer 가 Order 상태로 가는 기능을 추가해야 합니다.
         if (currPickCount >= MAX_INGREDIENT_NUMBER)
         {
-            Debug.Log("주문하러 갑니다");
+            currentRecipeConsumers.gameObject.GetComponent<Consumer>().SetState(ConsumerState.Order);
             currPickCount = 0;
             IsIngredientSelectMode = false;
         }

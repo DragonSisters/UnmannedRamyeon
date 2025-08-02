@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
 /// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
@@ -83,7 +84,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     {
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(HandleChildUpdate());
-        FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
         consumerUI.DeactivateAllFeedbackUIs();
     }
 
@@ -95,6 +95,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
+        gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
+
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
 
@@ -163,6 +165,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                 case ConsumerState.Exit:
                     yield return OnCustomerExit();
                     break;
+                case ConsumerState.Leave:
+                    yield return OnLeave();
+                    break;
                 case ConsumerState.Order:
                     yield return Order();
                     break;
@@ -179,6 +184,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
                 case ConsumerState.Issue:
                     break;
                 case ConsumerState.IssueUnsolved:
+                    OnIssueUnsolved();
+                    break;
                 case ConsumerState.IssueSolved:
                     SetState(cachedStateBeforeIssue); // 이슈가 끝나면 다시 예전상태로 돌아갑니다.
                     break;
@@ -214,6 +221,21 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             yield return null;
         }
 
+        FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
+
+        HandleChildExit();
+        exitCompleted = true;
+    }
+
+    private IEnumerator OnLeave()
+    {
+        var leavePoint = MoveManager.Instance.RandomLeavePoint;
+        while (!moveScript.IsCloseEnough(leavePoint))
+        {
+            moveScript.MoveTo(leavePoint);
+            yield return null;
+        }
+
         HandleChildExit();
         exitCompleted = true;
     }
@@ -245,15 +267,26 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 줄을 줄입니다
         MoveManager.Instance.PopOrderLineQueue();
 
-        // 주문을 다했다면 다음 차례로 넘어갑니다.
+        HandleOrder();   
+    }
+
+    public virtual void HandleOrder()
+    {
+        // 대부분의 손님의 경우 주문을 다했다면 다음 차례로 넘어갑니다.
         SetState(ConsumerState.Search);
+    }
+
+    public virtual void OnIssueUnsolved()
+    {
+        speechScript.StartSpeechFromState(consumerScriptableObject, ConsumerState.IssueUnsolved, true, false);
+
+        SetState(ConsumerState.Leave);
     }
 
     public void ChooseIngredients()
     {
         ingredientHandler.ResetAllIngredientLists();
         SetIngredientLists();
-        ingredientHandler.ChooseAllIngredients();
     }
 
     public virtual IEnumerator HandleOrderOnUI()
@@ -267,6 +300,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     public virtual void SetIngredientLists()
     {
         ingredientHandler.SetAllIngredientLists();
+        ingredientHandler.ChooseAllIngredients();
     }
 
     private IEnumerator SearchIngredient()
@@ -282,8 +316,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         }
 
         // 필요한 재료를 가져옵니다.
-        var neededIngredientInfo = ingredientHandler.GetAttemptIngredientInfo();
-        var point = neededIngredientInfo.Ingredient.Point;
+        var attemptIngredientInfo = ingredientHandler.GetAttemptIngredientInfo();
+        var point = attemptIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
         while (!moveScript.IsCloseEnough(point))
@@ -295,9 +329,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
-        ingredientHandler.AddOwnIngredient(neededIngredientInfo.Ingredient, neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
+        ingredientHandler.AddOwnIngredient(attemptIngredientInfo.Ingredient, attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
         // UI를 업데이트 합니다.
-        consumerUI.ActivateFeedbackUIs(neededIngredientInfo.Index, neededIngredientInfo.IsCorrect);
+        consumerUI.ActivateFeedbackUIs(attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
 
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);
