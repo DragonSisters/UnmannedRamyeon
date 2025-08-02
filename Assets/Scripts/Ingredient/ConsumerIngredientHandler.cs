@@ -144,7 +144,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     {
         if(index < 0)
         {
-            gameObject.GetComponent<Consumer>().SetState(ConsumerState.Exit);
+            gameObject.GetComponent<Consumer>().SetState(ConsumerState.IssueUnsolved);
         }
 
         // 같은 인덱스를 찾아서 재료 맞게 처리
