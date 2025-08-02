@@ -7,7 +7,10 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource BgmAudio;
     public AudioSource EffectAudio;
 
-    // audio clip 을 여러 개 담아 놓을 변수
+    /// <summary>
+    /// audio clip 을 여러 개 담아 놓을 변수
+    /// Effect 를 세부적으로 나누고 싶으면 더 나눠도 됩니다. 작은 볼륨의 게임이라 일단은 하나로 만들었습니다.
+    /// </summary>
     public AudioClip[] BgmClips;
     public AudioClip[] EffectClips;
 
@@ -18,8 +21,14 @@ public class SoundManager : Singleton<SoundManager>
         PlayBgmSound(startIndex);
     }
 
-    private void PlayBgmSound(int index)
+    public void PlayBgmSound(int index)
     {
-        BgmAudio.PlayOneShot(BgmClips[index]);
+        BgmAudio.clip = BgmClips[index];
+        BgmAudio.Play();
+    }
+
+    public void PlayEffectSound(int index)
+    {
+        EffectAudio.PlayOneShot(EffectClips[index]);
     }
 }
