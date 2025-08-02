@@ -40,7 +40,7 @@ public class IngredientManager : Singleton<IngredientManager>
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumers = null;
     // 레시피 손님이 가져간 재료 수
-    private int currPickCount = 0;
+    public int currPickCount = 0;
 
     void Start()
     {

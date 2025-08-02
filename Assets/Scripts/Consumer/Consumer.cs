@@ -41,6 +41,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
     private ConsumerState cachedStateBeforeIssue = ConsumerState.Invalid;
+    Coroutine previousCoroutine;
 
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
@@ -265,12 +266,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         // 줄을 줄입니다
         MoveManager.Instance.PopOrderLineQueue();
 
-        HandleOrder();   
-    }
-
-    public virtual void HandleOrder()
-    {
-        // 대부분의 손님의 경우 주문을 다했다면 다음 차례로 넘어갑니다.
         SetState(ConsumerState.Search);
     }
 
