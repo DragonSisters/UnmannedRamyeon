@@ -4,12 +4,18 @@
 public class IngredientScriptableObject : ScriptableObject
 {
     [SerializeField] private string name;
+    [SerializeField] private Sprite bgSprite;
     [SerializeField] private Sprite icon;
+    [SerializeField] private bool isOutsideBox;
     [SerializeField] private int price;
+    [SerializeField] private Vector2 ingredientCreatePosition;
     [SerializeField] private Vector2 point;
 
     public string Name => name;
+    public Sprite BgSprite => bgSprite;
     public Sprite Icon => icon;
+    public bool IsOutsideBox => isOutsideBox;
     public int Price => price;
-    public Vector2 Point => point;
+    public Vector2 IngredientCreatePosition => ingredientCreatePosition;
+    public Vector2 Point => ingredientCreatePosition + point;
 }
