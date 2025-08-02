@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ingredient_Ssamjang
   m_EditorClassIdentifier: 
   name: "\uC308\uC7A5"
-  icon: {fileID: 21300000, guid: 6d617f84ca4596545b19726eee12da9f, type: 3}
+  icon: {fileID: 129013656966423042, guid: e2d7c6ec0944c9244804ce92f3c9d586, type: 3}
   price: 500
   point: {x: -0.5, y: -3}

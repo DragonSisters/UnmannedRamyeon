@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ingredient_Tomato
   m_EditorClassIdentifier: 
   name: TomatoRamyeon
-  icon: {fileID: -8113185096396602001, guid: ce16d0b695f7f53418b5109598c4eea2, type: 3}
+  icon: {fileID: 7994015784537427722, guid: d3c799253c9294c4d94e29107d7df12f, type: 3}
   price: 800
   point: {x: 2, y: -3}

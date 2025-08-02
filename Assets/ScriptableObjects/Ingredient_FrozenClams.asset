@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Ingredient_FrozenClams
   m_EditorClassIdentifier: 
   name: "\uB0C9\uB3D9 \uBC14\uC9C0\uB77D"
-  icon: {fileID: 21300000, guid: dca20162ea2d1204b92a52751652765e, type: 3}
+  icon: {fileID: 5587662025680717804, guid: 39eb07a8aef17fb439fde6c73677b7db, type: 3}
   price: 1500
   point: {x: 2, y: 3}
