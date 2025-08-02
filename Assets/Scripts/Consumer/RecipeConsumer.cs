@@ -24,7 +24,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     internal override void HandleChildExit()
     {
-        IngredientManager.Instance.DeleteRecipeCx();
+        IngredientManager.Instance.DeleteRecipeConsumer();
     }
 
     internal override IEnumerator HandleChildUpdate()
@@ -75,7 +75,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.IsIngredientSelectMode = true;
 
         // IngredientManager 에 내 정보 보냄
-        IngredientManager.Instance.ReceiveRecipeCx(this);
+        IngredientManager.Instance.ReceiveRecipeConsumer(this);
     }
 
     internal override void HandleChildUnclicked()
@@ -84,6 +84,6 @@ public class RecipeConsumer : Consumer, IClickableSprite
         IngredientManager.Instance.IsIngredientSelectMode = false;
 
         // IngredientManager 에 내 정보 삭제 요청
-        IngredientManager.Instance.DeleteRecipeCx();
+        IngredientManager.Instance.DeleteRecipeConsumer();
     }
 }

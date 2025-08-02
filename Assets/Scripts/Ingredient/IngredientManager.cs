@@ -169,12 +169,12 @@ public class IngredientManager : Singleton<IngredientManager>
         return shuffledList;
     }
 
-    public void ReceiveRecipeCx(RecipeConsumer recipeConsumer)
+    public void ReceiveRecipeConsumer(RecipeConsumer recipeConsumer)
     {
         currentRecipeConsumers = recipeConsumer;
     }
 
-    public void DeleteRecipeCx()
+    public void DeleteRecipeConsumer()
     {
         if (currentRecipeConsumers == null)
         {
