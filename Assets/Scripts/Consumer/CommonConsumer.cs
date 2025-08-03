@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -29,6 +30,11 @@ public class CommonConsumer : Consumer
     }
 
     internal override void HandleChildExit() { }
+
+    internal override IEnumerator HandleChildIssue()
+    {
+        yield break;
+    }
 
     internal override void HandleChildClick() 
     {
@@ -85,5 +91,4 @@ public class CommonConsumer : Consumer
             moodScript.DecreaseMood(issueUnresolvedPenalty);
         }
     }
-
 }

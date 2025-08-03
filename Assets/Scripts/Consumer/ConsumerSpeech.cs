@@ -38,7 +38,7 @@ public class ConsumerSpeech : MonoBehaviour
         string format = "")
     {
         // 말하고 있는게 있다면 멈추고 말하게 합니다.
-        if(isSpeaking)
+        if (isSpeaking)
         {
             StopSpeech();
         }
@@ -85,7 +85,7 @@ public class ConsumerSpeech : MonoBehaviour
         {
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
-        if (!isRandom && index >= 0) 
+        if (!isRandom && index < 0) 
         {
             throw new System.Exception($"랜덤이 아닌데 인덱스를 설정하지 않았습니다.");
         }

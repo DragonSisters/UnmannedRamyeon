@@ -192,16 +192,15 @@ public class IngredientManager : Singleton<IngredientManager>
         throw new System.Exception($"{ingredientName}이라는 이름과 일치하는 재료가 없습니다.");
     }
 
-    public void SendIngredientToCorrectCx(IngredientScriptableObject ingredient)
+    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
     {
         ConsumerIngredientHandler ingredientHandler = currentRecipeConsumers.gameObject.GetComponent<ConsumerIngredientHandler>();
-        ingredientHandler.AddAttemptIngredients(ingredient);
-        currPickCount++;
+        ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
+        if(isNoDuplicate) currPickCount++;
 
-        // @anditsoon TODO: 나중에는 재료를 다 골라서 RecipeConsumer 가 Order 상태로 가는 기능을 추가해야 합니다.
         if (currPickCount >= MAX_INGREDIENT_NUMBER)
         {
-            Debug.Log("주문하러 갑니다");
+            currentRecipeConsumers.IsAllIngredientSelected = true;
             currPickCount = 0;
             IsIngredientSelectMode = false;
         }

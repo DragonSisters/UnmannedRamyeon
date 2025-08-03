@@ -7,6 +7,7 @@ public enum ConsumerState
     
     Enter, // 입장
     Exit, // 퇴장
+    Leave, // 주문 실패해서 가게를 떠남
     Order, // 주문하기
     Search, // 재료 찾기
     LineUp, // 줄서기
@@ -22,6 +23,9 @@ public enum ConsumerSituation
 
     WrongIngredientDetected, // 틀린 재료를 지적당했을 때
 
+    RecipeOrder, // 레시피로 주문할 때
+
+    DuplicateIngredientDetected, // 중복된 재료를 골랐을 때
 }
 [CreateAssetMenu(fileName = "Consumer", menuName = "Scriptable Objects/Consumer")]
 public class ConsumerScriptableObject : ScriptableObject

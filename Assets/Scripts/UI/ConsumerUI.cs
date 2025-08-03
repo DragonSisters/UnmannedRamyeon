@@ -64,11 +64,5 @@ public class ConsumerUI : MonoBehaviour
     {
         TransferClickEvent?.Invoke(index);
     }
-    
-    public void OrderByRecipeOnUI(string name)
-    {
-        SpeechBubbleUI.SetActive(true);
-        SpeechBubbleUI.GetComponentInChildren<TMP_Text>().text = StringUtil.KoreanParticle($"{name} 주세요!");
-    }
 }
 
