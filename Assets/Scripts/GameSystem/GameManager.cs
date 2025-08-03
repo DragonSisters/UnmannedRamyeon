@@ -71,6 +71,8 @@ public class GameManager : Singleton<GameManager>
         isGameStarted = false;
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
         ConsumerManager.Instance.StopSpawn();
+        // 생성했던 재료들을 모두 비활성화합니다.
+        IngredientManager.Instance.OnGameEnd();
 
         endCanvas.SetActive(true);
         // @anditsoon TODO: 현재는 성공 화면이 자동으로 나오게 해 놓았으나, 나중에는 게임 결과에 따라 성공/실패 화면이 구분되어 나오게 구현해야 합니다.

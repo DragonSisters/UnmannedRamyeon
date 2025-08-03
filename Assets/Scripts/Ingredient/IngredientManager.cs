@@ -13,6 +13,7 @@ public class IngredientManager : Singleton<IngredientManager>
     [SerializeField] private Transform ingredientsParent;
     [SerializeField] private GameObject ingredientBoxPrefab;
     List<IngredientClick> ingredientsClickable = new List<IngredientClick>();
+    List<GameObject> ingredientGameObjs = new List<GameObject>();
 
     private bool isIngredientSelectMode;
     public bool IsIngredientSelectMode
@@ -62,8 +63,28 @@ public class IngredientManager : Singleton<IngredientManager>
         OnIngredientDeselectMode += HandleIngredientDeselectMode;
     }
 
+    public void ActivateIngredientObjOnPosition(bool IsActive)
+    {
+        foreach (var obj in ingredientGameObjs)
+        {
+            obj.SetActive(IsActive);
+        }
+    }
+
+    public void OnGameEnd()
+    {
+        ActivateIngredientObjOnPosition(false);
+    }
+
     public void CreateIngredientObjOnPosition()
     {
+        // 이미 생성되어 있다면 생성하지 않고 Activate만 해줍니다.
+        if(ingredientGameObjs.Count == IngredientScriptableObject.Count)
+        {
+            ActivateIngredientObjOnPosition(true);
+            return;
+        }
+
         foreach (IngredientScriptableObject ingredient in IngredientScriptableObject)
         {
             GameObject ingredientGameObj = Instantiate(ingredientBoxPrefab, ingredientsParent);
@@ -84,6 +105,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
             IngredientClick ingredientClick = ingredientBox.Ingredient.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);
+            ingredientGameObjs.Add(ingredientGameObj);
         }
     }
 
