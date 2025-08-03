@@ -49,7 +49,7 @@ MonoBehaviour:
     - "\uB0C4\uC0C8 \uC8FD\uC778\uB2E4"
     - "\uC9C4\uC9DC \uB9DB\uC788\uACA0\uB2E4 \uD5E4\uD5E4"
     - "\uBC30\uACE0\uD30C\uC544\uC544"
-  - state: 6
+  - state: 7
     line:
     - "\uB3C4\uC640\uC8FC\uC138\uC694"
     - "\uBB50 \uC5B4\uB5BB\uAC8C \uD574\uC57C \uB418\uC9C0?"
@@ -59,4 +59,8 @@ MonoBehaviour:
     line:
     - "{0} \uBA39\uACE0\uC2F6\uC5B4\uC5FC"
     - "{0} \uC5B4\uB5BB\uAC8C \uB9CC\uB4E4\uC5B4\uC694?"
+  - situation: 2
+    line:
+    - "\uC774\uAC74 \uC774\uBBF8 \uC788\uB294\uB370"
+    - "\uC65C \uC900 \uAC70 \uB610 \uC918\uC694?"
   appearDate: 0

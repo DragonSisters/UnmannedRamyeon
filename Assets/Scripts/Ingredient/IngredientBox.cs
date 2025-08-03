@@ -6,6 +6,7 @@ public class IngredientBox : MonoBehaviour
     [SerializeField] private SpriteRenderer BoxSprite;
     [SerializeField] private SpriteRenderer ingredientSprite;
     [SerializeField] private TMP_Text ingredientNameUI;
+    public GameObject Ingredient => ingredientSprite.gameObject;
 
     public void SetBoxVisible(bool isOutside)
     {
