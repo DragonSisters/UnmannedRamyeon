@@ -39,7 +39,7 @@ public class IngredientManager : Singleton<IngredientManager>
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumers = null;
     // 레시피 손님이 가져간 재료 수
-    public int currPickCount = 0;
+    private int currPickCount = 0;
 
     void Start()
     {
@@ -199,7 +199,7 @@ public class IngredientManager : Singleton<IngredientManager>
         throw new System.Exception($"{ingredientName}이라는 이름과 일치하는 재료가 없습니다.");
     }
 
-    public void SendIngredientToCorrectCx(IngredientScriptableObject ingredient)
+    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
     {
         ConsumerIngredientHandler ingredientHandler = currentRecipeConsumers.gameObject.GetComponent<ConsumerIngredientHandler>();
         ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);

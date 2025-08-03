@@ -13,7 +13,6 @@ public class RecipeConsumer : Consumer, IClickableSprite
     private RecipeScriptableObject myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
-    [SerializeField] private float recipeOrderTimeLimit = 10f;
     public bool IsAllIngredientSelected = false;
 
     internal override void HandleChildEnter()
@@ -65,7 +64,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
             yield return null;
         }
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(recipeOrderDuration);
     }
 
     public override void SetIngredientLists()

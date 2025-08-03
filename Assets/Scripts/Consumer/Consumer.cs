@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.LowLevel;
 
 /// <summary>
 /// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
@@ -43,7 +41,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
     private ConsumerState cachedStateBeforeIssue = ConsumerState.Invalid;
-    Coroutine previousCoroutine;
 
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
@@ -99,8 +96,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     private void Initialize()
     {
-        gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
-
         ingredientHandler = gameObject.GetOrAddComponent<ConsumerIngredientHandler>();
         ingredientHandler.Initialize();
 
