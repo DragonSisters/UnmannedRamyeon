@@ -80,6 +80,7 @@ public class IngredientManager : Singleton<IngredientManager>
             ingredientBox.SetIngredientName(ingredient.Name);
             ingredientBox.GetOrAddCollision();
             ingredientBox.SetBoxVisible(ingredient.IsOutsideBox);
+            ingredientBox.SetSpriteDrawingOrder(ingredient.IngredientCreatePosition);
 
             IngredientClick ingredientClick = ingredientBox.Ingredient.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);

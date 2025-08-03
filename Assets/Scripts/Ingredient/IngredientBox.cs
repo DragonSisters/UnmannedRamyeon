@@ -5,7 +5,11 @@ public class IngredientBox : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer BoxSprite;
     [SerializeField] private SpriteRenderer ingredientSprite;
+    [SerializeField] private Canvas ingredientCanvas;
     [SerializeField] private TMP_Text ingredientNameUI;
+    [SerializeField] private int splitYPosition = 0;
+    [SerializeField] private int topDrawingOrder = 6;
+    [SerializeField] private int bottomDrawingOrder = 11;
     public GameObject Ingredient => ingredientSprite.gameObject;
 
     public void SetBoxVisible(bool isOutside)
@@ -14,6 +18,14 @@ public class IngredientBox : MonoBehaviour
         {
             BoxSprite.forceRenderingOff = true;
         }
+    }
+
+    public void SetSpriteDrawingOrder(Vector2 position)
+    {
+        var isBottom = position.y < splitYPosition;
+        BoxSprite.sortingOrder = isBottom ? bottomDrawingOrder : topDrawingOrder;
+        ingredientCanvas.sortingOrder = isBottom ? bottomDrawingOrder : topDrawingOrder;
+        ingredientSprite.sortingOrder = isBottom ? bottomDrawingOrder + 1: topDrawingOrder + 1;
     }
 
     public void GetOrAddCollision()
