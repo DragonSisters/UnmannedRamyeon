@@ -18,6 +18,8 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject img_Success;
     [SerializeField] private GameObject img_Fail;
 
+    private const float START_DELAY_TIME = 1f;
+
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
 
@@ -38,7 +40,7 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         btn_Start.SetActive(false);
         img_Start.SetActive(true);
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(START_DELAY_TIME);
         img_Start.SetActive(false);
         StartGame();
     }
