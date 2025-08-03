@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Ingredient_GreenOnion
   m_EditorClassIdentifier: 
   name: "\uB300\uD30C"
-  icon: {fileID: 21300000, guid: 6bf62ea5de1c1f34491d1b4b155718b8, type: 3}
+  bgSprite: {fileID: 21300000, guid: 55bf73a96400f384f865ab5d1a131d59, type: 3}
+  icon: {fileID: 21300000, guid: 689fe592f2401f24698513d2d9873ef4, type: 3}
+  isOutsideBox: 0
   price: 500
-  point: {x: -8, y: -3}
+  ingredientCreatePosition: {x: -3.3, y: 4.4}
+  point: {x: 0, y: -1.6}

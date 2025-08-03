@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bf5ce1d0f2c5446b45c9fc567fd3eb, type: 3}
   m_Name: Ingredient_MaraSauce
   m_EditorClassIdentifier: 
-  name: "\uB9C8\uB77C\uC18C\uC2A4"
-  icon: {fileID: 21300000, guid: 7ae6e0aa08b402c46bb95ae0a9b34b23, type: 3}
+  name: "\uB9C8\uB77C"
+  bgSprite: {fileID: 21300000, guid: d63356aa812d5ef4895f69aeb9b9bbd5, type: 3}
+  icon: {fileID: 21300000, guid: 7e0b66dcaec2cad4eacd4ae05a0905ac, type: 3}
+  isOutsideBox: 1
   price: 800
-  point: {x: -5.5, y: -3}
+  ingredientCreatePosition: {x: 3.7, y: 4.4}
+  point: {x: 0, y: -1.6}
