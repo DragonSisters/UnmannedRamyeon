@@ -14,7 +14,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
         IngredientScriptableObject matchingIngredient = IngredientManager.Instance.FindMatchingIngredient(ingredientName);
 
         // 해당 recipeConsumer 의 ingredientHandler 에 보내기
-        IngredientManager.Instance.SendIngredientToCorrectCx(matchingIngredient);
+        IngredientManager.Instance.SendIngredientToCorrectConsumer(matchingIngredient);
     }
 
     public void OnSpriteDeselected()
