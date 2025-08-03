@@ -26,6 +26,7 @@ public class DebugManager : MonoBehaviour
             StartCoroutine(UpdateClick());
             ConsumerManager.Instance.InitializePools();
             IngredientManager.Instance.CreateIngredientObjOnPosition();
+            SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         }
 
         // 손님시스템

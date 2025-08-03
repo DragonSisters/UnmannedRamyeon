@@ -196,7 +196,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 6
   m_TargetDisplay: 0
 --- !u!114 &9193097195674055289
 MonoBehaviour:
@@ -316,7 +316,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: e87cff69fe3e7034d8abe3b4415c1034, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -342,7 +342,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BoxSprite: {fileID: 2910185633973640315}
   ingredientSprite: {fileID: 69713760922492490}
+  ingredientCanvas: {fileID: 130906143231733096}
   ingredientNameUI: {fileID: 913258103267841361}
+  splitYPosition: 0
+  topDrawingOrder: 6
+  bottomDrawingOrder: 11
 --- !u!1 &8132464980412222452
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,7 +422,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 4
+  m_SortingOrder: 7
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

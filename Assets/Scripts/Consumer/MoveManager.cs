@@ -85,6 +85,10 @@ public class MoveManager : Singleton<MoveManager>
 
     public void OnGameEnter()
     {
+        orderLine.Clear();
+        cookingLines.Clear();
+        cookingLineList.Clear();
+
         ingredientScriptableObjects = IngredientManager.Instance.IngredientScriptableObject;
 
         for (int i = 0; i < lineCount; i++)
