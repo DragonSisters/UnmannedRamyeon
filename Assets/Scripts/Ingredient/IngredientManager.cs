@@ -67,6 +67,7 @@ public class IngredientManager : Singleton<IngredientManager>
         foreach (IngredientScriptableObject ingredient in IngredientScriptableObject)
         {
             GameObject ingredientGameObj = Instantiate(ingredientBoxPrefab, ingredientsParent);
+            ingredientGameObj.name = ingredient.name;
 
             ingredientGameObj.transform.position = ingredient.IngredientCreatePosition; // 각 재료별 좌표로 옮김
 
@@ -80,7 +81,7 @@ public class IngredientManager : Singleton<IngredientManager>
             ingredientBox.GetOrAddCollision();
             ingredientBox.SetBoxVisible(ingredient.IsOutsideBox);
 
-            IngredientClick ingredientClick = ingredientGameObj.GetOrAddComponent<IngredientClick>();
+            IngredientClick ingredientClick = ingredientBox.Ingredient.GetOrAddComponent<IngredientClick>();
             ingredientsClickable.Add(ingredientClick);
         }
     }
