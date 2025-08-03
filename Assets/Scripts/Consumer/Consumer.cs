@@ -41,7 +41,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
     private ConsumerState cachedStateBeforeIssue = ConsumerState.Invalid;
-    Coroutine previousCoroutine;
 
     /// <summary>
     /// 손님 상태를 설정할 때 무조건 이 함수를 사용하도록 합니다.
