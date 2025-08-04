@@ -104,15 +104,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73408396c45f9694ba5deaf1799f1191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumerScriptableObject: {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
+  consumerScriptableObject:
+  - {fileID: 11400000, guid: c5228cb10d3e75c4fa15cb8c575714d5, type: 2}
+  - {fileID: 11400000, guid: 362dab2156a140a409aba7be884f9cbc, type: 2}
+  - {fileID: 11400000, guid: 2ca09e705cce5db48b07861da8721a31, type: 2}
+  - {fileID: 11400000, guid: b8139b79fdde8e045afe869bb634048a, type: 2}
+  - {fileID: 11400000, guid: df13e68ff96466d499669082750ff964, type: 2}
+  - {fileID: 11400000, guid: eb54a1cf7e75d5c4891868a8f30dd5f8, type: 2}
+  - {fileID: 11400000, guid: 45750e8252d150b4a8a3ba9a9c83cd5e, type: 2}
   consumerUI: {fileID: 1264228265461581360}
   allRecipes:
   - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
   - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
   recipeOrderDuration: 2
-  waitingPoint: {x: 7, y: 2}
-  recipeOrderTimeLimit: 10
   IsAllIngredientSelected: 0
 --- !u!114 &1264228265461581360
 MonoBehaviour:

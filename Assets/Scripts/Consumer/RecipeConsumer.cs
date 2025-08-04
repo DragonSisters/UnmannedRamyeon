@@ -90,7 +90,7 @@ public class RecipeConsumer : Consumer, IClickableSprite
 
     public override IEnumerator HandleOrderOnUI()
     {
-        speechScript.StartSpeechFromSituation(consumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, -1, $"{myRecipe.Name}");
+        speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, -1, $"{myRecipe.Name}");
         yield return new WaitForSeconds(recipeOrderDuration);
     }
 

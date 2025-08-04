@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,7 +9,8 @@ using UnityEngine;
 /// </summary>
 public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 {
-    [SerializeField] internal ConsumerScriptableObject consumerScriptableObject;
+    [SerializeField] internal List<ConsumerScriptableObject> consumerScriptableObject = new();
+    internal ConsumerScriptableObject currentConsumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
 
     internal ConsumerMood moodScript;
@@ -61,7 +63,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         if (newState != ConsumerState.Invalid)
         {
             // 손님 상태가 변할 때 말하는 것은 모두 Random + Non-Format처리합니다.
-            speechScript.StartSpeechFromState(consumerScriptableObject, newState, true, false);
+            speechScript.StartSpeechFromState(currentConsumerScriptableObject, newState, true, false);
         }
     }
 
@@ -103,12 +105,13 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         priceCalculator.Initialize();
 
         // 스프라이트 렌더러 추가
+        currentConsumerScriptableObject = consumerScriptableObject[UnityEngine.Random.Range(0, consumerScriptableObject.Count)];
         var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
         {
             spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
         }
-        spriteRenderer.sprite = consumerScriptableObject.Appearance;
+        spriteRenderer.sprite = currentConsumerScriptableObject.Appearance;
         // 콜라이더 추가
         var collider = gameObject.GetComponent<PolygonCollider2D>();
         if (collider == null)
@@ -270,7 +273,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     public virtual void OnIssueUnsolved()
     {
-        speechScript.StartSpeechFromState(consumerScriptableObject, ConsumerState.IssueUnsolved, true, false);
+        speechScript.StartSpeechFromState(currentConsumerScriptableObject, ConsumerState.IssueUnsolved, true, false);
 
         SetState(ConsumerState.Leave);
     }
@@ -395,6 +398,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
 
     public void WrongIngredientSpeech(int tmp = 0)
     {
-        speechScript.StartSpeechFromSituation(consumerScriptableObject, ConsumerSituation.WrongIngredientDetected, true, false);
+        speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.WrongIngredientDetected, true, false);
     }
 }
