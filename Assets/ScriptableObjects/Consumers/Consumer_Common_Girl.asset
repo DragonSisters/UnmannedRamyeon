@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20ff02a0d89e29b41afd711a699e5118, type: 3}
   m_Name: Consumer_Common_Girl
   m_EditorClassIdentifier: 
-  appearance: {fileID: 21300000, guid: d6379a72ea318ef4a811be94104c0383, type: 3}
+  appearancePrefab: {fileID: 3463868029112425272, guid: 1167883bba0ca4249af858b0339ce79b, type: 3}
   stateDialogues:
   - state: 0
     line:
