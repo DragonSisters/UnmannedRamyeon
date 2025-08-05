@@ -33,7 +33,8 @@ public class ConsumerScriptableObject : ScriptableObject
     /// <summary>
     /// 외형
     /// </summary>
-    [SerializeField] private Sprite appearance;
+    public GameObject AppearancePrefab => appearancePrefab;
+    [SerializeField] private GameObject appearancePrefab;
 
     [System.Serializable]
     public struct StateDialogue
@@ -58,8 +59,6 @@ public class ConsumerScriptableObject : ScriptableObject
     /// </summary>
     public int AppearDate => appearDate;
     [SerializeField] private int appearDate;
-
-    public Sprite Appearance => appearance;
 
     public string GetRandomDialogueFromState(ConsumerState state, string format = "")
     {
