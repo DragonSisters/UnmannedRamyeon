@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
 /// </summary>
-public class RecipeConsumer : Consumer, IClickableSprite
+public class RecipeConsumer : Consumer
 {
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;

@@ -3,16 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.U2D.Animation;
 
 /// <summary>
 /// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
 /// </summary>
-public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
+public abstract class Consumer : MonoBehaviour, IPoolable
 {
-    [SerializeField] internal List<ConsumerScriptableObject> consumerScriptableObject = new();
+    [SerializeField] internal List<ConsumerScriptableObject> consumerScriptableObjectList = new();
     internal ConsumerScriptableObject currentConsumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
 
+    internal ConsumerAppearance appearanceScript;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
     internal ConsumerSpeech speechScript;
@@ -26,17 +28,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     /// 손님의 상태. 값을 설정할 떄 SetState() 함수를 사용합니다.
     /// </summary>
     public ConsumerState State { get; private set; }
-
-    /// <summary>
-    /// 클릭할 수 있는 상태인지 반환합니다.
-    /// </summary>
-    public bool IsClickable => isClickable;
-    private bool isClickable = true;
-    /// <summary>
-    /// 클릭 된 상태인지 반환합니다.
-    /// </summary>
-    public bool IsClicked => isClicked;
-    private bool isClicked = false;
 
     private bool exitCompleted;
     /// <summary>
@@ -104,22 +95,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         priceCalculator = gameObject.GetOrAddComponent<ConsumerPriceCalculator>();
         priceCalculator.Initialize();
 
-        // 스프라이트 렌더러 추가
-        currentConsumerScriptableObject = consumerScriptableObject[UnityEngine.Random.Range(0, consumerScriptableObject.Count)];
-        var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
-        if (spriteRenderer == null)
-        {
-            spriteRenderer = gameObject.AddComponent<SpriteRenderer>();
-        }
-        spriteRenderer.sprite = currentConsumerScriptableObject.Appearance;
-        // 콜라이더 추가
-        var collider = gameObject.GetComponent<PolygonCollider2D>();
-        if (collider == null)
-        {
-            collider = gameObject.AddComponent<PolygonCollider2D>();
-        }
-        // 충돌되지 않도록 trigger on
-        collider.isTrigger = true;
         // 손님 기분 스크립트 추가
         moodScript = gameObject.GetComponent<ConsumerMood>();
         if (moodScript == null)
@@ -134,6 +109,19 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
             moveScript = gameObject.AddComponent<ConsumerMove>();
         }
         moveScript.Initialize();
+        // 외형 프리팹으로 추가
+        currentConsumerScriptableObject = consumerScriptableObjectList[UnityEngine.Random.Range(0, consumerScriptableObjectList.Count)];
+        var appearanceGameObject = Instantiate(currentConsumerScriptableObject.AppearancePrefab, transform);
+        // 외형 제어용 스크립트 추가
+        appearanceScript = appearanceGameObject.GetComponent<ConsumerAppearance>();
+        if (appearanceScript == null)
+        {
+            appearanceScript = appearanceGameObject.AddComponent<ConsumerAppearance>();
+        }
+        appearanceScript.Initialize();
+        // 클릭 이벤트 추가 (외형이 자식으로 빠지면서 이벤트로 추가합니다)
+        appearanceScript.OnClick += OnSpriteClicked;
+        appearanceScript.OnDeselect += OnSpriteDeselected;
         // 손님 말하기 스크립트 추가
         speechScript = gameObject.GetComponent<ConsumerSpeech>();
         if (speechScript == null)
@@ -153,7 +141,17 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     private IEnumerator UpdateCustomerBehavior()
     {
         StartCoroutine(HandleChildUpdate());
+        StartCoroutine(UpdateBehaviorByState());
 
+        while (!ShouldDespawn())
+        {
+            appearanceScript.OnUpdate();
+            yield return null;
+        }        
+    }
+
+    private IEnumerator UpdateBehaviorByState()
+    {
         while (!ShouldDespawn())
         {
             switch (State)
@@ -245,11 +243,10 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
     {
         // 줄 서러 갑니다
         var waitingPoint = moveScript.GetOrderWaitingPoint(this);
-        while (!moveScript.IsCloseEnough(waitingPoint))
-        {
-            moveScript.MoveTo(waitingPoint);
-            yield return null;
-        }
+
+        moveScript.MoveTo(waitingPoint);
+
+        yield return new WaitUntil(() => moveScript.IsCloseEnough(waitingPoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToOrder);
@@ -374,25 +371,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable, IClickableSprite
         SetState(ConsumerState.Exit);
     }
 
+    /// <summary>
+    /// 자식이 해야할 일이 있어서 이벤트로 뺐습니다.
+    /// </summary>
     public void OnSpriteClicked()
     {
-        Debug.Log($"손님{gameObject.GetInstanceID()}가 클릭되었습니다.");
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
-
-        // 모든 Consumer 검사하여 다른 손님은 Click해제
-        ConsumerManager.Instance.DeselectOtherConsumers();
-
-        isClicked = true;
-
         HandleChildClick();
     }
 
     public void OnSpriteDeselected()
     {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
-
-        isClicked = false;
-
         HandleChildUnclicked();
     }
 
