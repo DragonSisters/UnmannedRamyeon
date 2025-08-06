@@ -32,9 +32,14 @@ public class ConsumerManager : Singleton<ConsumerManager>
             var activeObjs = consumer.Value.GetActiveObjects();
             foreach (var obj in activeObjs)
             {
-                if(obj.IsClicked && ((IClickableSprite)obj != SpriteClickHandler.Instance.CurrentClickedSprite))
+                var apearanceGameobject = obj.GetComponentInChildren<ConsumerAppearance>();
+                if (apearanceGameobject == null)
                 {
-                    obj.OnSpriteDeselected();
+                    Debug.LogError($"손님에게 {nameof(ConsumerAppearance)}가 생성되지 않았는데 찾아오려고 했습니다.");
+                }
+                if (apearanceGameobject.IsClicked && ((IClickableSprite)apearanceGameobject != SpriteClickHandler.Instance.CurrentClickedSprite))
+                {
+                    apearanceGameobject.OnSpriteDeselected();
                 }
             }
         }
