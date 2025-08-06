@@ -55,12 +55,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         {
             // 손님 상태가 변할 때 말하는 것은 모두 Random + Non-Format처리합니다.
             // 이슈 상태일 때는 계속 말풍선이 떠 있게, 아닐 때는 몇 초 뒤 사라지게 처리합니다.
-            bool isContinue = false;
-            if(newState == ConsumerState.Issue)
-            {
-                isContinue = true;
-            }
-
+            bool isContinue = (newState == ConsumerState.Issue);
             StartCoroutine(speechScript.StartSpeechFromState(currentConsumerScriptableObject, newState, false, isContinue, true, false));
         }
     }
