@@ -131,7 +131,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
         if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
         {
-            gameObject.GetComponent<ConsumerSpeech>().StartSpeechFromSituation(gameObject.GetComponent<Consumer>().consumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, true, false);
+            gameObject.GetComponent<ConsumerSpeech>().StartSpeechFromSituation(gameObject.GetComponent<Consumer>().currentConsumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, true, false);
             isNoDuplicate = false;
             Debug.Log("중복된 재료입니다!");
             return;

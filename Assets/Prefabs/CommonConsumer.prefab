@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 7
-  m_Sprite: {fileID: 21300000, guid: bdb7c058655e85a4a9e1cc770e5af79f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 7bd678d0ed4a47540a5f00759bcb2bf2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,7 +104,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39675376b3eafef4e81ab3fe6a123545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  consumerScriptableObject: {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
+  consumerScriptableObject:
+  - {fileID: 11400000, guid: e8d3874f568c5de49a6da3f41b0ddf63, type: 2}
+  - {fileID: 11400000, guid: 0c2cb44ecf1692c48a2c198014190cf7, type: 2}
+  - {fileID: 11400000, guid: 27351e6c55464b44292322a1d2376d5e, type: 2}
+  - {fileID: 11400000, guid: d3c36f99315dda949b6872605c2f81e7, type: 2}
+  - {fileID: 11400000, guid: e28965391fad05a42b0405424925d843, type: 2}
+  - {fileID: 11400000, guid: 58598d460efe5384691b39bf42a2becb, type: 2}
+  - {fileID: 11400000, guid: 372cfb59c39725148bcd1c3261336003, type: 2}
   consumerUI: {fileID: 1264228265461581360}
   issueResolvedBonus: 5
   issueUnresolvedPenalty: 20
