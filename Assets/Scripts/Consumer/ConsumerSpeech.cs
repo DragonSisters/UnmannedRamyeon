@@ -92,12 +92,8 @@ public class ConsumerSpeech : MonoBehaviour
         string format = "")
     {
         if(isGetPreviousLine)
-        { 
-            // 말이 끝날 때까지 기다립니다
-            while(isSpeaking)
-            {
-                yield return null;
-            }
+        {
+            yield return new WaitUntil(() => !isSpeaking);
         }
         else if (isSpeaking)
         {
