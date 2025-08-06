@@ -39,7 +39,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public event System.Action OnIngredientDeselectMode;
 
     // 현재 처리하고 있는 레시피 손님
-    private RecipeConsumer currentRecipeConsumers = null;
+    private RecipeConsumer currentRecipeConsumer = null;
     // 레시피 손님이 가져간 재료 수
     private int currPickCount = 0;
 
@@ -188,18 +188,18 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer recipeConsumer)
     {
-        currentRecipeConsumers = recipeConsumer;
+        currentRecipeConsumer = recipeConsumer;
     }
 
     public void DeleteRecipeConsumer()
     {
-        if (currentRecipeConsumers == null)
+        if (currentRecipeConsumer == null)
         {
             Debug.LogWarning($"현재 돕고 있는 손님이 없습니다");
             return;
         }
 
-        currentRecipeConsumers = null;
+        currentRecipeConsumer = null;
         currPickCount = 0;
     }
 
@@ -218,13 +218,23 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
     {
-        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumers.gameObject.GetComponent<ConsumerIngredientHandler>();
+        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
         ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
-        if(isNoDuplicate) currPickCount++;
+        if (isNoDuplicate)
+        {
+            currPickCount++;
+        }
+        else
+        {
+            ConsumerSpeech consumerSpeech = currentRecipeConsumer.GetComponent<ConsumerSpeech>();
+            if (consumerSpeech == null) Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
+
+            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
+        }
 
         if (currPickCount >= MAX_INGREDIENT_NUMBER)
         {
-            currentRecipeConsumers.IsAllIngredientSelected = true;
+            currentRecipeConsumer.IsAllIngredientSelected = true;
             currPickCount = 0;
             IsIngredientSelectMode = false;
         }

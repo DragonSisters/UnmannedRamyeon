@@ -54,7 +54,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         if (newState != ConsumerState.Invalid)
         {
             // 손님 상태가 변할 때 말하는 것은 모두 Random + Non-Format처리합니다.
-            speechScript.StartSpeechFromState(currentConsumerScriptableObject, newState, true, false);
+            // 이슈 상태일 때는 계속 말풍선이 떠 있게, 아닐 때는 몇 초 뒤 사라지게 처리합니다.
+            bool isContinue = false;
+            if(newState == ConsumerState.Issue)
+            {
+                isContinue = true;
+            }
+
+            StartCoroutine(speechScript.StartSpeechFromState(currentConsumerScriptableObject, newState, false, isContinue, true, false));
         }
     }
 
@@ -270,7 +277,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public virtual void OnIssueUnsolved()
     {
-        speechScript.StartSpeechFromState(currentConsumerScriptableObject, ConsumerState.IssueUnsolved, true, false);
+        StartCoroutine(speechScript.StartSpeechFromState(currentConsumerScriptableObject, ConsumerState.IssueUnsolved, false, false, true, false));
 
         SetState(ConsumerState.Leave);
     }
@@ -386,6 +393,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public void WrongIngredientSpeech(int tmp = 0)
     {
-        speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.WrongIngredientDetected, true, false);
+        StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.WrongIngredientDetected, false, false, true, false));
     }
 }
