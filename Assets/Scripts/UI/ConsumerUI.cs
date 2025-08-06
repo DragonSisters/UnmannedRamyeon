@@ -9,7 +9,6 @@ public class ConsumerUI : MonoBehaviour
 
     [SerializeField] private IngredientUI[] ingredientUis;
     [SerializeField] private TMP_Text speechBubbleText;
-    [SerializeField] private Sprite speechBubbleSprite;
 
     // IngredientUI의 이벤트를 ConsumerIngredientHandler에게 중계해주는 이벤트입니다.
     public delegate void ClickEventTransferHandler(int index);

@@ -9,6 +9,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject btn_Start;
     [SerializeField] private GameObject img_Start;
+    [SerializeField] private Texture2D cursorIcon;
 
     [Header("인게임 화면 관련 게임 오브젝트")]
     [SerializeField] private GameObject inGameCanvas;
@@ -22,6 +23,11 @@ public class GameManager : Singleton<GameManager>
 
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
+
+    private void Start()
+    {
+        Cursor.SetCursor(cursorIcon, Vector2.zero, CursorMode.Auto);
+    }
 
     // Start 버튼에 연결할 함수입니다
     public void OnStartButtonClick()
