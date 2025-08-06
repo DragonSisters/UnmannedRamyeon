@@ -9,6 +9,8 @@ public class ConsumerSpeech : MonoBehaviour
     private const float SPEECH_INTERVAL = 0.1f;
     private const float SPEECH_END_WAIT_TIME = 3f;
 
+    private string previousLine = null;
+
     Coroutine SpeechCoroutine;
 
     private bool isSpeaking;
@@ -29,19 +31,27 @@ public class ConsumerSpeech : MonoBehaviour
         isSpeaking = false;
     }
 
-    public void StartSpeechFromSituation(
-        ConsumerScriptableObject consumerScriptableObject, 
+    public IEnumerator StartSpeechFromSituation(
+        ConsumerScriptableObject consumerScriptableObject,
         ConsumerSituation situation,
+        bool isGetPreviousLine,
+        bool isContinue,
         bool isRandom,
         bool hasFormat,
         int index = -1,
         string format = "")
     {
-        // 말하고 있는게 있다면 멈추고 말하게 합니다.
-        if (isSpeaking)
+        if (isGetPreviousLine)
         {
+            // 말이 끝날 때까지 기다립니다
+            yield return new WaitUntil(() => !isSpeaking);
+        }
+        else if (isSpeaking)
+        {
+            // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
         }
+
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (situation == ConsumerSituation.Invalid)
         {
@@ -63,23 +73,30 @@ public class ConsumerSpeech : MonoBehaviour
         // 해당 state에 대사가 있었을 경우에만 재생합니다.
         if (!string.IsNullOrEmpty(line))
         {
-            SpeechCoroutine = StartCoroutine(Speech(line));
+            SpeechCoroutine = StartCoroutine(Speech(line, isContinue));
         }
     }
 
-    public void StartSpeechFromState(
-        ConsumerScriptableObject consumerScriptableObject, 
-        ConsumerState state, 
+    public IEnumerator StartSpeechFromState(
+        ConsumerScriptableObject consumerScriptableObject,
+        ConsumerState state,
+        bool isGetPreviousLine,
+        bool isContinue,
         bool isRandom, 
         bool hasFormat,
         int index = -1,
         string format = "")
     {
-        // 말하고 있는게 있다면 멈추고 말하게 합니다.
-        if (isSpeaking)
+        if(isGetPreviousLine)
         {
+            yield return new WaitUntil(() => !isSpeaking);
+        }
+        else if (isSpeaking)
+        {
+            // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
         }
+
         // Invalid 초기화일 때는 대사를 건너뜁니다.
         if (state == ConsumerState.Invalid)
         {
@@ -101,11 +118,11 @@ public class ConsumerSpeech : MonoBehaviour
         // 해당 state에 대사가 있었을 경우에만 재생합니다.
         if (!string.IsNullOrEmpty(line))
         {
-            SpeechCoroutine = StartCoroutine(Speech(line));
+            SpeechCoroutine = StartCoroutine(Speech(line, isContinue));
         }
     }
 
-    private IEnumerator Speech(string line)
+    private IEnumerator Speech(string line, bool isContinue)
     {
         isSpeaking = true;
 
@@ -114,16 +131,21 @@ public class ConsumerSpeech : MonoBehaviour
         // 한글자씩 말하게 합니다.
         var queue = new Queue<char>(line);
         var newLine = "";
-        while (queue.Count > 0) 
+        while (queue.Count > 0)
         {
             newLine += queue.Dequeue();
             consumerUI.SetSpeechBubbleText($"{newLine}");
             yield return new WaitForSeconds(SPEECH_INTERVAL);
         }
-       
-        // 다 말하면 n초 기다리고 사라집니다.
+
+        // 다 말하면 n초 기다리고
         yield return new WaitForSeconds(SPEECH_END_WAIT_TIME);
-        consumerUI.SetSpeechBubbleUI(false);
+
+        // isContinue 가 아니면 사라집니다
+        if(!isContinue)
+        {
+            consumerUI.SetSpeechBubbleUI(false);
+        }
 
         isSpeaking = false;
     }

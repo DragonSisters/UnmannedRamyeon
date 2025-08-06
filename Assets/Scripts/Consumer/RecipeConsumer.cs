@@ -11,6 +11,7 @@ public class RecipeConsumer : Consumer
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     private RecipeScriptableObject myRecipe;
+    public RecipeScriptableObject MyRecipe => myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
     public bool IsAllIngredientSelected = false;
@@ -90,7 +91,7 @@ public class RecipeConsumer : Consumer
 
     public override IEnumerator HandleOrderOnUI()
     {
-        speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, -1, $"{myRecipe.Name}");
+        StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, false, true, true, true, -1, $"{myRecipe.Name}"));
         yield return new WaitForSeconds(recipeOrderDuration);
     }
 
