@@ -14,6 +14,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
 
     private Animator animator;
     private NavMeshAgent agent;
+    private Material material;
 
     public delegate void OnClickHandler();
     public event OnClickHandler OnClick;
@@ -33,6 +34,12 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         {
             Debug.LogError($"손님에게서 NavMeshAgent를 찾지 못했습니다. 원본 프리팹을 확인해주세요.");
         }
+        var spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        if(spriteRenderer == null)
+        {
+            Debug.LogError($"손님 외형 프리팹에서 SpriteRenderer를 찾지 못했습니다. 원본 프리팹을 확인해주세요.");
+        }
+        material = spriteRenderer.material;
     }
 
     public void OnUpdate()
@@ -54,6 +61,8 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         // 모든 Consumer 검사하여 다른 손님은 Click해제
         ConsumerManager.Instance.DeselectOtherConsumers();
 
+        material.SetFloat("_OutlineEnabled", 1);
+
         isClicked = true;
 
         OnClick?.Invoke();
@@ -62,6 +71,8 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public void OnSpriteDeselected()
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
+
+        material.SetFloat("_OutlineEnabled", 0);
 
         isClicked = false;
 
