@@ -140,8 +140,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     private IEnumerator UpdateCustomerBehavior()
     {
-        StartCoroutine(HandleChildUpdate());
         StartCoroutine(UpdateBehaviorByState());
+        StartCoroutine(HandleChildUpdate());
 
         while (!ShouldDespawn())
         {
