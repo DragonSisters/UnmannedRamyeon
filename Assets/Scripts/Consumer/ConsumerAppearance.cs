@@ -13,18 +13,13 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public bool IsClicked => isClicked;
     private bool isClicked = false;
 
-    private bool isSpringWorking = false;
-
     private Animator animator;
     private NavMeshAgent agent;
     private Material material;
 
     private readonly int walkAnimId = Animator.StringToHash("Walk");
     private readonly int outlineEnabledId = Shader.PropertyToID("_OutlineEnabled");
-    private readonly int springScaleId = Shader.PropertyToID("_SpringScale");
-
-    private const float SPRING_ORIGIN_SCALE = 1f;
-
+    
     public delegate void OnClickHandler();
     public event OnClickHandler OnClick;
 
@@ -55,7 +50,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     private void SetMaterialSettingUnclicked()
     {
         material.SetFloat(outlineEnabledId, 0f);
-        material.SetFloat(springScaleId, SPRING_ORIGIN_SCALE);
+        material.SetFloat(SpringEffect.SpringScaleId, SpringEffect.SPRING_ORIGIN_SCALE);
     }
 
     public void OnUpdate()
@@ -79,10 +74,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
 
         material.SetFloat(outlineEnabledId, 1f);
 
-        if(!isSpringWorking) // 중복방지
-        {
-            StartCoroutine(SpringAnimation());
-        }
+        StartCoroutine(SpringEffect.SpringAnimation(material));
 
         isClicked = true;
 
@@ -98,35 +90,5 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         isClicked = false;
 
         OnDeselect?.Invoke();
-    }
-
-    private IEnumerator SpringAnimation()
-    {
-        isSpringWorking = true;
-
-        float duration = 0.6f;
-
-        // 랜덤값 설정
-        float amplitude = Random.Range(0.2f, 0.25f); // 진폭
-        float frequency = Random.Range(15f, 20f);    // 진동수
-        float damping = Random.Range(3f, 6f);        // 감쇠 계수
-
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed;
-
-            // 감쇠 진동 함수 (스프링 수식)
-            float scale = 1f + amplitude * Mathf.Exp(-damping * t) * Mathf.Sin(frequency * t);
-            material.SetFloat(springScaleId, scale);
-
-            yield return null;
-        }
-
-        // 애니메이션 끝나면 원래 크기로
-        material.SetFloat(springScaleId, SPRING_ORIGIN_SCALE);
-        isSpringWorking = false;
     }
 }
