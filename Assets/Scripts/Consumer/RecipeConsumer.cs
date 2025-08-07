@@ -12,7 +12,7 @@ public class RecipeConsumer : Consumer
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
-    public RecipeScriptableObject MyRecipe => myRecipe;
+
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
     public bool IsAllIngredientSelected = false;
