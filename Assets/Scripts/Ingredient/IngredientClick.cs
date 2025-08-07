@@ -6,7 +6,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
     private bool isClickable = false;
 
     private Material material;
-    private readonly Color enableColor = Color.white;
+    private readonly Color clickableColor = Color.white;
     private readonly Color answerColor = Color.green;
     private readonly Color wrongColor = Color.red;
     private readonly float outlineWidth = 4f;
@@ -20,7 +20,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
         }
         material = spriteRenderer.material;
         ShaderEffectHelper.SetOutlineWidth(material, outlineWidth);
-        ShaderEffectHelper.SetOutlineColor(material, enableColor);
+        ShaderEffectHelper.SetOutlineColor(material, clickableColor);
     }
 
     public void OnSpriteClicked()
@@ -59,7 +59,7 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
         if(isClickable)
         {
             ShaderEffectHelper.SetOutlineEnable(material, true);
-            ShaderEffectHelper.SetOutlineColor(material, enableColor);
+            ShaderEffectHelper.SetOutlineColor(material, clickableColor);
         }
         else
         {

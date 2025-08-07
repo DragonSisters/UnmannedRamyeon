@@ -131,14 +131,7 @@ public class IngredientManager : Singleton<IngredientManager>
             throw new System.Exception($"선택된 레시피 손님이 없는데 가져온 재료가 필요한 재료가 맞는지 검사하려 했습니다.");
         }
 
-        if (currentRecipeConsumer.MyRecipe.Ingredients.Contains(ingredient))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return currentRecipeConsumer.MyRecipe.Ingredients.Contains(ingredient);
     }
 
     private void HandleIngredientSelectMode()
