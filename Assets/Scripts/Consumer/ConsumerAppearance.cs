@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class ConsumerAppearance : MonoBehaviour, IClickableSprite
@@ -15,7 +16,11 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     private Animator animator;
     private NavMeshAgent agent;
     private Material material;
+    private readonly float outlineWidth = 10;
+    private readonly Color outlineColor = Color.cyan;
 
+    private readonly int walkAnimId = Animator.StringToHash("Walk");
+    
     public delegate void OnClickHandler();
     public event OnClickHandler OnClick;
 
@@ -40,12 +45,15 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
             Debug.LogError($"손님 외형 프리팹에서 SpriteRenderer를 찾지 못했습니다. 원본 프리팹을 확인해주세요.");
         }
         material = spriteRenderer.material;
+        ShaderEffectHelper.SetOutlineWidth(material, outlineWidth);
+        ShaderEffectHelper.SetOutlineColor(material, outlineColor);
+        ShaderEffectHelper.SetOutlineEnable(material, false);
     }
 
     public void OnUpdate()
     {
         // agent가 움직이는 상태라면 애니메이션을 Walk로 바꿉니다.
-        animator.SetBool("Walk", agent.velocity.magnitude > 0);
+        animator.SetBool(walkAnimId, agent.velocity.magnitude > 0);
     }
 
     public void OnSpriteClicked()
@@ -61,7 +69,8 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         // 모든 Consumer 검사하여 다른 손님은 Click해제
         ConsumerManager.Instance.DeselectOtherConsumers();
 
-        material.SetFloat("_OutlineEnabled", 1);
+        ShaderEffectHelper.SetOutlineEnable(material, true);
+        StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
 
         isClicked = true;
 
@@ -72,7 +81,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
 
-        material.SetFloat("_OutlineEnabled", 0);
+        ShaderEffectHelper.SetOutlineEnable(material, false);
 
         isClicked = false;
 

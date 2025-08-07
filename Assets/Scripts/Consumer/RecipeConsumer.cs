@@ -10,8 +10,9 @@ public class RecipeConsumer : Consumer
 {
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
-    private RecipeScriptableObject myRecipe;
     public RecipeScriptableObject MyRecipe => myRecipe;
+    private RecipeScriptableObject myRecipe;
+
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
     public bool IsAllIngredientSelected = false;

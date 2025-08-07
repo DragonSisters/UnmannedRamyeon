@@ -1,9 +1,12 @@
-﻿Shader "Sprites/Outline"
+﻿Shader "Sprites/OutlineAndSpring"
 {
     Properties
     {
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Main texture Tint", Color) = (1,1,1,1)
+
+		[Header(Spring Settings)]
+		_SpringScale ("Spring Scale", Float) = 1
 
 		[Header(General Settings)]
 		[MaterialToggle] _OutlineEnabled ("Outline Enabled", Float) = 1
@@ -56,6 +59,8 @@
 
 			#include "UnityCG.cginc"
 			
+			float _SpringScale;
+
 			struct appdata_t
 			{
 				float4 vertex   : POSITION;
@@ -93,7 +98,9 @@
 			v2f vert(appdata_t IN)
 			{
 				v2f OUT;
-				OUT.vertex = UnityObjectToClipPos(IN.vertex);
+				// 스프링 효과를 위한 정점 위치 조정
+				float3 scaledVertex = IN.vertex.xyz * _SpringScale;
+				OUT.vertex = UnityObjectToClipPos(float4(scaledVertex, 1));
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
 				#ifdef PIXELSNAP_ON
