@@ -19,8 +19,8 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
             Debug.LogError($"재료 프리팹에 SpriteRenderer가 없습니다. 원본 프리팹을 확인해주세요.");
         }
         material = spriteRenderer.material;
-        ShaderEffect.SetOutlineWidth(material, outlineWidth);
-        ShaderEffect.SetOutlineColor(material, enableColor);
+        ShaderEffectHelper.SetOutlineWidth(material, outlineWidth);
+        ShaderEffectHelper.SetOutlineColor(material, enableColor);
     }
 
     public void OnSpriteClicked()
@@ -38,14 +38,14 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
         bool isCorrect = IngredientManager.Instance.IsCorrectIngredient(matchingIngredient);
         if(isCorrect)
         {
-            ShaderEffect.SetOutlineColor(material, answerColor);
+            ShaderEffectHelper.SetOutlineColor(material, answerColor);
         }
         else
         {
-            ShaderEffect.SetOutlineColor(material, wrongColor);
+            ShaderEffectHelper.SetOutlineColor(material, wrongColor);
         }
 
-        StartCoroutine(ShaderEffect.SpringAnimation(material));
+        StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
     }
 
     public void OnSpriteDeselected()
@@ -58,12 +58,12 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
         this.isClickable = isClickable;
         if(isClickable)
         {
-            ShaderEffect.SetOutlineEnable(material, true);
-            ShaderEffect.SetOutlineColor(material, enableColor);
+            ShaderEffectHelper.SetOutlineEnable(material, true);
+            ShaderEffectHelper.SetOutlineColor(material, enableColor);
         }
         else
         {
-            ShaderEffect.SetOutlineEnable(material, false);
+            ShaderEffectHelper.SetOutlineEnable(material, false);
         }
     }
 

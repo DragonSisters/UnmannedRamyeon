@@ -45,9 +45,9 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
             Debug.LogError($"손님 외형 프리팹에서 SpriteRenderer를 찾지 못했습니다. 원본 프리팹을 확인해주세요.");
         }
         material = spriteRenderer.material;
-        ShaderEffect.SetOutlineWidth(material, outlineWidth);
-        ShaderEffect.SetOutlineColor(material, outlineColor);
-        ShaderEffect.SetOutlineEnable(material, false);
+        ShaderEffectHelper.SetOutlineWidth(material, outlineWidth);
+        ShaderEffectHelper.SetOutlineColor(material, outlineColor);
+        ShaderEffectHelper.SetOutlineEnable(material, false);
     }
 
     public void OnUpdate()
@@ -69,8 +69,8 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         // 모든 Consumer 검사하여 다른 손님은 Click해제
         ConsumerManager.Instance.DeselectOtherConsumers();
 
-        ShaderEffect.SetOutlineEnable(material, true);
-        StartCoroutine(ShaderEffect.SpringAnimation(material));
+        ShaderEffectHelper.SetOutlineEnable(material, true);
+        StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
 
         isClicked = true;
 
@@ -81,7 +81,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
 
-        ShaderEffect.SetOutlineEnable(material, false);
+        ShaderEffectHelper.SetOutlineEnable(material, false);
 
         isClicked = false;
 

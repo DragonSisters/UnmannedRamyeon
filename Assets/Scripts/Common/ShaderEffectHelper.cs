@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class ShaderEffect : MonoBehaviour
+public class ShaderEffectHelper : MonoBehaviour
 {
     private static readonly int outlineEnabledId = Shader.PropertyToID("_OutlineEnabled");
     private static readonly int outlineWidthId = Shader.PropertyToID("_Thickness");
