@@ -10,6 +10,7 @@ public class RecipeConsumer : Consumer
 {
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
+    public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
     public RecipeScriptableObject MyRecipe => myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
