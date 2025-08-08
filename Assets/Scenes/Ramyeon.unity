@@ -520,7 +520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   img_timerGuage: {fileID: 1364227510}
-  time: 100
 --- !u!1 &340036697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1906,9 +1905,41 @@ MonoBehaviour:
   - {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
   - {fileID: 7357440723094547320, guid: 9dd112f23f16df24eb1f4b75ab04b729, type: 3}
   poolSize: 10
-  maxActiveCount: 1
   minSpawnInterval: 1
   maxSpawnInterval: 3
+  spawnSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: -0.9996314
+      outSlope: -0.9996314
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0001208
+      value: 0.00024789432
+      inSlope: -0.9996314
+      outSlope: -0.9996314
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnIntervalLimit: 0.2
+  activeCountCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  currentActiveLimit: 15
+  maxActiveLimit: 15
 --- !u!4 &862743925
 Transform:
   m_ObjectHideFlags: 0
@@ -3524,6 +3555,7 @@ MonoBehaviour:
   img_Start: {fileID: 1375198433}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
+  GameDuration: 300
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
   img_Fail: {fileID: 1606098992}

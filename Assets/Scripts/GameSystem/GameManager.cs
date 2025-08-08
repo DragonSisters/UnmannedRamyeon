@@ -13,6 +13,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("인게임 화면 관련 게임 오브젝트")]
     [SerializeField] private GameObject inGameCanvas;
+    [SerializeField] public float GameDuration = 300;
 
     [Header("EndCanvas 관련 게임 오브젝트")]
     [SerializeField] private GameObject endCanvas;
@@ -35,7 +36,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(nameof(UnableStartUI));
         // @charotiti9 TODO: 손님 풀을 미리 만들어두어야합니다. 지금은 자리가 마땅치 않아서 게임 시작 버튼을 누르면 생성하도록 만들었습니다.
         // 추후 더 괜찮은 자리가 나오면 자리를 옮겨줍시다.
-        ConsumerManager.Instance.InitializePools();
+        ConsumerManager.Instance.InitializeConsumerManagerSetting();
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
