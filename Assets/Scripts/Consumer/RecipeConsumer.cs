@@ -62,11 +62,8 @@ public class RecipeConsumer : Consumer
     private IEnumerator EnterCoroutine()
     {
         var waitingPoint = MoveManager.Instance.RandomShoutPoint;
-        while (!moveScript.IsCloseEnough(waitingPoint))
-        {
-            moveScript.MoveTo(waitingPoint);
-            yield return null;
-        }
+        moveScript.MoveTo(waitingPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
 
         yield return new WaitForSeconds(recipeOrderDuration);
     }

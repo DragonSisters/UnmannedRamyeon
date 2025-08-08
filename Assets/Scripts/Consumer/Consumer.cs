@@ -14,6 +14,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal ConsumerScriptableObject currentConsumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
 
+    internal GameObject appearanceGameObject;
     internal ConsumerAppearance appearanceScript;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
@@ -81,6 +82,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(HandleChildUpdate());
         consumerUI.DeactivateAllFeedbackUIs();
+        //외형 삭제
+        Destroy(appearanceGameObject);
     }
 
     public bool ShouldDespawn()
@@ -113,7 +116,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         moveScript.Initialize();
         // 외형 프리팹으로 추가
         currentConsumerScriptableObject = consumerScriptableObjectList[UnityEngine.Random.Range(0, consumerScriptableObjectList.Count)];
-        var appearanceGameObject = Instantiate(currentConsumerScriptableObject.AppearancePrefab, transform);
+        if(appearanceGameObject != null)
+        {
+            Debug.LogError($"이미 외형 프리팹이 있는데 또 추가하고 있습니다");
+        }
+        appearanceGameObject = Instantiate(currentConsumerScriptableObject.AppearancePrefab, transform);
         // 외형 제어용 스크립트 추가
         appearanceScript = appearanceGameObject.GetComponent<ConsumerAppearance>();
         if (appearanceScript == null)
@@ -215,11 +222,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private IEnumerator OnCustomerExit()
     {
         var exitPoint = MoveManager.Instance.RandomExitPoint;
-        while (!moveScript.IsCloseEnough(exitPoint))
-        {
-            moveScript.MoveTo(exitPoint);
-            yield return null;
-        }
+        moveScript.MoveTo(exitPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(exitPoint));
 
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
 
@@ -230,11 +234,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private IEnumerator OnLeave()
     {
         var leavePoint = MoveManager.Instance.RandomLeavePoint;
-        while (!moveScript.IsCloseEnough(leavePoint))
-        {
-            moveScript.MoveTo(leavePoint);
-            yield return null;
-        }
+        moveScript.MoveTo(leavePoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(leavePoint));
 
         HandleChildExit();
         exitCompleted = true;
@@ -244,21 +245,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         // 줄 서러 갑니다
         var waitingPoint = moveScript.GetOrderWaitingPoint(this);
-
         moveScript.MoveTo(waitingPoint);
-
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(waitingPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToOrder);
 
         // 주문하러 갑니다
         var orderPoint = MoveManager.Instance.GetOrderPoint();
-        while (!moveScript.IsCloseEnough(orderPoint))
-        {
-            moveScript.MoveTo(orderPoint);
-            yield return null;
-        }
+        moveScript.MoveTo(orderPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(orderPoint));
 
         // 주문하는 시간
         yield return new WaitForSeconds(ORDER_WAITING_TIME);
@@ -316,11 +312,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         var point = attemptIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
-        while (!moveScript.IsCloseEnough(point))
-        {
-            moveScript.MoveTo(point);
-            yield return null;
-        }
+        moveScript.MoveTo(point);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(point));
 
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
@@ -339,23 +332,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         // 줄 서러 갑니다.
         var waitingLinePoint = moveScript.GetCookingWaitingPoint(this);
-
-        while (!moveScript.IsCloseEnough(waitingLinePoint)) 
-        {
-            moveScript.MoveTo(waitingLinePoint);
-            yield return null;
-        }
+        moveScript.MoveTo(waitingLinePoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingLinePoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToCooking);
 
         // 요리하러 갑니다
         var cookingPoint = moveScript.GetCookingPoint();
-        while (!moveScript.IsCloseEnough(cookingPoint))
-        {
-            moveScript.MoveTo(cookingPoint);
-            yield return null;
-        }
+        moveScript.MoveTo(cookingPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(cookingPoint));
 
         // 줄을 줄입니다
         moveScript.GoToCooking();
