@@ -89,8 +89,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctSprite: {fileID: 21300000, guid: 449ea9ceedf565f449179597d6a2f280, type: 3}
-  wrongSprite: {fileID: 21300000, guid: a1044ece97581e74cb8a12519bf011a0, type: 3}
+  correctSprite: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
+  wrongSprite: {fileID: 21300000, guid: 53dffa631826c2d4692c1f3c931b8844, type: 3}
   ingredientImage: {fileID: 5468114496687055144}
   feedbackImage: {fileID: 4335611497713179312}
 --- !u!1 &705766576130647555
@@ -182,8 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctSprite: {fileID: 21300000, guid: 449ea9ceedf565f449179597d6a2f280, type: 3}
-  wrongSprite: {fileID: 21300000, guid: a1044ece97581e74cb8a12519bf011a0, type: 3}
+  correctSprite: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
+  wrongSprite: {fileID: 21300000, guid: 53dffa631826c2d4692c1f3c931b8844, type: 3}
   ingredientImage: {fileID: 7571383392481788142}
   feedbackImage: {fileID: 7211510995091527768}
 --- !u!1 &1023282139588768291
@@ -199,6 +199,7 @@ GameObject:
   - component: {fileID: 2608607745157626474}
   - component: {fileID: 7474416629315567866}
   - component: {fileID: 2308866542913594662}
+  - component: {fileID: 7469310399671392878}
   m_Layer: 0
   m_Name: Img_SpeechBubbleNextIngredient
   m_TagString: Untagged
@@ -304,6 +305,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
+--- !u!114 &7469310399671392878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1023282139588768291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e7125aa87efba04183f169d95f71e25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3598070547204411315
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,8 +406,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctSprite: {fileID: 21300000, guid: 449ea9ceedf565f449179597d6a2f280, type: 3}
-  wrongSprite: {fileID: 21300000, guid: a1044ece97581e74cb8a12519bf011a0, type: 3}
+  correctSprite: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
+  wrongSprite: {fileID: 21300000, guid: 53dffa631826c2d4692c1f3c931b8844, type: 3}
   ingredientImage: {fileID: 7030711019286090608}
   feedbackImage: {fileID: 6769802752206606722}
 --- !u!1 &3603087148771253653
@@ -429,10 +442,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2513794001749839607}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6354912621183641281
 CanvasRenderer:
@@ -504,10 +517,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 7730647517171582073}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1176406714147993080
 CanvasRenderer:
@@ -579,10 +592,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 5124968608362179045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3603425659638068091
 CanvasRenderer:
@@ -711,8 +724,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  correctSprite: {fileID: 21300000, guid: 449ea9ceedf565f449179597d6a2f280, type: 3}
-  wrongSprite: {fileID: 21300000, guid: a1044ece97581e74cb8a12519bf011a0, type: 3}
+  correctSprite: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
+  wrongSprite: {fileID: 21300000, guid: 53dffa631826c2d4692c1f3c931b8844, type: 3}
   ingredientImage: {fileID: 2648347870539181898}
   feedbackImage: {fileID: 4596646848675934645}
 --- !u!1 &5249231194510987962
@@ -850,10 +863,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 3782117568458462811}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 80, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2580419087689366038
 CanvasRenderer:
