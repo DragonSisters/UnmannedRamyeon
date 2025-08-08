@@ -27,6 +27,12 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public delegate void OnDeselectHandler();
     public event OnDeselectHandler OnDeselect;
 
+    public void OnDestroy()
+    {
+        // 메모리 누수 방지를 위한 인스턴스 material 삭제
+        Destroy(material);
+    }
+
     public void Initialize()
     {
         animator = gameObject.GetComponent<Animator>();

@@ -14,6 +14,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal ConsumerScriptableObject currentConsumerScriptableObject;
     [SerializeField] internal ConsumerUI consumerUI;
 
+    internal GameObject appearanceGameObject;
     internal ConsumerAppearance appearanceScript;
     internal ConsumerMood moodScript;
     internal ConsumerMove moveScript;
@@ -81,6 +82,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(HandleChildUpdate());
         consumerUI.DeactivateAllFeedbackUIs();
+        //외형 삭제
+        Destroy(appearanceGameObject);
     }
 
     public bool ShouldDespawn()
@@ -113,7 +116,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         moveScript.Initialize();
         // 외형 프리팹으로 추가
         currentConsumerScriptableObject = consumerScriptableObjectList[UnityEngine.Random.Range(0, consumerScriptableObjectList.Count)];
-        var appearanceGameObject = Instantiate(currentConsumerScriptableObject.AppearancePrefab, transform);
+        if(appearanceGameObject != null)
+        {
+            Debug.LogError($"이미 외형 프리팹이 있는데 또 추가하고 있습니다");
+        }
+        appearanceGameObject = Instantiate(currentConsumerScriptableObject.AppearancePrefab, transform);
         // 외형 제어용 스크립트 추가
         appearanceScript = appearanceGameObject.GetComponent<ConsumerAppearance>();
         if (appearanceScript == null)
