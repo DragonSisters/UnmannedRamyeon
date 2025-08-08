@@ -229,11 +229,11 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
     {
-        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
         if(currentRecipeConsumer == null)
         {
             Debug.LogError("currentRecipeConsumer 가 없습니다.");
         }
+        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
         if (ingredientHandler == null)
         {
             Debug.LogError("ConsumerIngredientHandler 가 없습니다.");
