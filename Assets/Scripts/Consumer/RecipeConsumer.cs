@@ -30,7 +30,7 @@ public class RecipeConsumer : Consumer
 
     internal override IEnumerator HandleChildIssue()
     {
-        HandleOrderOnUI();
+        StartCoroutine(HandleOrderOnUI());
         yield return new WaitUntil(() => IsAllIngredientSelected);
 
         bool isAllIngredientCorrect = true;
