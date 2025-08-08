@@ -63,7 +63,7 @@ public class RecipeConsumer : Consumer
     {
         var waitingPoint = MoveManager.Instance.RandomShoutPoint;
         moveScript.MoveTo(waitingPoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(waitingPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
 
         yield return new WaitForSeconds(recipeOrderDuration);
     }

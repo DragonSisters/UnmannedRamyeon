@@ -6,7 +6,8 @@ public class ConsumerMove : MonoBehaviour
     private float moveSpeed;
     private NavMeshAgent agent;
     private const float RANGE_THRESHOLD = 0.5f;
-
+    private const int MIN_AVOIDANCE_PRIORITY = 30;
+    private const int MAX_AVOIDANCE_PRIORITY = 70;
     public bool IsMyTurnToOrder => orderTurn == 0;
     private int orderTurn = -1;
 
@@ -30,6 +31,8 @@ public class ConsumerMove : MonoBehaviour
         agent.radius = 0.3f;
         agent.height = 0.1f;
         agent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+        // 에이전트마다 우선순위 부여 (중간값이 50이니 30~70으로 분포시킵니다)
+        agent.avoidancePriority = Random.Range(MIN_AVOIDANCE_PRIORITY, MAX_AVOIDANCE_PRIORITY);
 
         gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
     }
@@ -44,7 +47,18 @@ public class ConsumerMove : MonoBehaviour
         agent.SetDestination(point);
     }
 
-    public bool IsCloseEnough(Vector2 point)
+    // Destination에 충분히 도달했는지 IsCloseEnough로 확인하고, 충분하다면 Destination을 취소합니다.
+    public bool MoveStopIfCloseEnough(Vector3 point)
+    {
+        if (IsCloseEnough(point))
+        {
+            agent.ResetPath();
+            return true;
+        }
+        return false;
+    }
+
+    private bool IsCloseEnough(Vector2 point)
     {
         float distance = Vector2.Distance(gameObject.transform.position, point);
         return distance <= RANGE_THRESHOLD;

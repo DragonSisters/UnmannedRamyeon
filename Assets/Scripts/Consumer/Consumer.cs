@@ -223,7 +223,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         var exitPoint = MoveManager.Instance.RandomExitPoint;
         moveScript.MoveTo(exitPoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(exitPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(exitPoint));
 
         FinanceManager.Instance.IncreaseCurrentMoney(priceCalculator.GetFinalPrice());
 
@@ -235,7 +235,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         var leavePoint = MoveManager.Instance.RandomLeavePoint;
         moveScript.MoveTo(leavePoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(leavePoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(leavePoint));
 
         HandleChildExit();
         exitCompleted = true;
@@ -246,7 +246,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 줄 서러 갑니다
         var waitingPoint = moveScript.GetOrderWaitingPoint(this);
         moveScript.MoveTo(waitingPoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(waitingPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToOrder);
@@ -254,7 +254,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 주문하러 갑니다
         var orderPoint = MoveManager.Instance.GetOrderPoint();
         moveScript.MoveTo(orderPoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(orderPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(orderPoint));
 
         // 주문하는 시간
         yield return new WaitForSeconds(ORDER_WAITING_TIME);
@@ -313,7 +313,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
         // 해당 재료를 가지러 이동합니다.
         moveScript.MoveTo(point);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(point));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(point));
 
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
@@ -333,7 +333,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 줄 서러 갑니다.
         var waitingLinePoint = moveScript.GetCookingWaitingPoint(this);
         moveScript.MoveTo(waitingLinePoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(waitingLinePoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingLinePoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToCooking);
@@ -341,7 +341,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 요리하러 갑니다
         var cookingPoint = moveScript.GetCookingPoint();
         moveScript.MoveTo(cookingPoint);
-        yield return new WaitUntil(() => moveScript.IsCloseEnough(cookingPoint));
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(cookingPoint));
 
         // 줄을 줄입니다
         moveScript.GoToCooking();
