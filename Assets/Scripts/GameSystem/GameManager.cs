@@ -5,24 +5,24 @@ using UnityEngine.Rendering;
 
 public class GameManager : Singleton<GameManager>
 {
-    [Header("시작 화면 관련 게임 오브젝트")]
+    [Header("시작 화면 관련 변수들")]
     [SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject btn_Start;
     [SerializeField] private GameObject img_Start;
     [SerializeField] private Texture2D cursorIcon;
+    private const float START_DELAY_TIME = 1f;
 
-    [Header("인게임 화면 관련 게임 오브젝트")]
+    [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
+    [SerializeField] public float GameDuration = 100;
+    public bool IsGameStarted => isGameStarted;
+    private bool isGameStarted;
 
-    [Header("EndCanvas 관련 게임 오브젝트")]
+    [Header("EndCanvas 관련 변수들")]
     [SerializeField] private GameObject endCanvas;
     [SerializeField] private GameObject img_Success;
     [SerializeField] private GameObject img_Fail;
-
-    private const float START_DELAY_TIME = 1f;
-
-    public bool IsGameStarted => isGameStarted;
-    private bool isGameStarted;
+    [SerializeField] private int finalScoreAmount = 100000;
 
     private void Start()
     {
@@ -35,7 +35,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(nameof(UnableStartUI));
         // @charotiti9 TODO: 손님 풀을 미리 만들어두어야합니다. 지금은 자리가 마땅치 않아서 게임 시작 버튼을 누르면 생성하도록 만들었습니다.
         // 추후 더 괜찮은 자리가 나오면 자리를 옮겨줍시다.
-        ConsumerManager.Instance.InitializePools();
+        ConsumerManager.Instance.InitializeConsumerManagerSetting();
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
@@ -82,9 +82,17 @@ public class GameManager : Singleton<GameManager>
         // 생성했던 재료들을 모두 비활성화합니다.
         IngredientManager.Instance.OnGameEnd();
 
+        // 게임 결과에 따라 성공/실패 화면을 불러옵니다.
+        // @anditsoon TODO: 게임 결과창에 최종 금액 나오게 하기 -> 추후 아트 받아서 적용 후 구현하겠습니다
         endCanvas.SetActive(true);
-        // @anditsoon TODO: 현재는 성공 화면이 자동으로 나오게 해 놓았으나, 나중에는 게임 결과에 따라 성공/실패 화면이 구분되어 나오게 구현해야 합니다.
-        img_Success.SetActive(true);
+        if (FinanceManager.Instance.CurrentMoney > finalScoreAmount)
+        {
+            img_Success.SetActive(true);
+        }
+        else
+        {
+            img_Fail.SetActive(true);
+        }
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.End);
     }

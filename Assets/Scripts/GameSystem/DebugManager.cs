@@ -24,7 +24,7 @@ public class DebugManager : MonoBehaviour
         {
             MoveManager.Instance.OnGameEnter();
             StartCoroutine(UpdateClick());
-            ConsumerManager.Instance.InitializePools();
+            ConsumerManager.Instance.InitializeConsumerManagerSetting();
             IngredientManager.Instance.CreateIngredientObjOnPosition();
             SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         }

@@ -12,18 +12,31 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [Header("Consumer 프리팹들을 직접 드래그하세요")]
     [SerializeField] private List<GameObject> consumerPrefabs = new List<GameObject>();
     [Header("Pool 사이즈")]
-    [SerializeField] private int poolSize = 10;
-    [Header("최대 소환 갯수")]
-    [SerializeField] private int maxActiveCount = 3;
-    [Header("N~M초마다 등장합니다.")]
+    [SerializeField] private int poolSize = 20;
+
+    [Header("스폰 기본 간격 (최대/최소")]
     [SerializeField] private float minSpawnInterval = 1f;
     [SerializeField] private float maxSpawnInterval = 3f;
+
+    [Header("스폰 속도 변화 곡선 (X: 게임 시간 진행 비율, Y: 스폰 간격 배율)")]
+    // Y: 스폰 대기 시간에 곱하는 간격 배율 (값이 작을수록 간격이 작아져서 빠른 스폰)
+    [SerializeField] private AnimationCurve spawnSpeedCurve = new AnimationCurve();
+    [SerializeField] private float spawnIntervalLimit = 0.2f;
+
+    [Header("최대 소환 개수 변화 곡선")]
+    [SerializeField] private AnimationCurve activeCountCurve = new AnimationCurve();
+
+    [Header("최대 소환 갯수")]
+    [SerializeField] private int currentActiveLimit = 3;
+    [SerializeField] private int maxActiveLimit = 15;
 
     private Dictionary<GameObject, ObjectPool<Consumer>> pools;
 
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
 
+    private float startTime;
+    private float gameDuration;
 
     public void DeselectOtherConsumers()
     {
@@ -45,10 +58,17 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
     }
 
-    public void InitializePools()
+    public void InitializeConsumerManagerSetting()
     {
+        startTime = Time.time;
+        gameDuration = GameManager.Instance.GameDuration;
+
+        // @anditsoon TODO: 손님 병목 현상 해결되면 에디터에서 보고 커브 수정합니다. 수정한 커브를 나중에 여기에 스크립트로 설정하겠습니다. (아마 Linear 가 아닐 것 같아서)
+        spawnSpeedCurve = AnimationCurve.Linear(0, 1, 1, spawnIntervalLimit);
+        activeCountCurve = AnimationCurve.Linear(0, 1, 1, maxActiveLimit);
+
         // 모든 오브젝트 정리
-        if(pools != null)
+        if (pools != null)
         {
             foreach (var pool in pools.Values)
             {
@@ -78,7 +98,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
                 StopCoroutine(despawnCoroutine);
             }
 
-            spawnCoroutine = StartCoroutine(SpawnRoutine());
+            spawnCoroutine = StartCoroutine(SpawnRoutine()); 
             despawnCoroutine = StartCoroutine(DespawnRoutine());
         }
     }
@@ -102,10 +122,17 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         while (IsAvailableSpawn())
         {
-            yield return new WaitForSeconds(Random.Range(minSpawnInterval, maxSpawnInterval));
+            float elapsedTime = Time.time - startTime;
+            float t = Mathf.Clamp01(elapsedTime / gameDuration);
+
+            // 곡선에 적용합니다.
+            float speedMultiplier = spawnSpeedCurve.Evaluate(t);
+            float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval) * speedMultiplier;
+            currentActiveLimit = Mathf.RoundToInt(activeCountCurve.Evaluate(t));
+
+            yield return new WaitForSeconds(waitTime);
 
             SpawnRandomObject();
-            
         }
     }
 
@@ -142,7 +169,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
-        if(!pools[prefab].CanActiveMore(maxActiveCount))
+        if(!pools[prefab].CanActiveMore(currentActiveLimit))
         {
             return;
         }
