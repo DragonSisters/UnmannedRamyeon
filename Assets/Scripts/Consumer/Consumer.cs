@@ -207,7 +207,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         ChooseIngredients();
         HandleChildEnter();
-        StartCoroutine(HandleOrderOnUI());
     }
 
     /// <summary>
@@ -263,6 +262,9 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
         // 주문하는 시간
         yield return new WaitForSeconds(ORDER_WAITING_TIME);
+
+        // 주문을 다하면 Order한 재료 UI를 잠시 보여줍니다.
+        StartCoroutine(HandleOrderOnUI());
 
         // 줄을 줄입니다
         MoveManager.Instance.PopOrderLineQueue();
