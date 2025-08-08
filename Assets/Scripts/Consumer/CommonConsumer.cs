@@ -38,8 +38,8 @@ public class CommonConsumer : Consumer
 
     internal override void HandleChildClick() 
     {
-        // 이슈상태라면 재료는 보이지 않고 자식컴포넌트의 함수를 실행합니다.
-        if (State == ConsumerState.Issue)
+        // 특정 상태에서는 재료가 보이지 않습니다.(ex. 주문하기 전)
+        if (State == ConsumerState.Enter || State == ConsumerState.Order)
         {
             return;
         }
