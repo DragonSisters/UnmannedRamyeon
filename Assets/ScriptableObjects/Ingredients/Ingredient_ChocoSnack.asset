@@ -17,5 +17,5 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 95acbdc560efcda4ab3ddcd4f3b969e6, type: 3}
   isOutsideBox: 0
   price: 300
-  ingredientCreatePosition: {x: -4, y: -3.5}
+  ingredientCreatePosition: {x: -5, y: -3.5}
   point: {x: 0, y: 0}
