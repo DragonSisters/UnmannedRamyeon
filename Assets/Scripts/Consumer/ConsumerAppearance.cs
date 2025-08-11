@@ -85,8 +85,6 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
 
     public void OnSpriteDeselected()
     {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
-
         ShaderEffectHelper.SetOutlineEnable(material, false);
 
         isClicked = false;

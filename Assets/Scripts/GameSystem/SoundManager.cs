@@ -12,9 +12,9 @@ public enum BgmSoundType
 public enum EffectSoundType
 {
     Click,
-    Unclick,
     Success,
-    Fail
+    Fail,
+    Coin
 }
 
 [Serializable]
