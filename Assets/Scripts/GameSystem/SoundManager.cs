@@ -14,7 +14,8 @@ public enum EffectSoundType
     Click,
     Success,
     Fail,
-    Coin
+    CoinGain,
+    CoinLoss
 }
 
 [Serializable]

@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
     [SerializeField] public float GameDuration = 100;
+
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
 
@@ -22,7 +23,6 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject endCanvas;
     [SerializeField] private GameObject img_Success;
     [SerializeField] private GameObject img_Fail;
-    [SerializeField] private int finalScoreAmount = 100000;
 
     private void Start()
     {
@@ -60,6 +60,7 @@ public class GameManager : Singleton<GameManager>
         inGameCanvas.SetActive(true);
         StartCoroutine(UpdateGame());
 
+        FinanceManager.Instance.OnGameEnter();
         ConsumerManager.Instance.StartSpawn();
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
@@ -77,6 +78,8 @@ public class GameManager : Singleton<GameManager>
     public void EndGame()
     {
         isGameStarted = false;
+
+        FinanceManager.Instance.OnGameEnd();
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
         ConsumerManager.Instance.StopSpawn();
         // 생성했던 재료들을 모두 비활성화합니다.
@@ -85,7 +88,7 @@ public class GameManager : Singleton<GameManager>
         // 게임 결과에 따라 성공/실패 화면을 불러옵니다.
         // @anditsoon TODO: 게임 결과창에 최종 금액 나오게 하기 -> 추후 아트 받아서 적용 후 구현하겠습니다
         endCanvas.SetActive(true);
-        if (FinanceManager.Instance.CurrentMoney > finalScoreAmount)
+        if (FinanceManager.Instance.IsSuccess)
         {
             img_Success.SetActive(true);
         }
