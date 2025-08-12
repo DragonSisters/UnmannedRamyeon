@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 
 public class ConsumerPriceCalculator : MonoBehaviour
@@ -13,25 +12,26 @@ public class ConsumerPriceCalculator : MonoBehaviour
         consumerMood = gameObject.GetOrAddComponent<ConsumerMood>();
     }
 
-    public int GetFinalPrice()
+    public void GetFinalPrice(out int gain, out int loss)
     {
-        float price = 0;
+        gain = 0;
+        loss = 0;
 
-        List<IngredientInfo> ingredientInfos = ingredientHandler.OwnedIngredients;
-
-        foreach(var ingredientInfo in ingredientInfos)
+        foreach (var ingredientInfo in ingredientHandler.OwnedIngredients)
         {
             // 지적한 ingredient만 값에 들어갑니다
             if (ingredientInfo.IsCorrect)
             {
-                price += ingredientInfo.Ingredient.Price;
+                gain += ingredientInfo.Ingredient.Price;
+            }
+            else
+            {
+                loss += ingredientInfo.Ingredient.Price;
             }
         }
 
-        price *= consumerMood.GetMoodRatio();
+        gain *= (int)consumerMood.GetMoodRatio();
 
-        Debug.Log($"최종 금액은 {price}입니다");
-
-        return (int)price;
+        Debug.Log($"최종 금액은 {gain}입니다. 잃은 금액은 {loss}입니다.");
     }
 }

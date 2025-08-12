@@ -308,13 +308,15 @@ MonoBehaviour:
   BgmAudio: {fileID: 101085216461258285}
   EffectSoundEntries:
   - Type: 0
-    Clip: {fileID: 8300000, guid: d9419ba0bfac1e84a95418ac5851caf6, type: 3}
+    Clip: {fileID: 8300000, guid: 5e06666e097474ebbbbe1a30422c0fa3, type: 3}
   - Type: 1
-    Clip: {fileID: 8300000, guid: af66162561d2eed40ad49268cab318bb, type: 3}
-  - Type: 2
     Clip: {fileID: 8300000, guid: b1b9c1f0ea1fcae439ed1a4d44ff05fd, type: 3}
-  - Type: 3
+  - Type: 2
     Clip: {fileID: 8300000, guid: ab297b593498a6e47ba84de770477cbe, type: 3}
+  - Type: 3
+    Clip: {fileID: 8300000, guid: 0f97864d84476bf438df6c00f6828459, type: 3}
+  - Type: 4
+    Clip: {fileID: 8300000, guid: a245ee5d75348c84a89ffb7992f1dc82, type: 3}
   BgmSoundEntries:
   - Type: 0
     Clip: {fileID: 8300000, guid: ce2bdc71de8221046b5109f02c551f46, type: 3}

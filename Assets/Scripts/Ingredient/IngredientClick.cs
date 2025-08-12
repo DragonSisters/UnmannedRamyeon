@@ -50,7 +50,6 @@ public class IngredientClick : MonoBehaviour, IClickableSprite
 
     public void OnSpriteDeselected()
     {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Unclick);
     }
 
     public void SetClickable(bool isClickable)

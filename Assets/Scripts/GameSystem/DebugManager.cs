@@ -23,6 +23,7 @@ public class DebugManager : MonoBehaviour
         if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Game Initialize"))
         {
             MoveManager.Instance.OnGameEnter();
+            FinanceManager.Instance.OnGameEnter();
             StartCoroutine(UpdateClick());
             ConsumerManager.Instance.InitializeConsumerManagerSetting();
             IngredientManager.Instance.CreateIngredientObjOnPosition();
