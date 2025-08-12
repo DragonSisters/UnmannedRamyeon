@@ -14,8 +14,7 @@ public class GameManager : Singleton<GameManager>
 
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
-    [SerializeField] public float GameDuration = 100;
-
+    [SerializeField] public float GameDuration = 180;
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
 

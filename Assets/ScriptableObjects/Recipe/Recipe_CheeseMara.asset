@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
+  m_Name: Recipe_CheeseMara
+  m_EditorClassIdentifier: 
+  recipeName: "\uD1A0\uB9C8\uD1A0\uB77C\uBA74"
+  ingredients:
+  - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
+  - {fileID: 11400000, guid: 3aef26de493908f44b1d28c213d8739f, type: 2}
+  - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}
+  - {fileID: 11400000, guid: 9b58fdb61e28ff9429cbd8b7cd12ee5a, type: 2}
+  price: 7000
