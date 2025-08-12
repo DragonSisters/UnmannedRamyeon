@@ -11,7 +11,7 @@ public class RecipeConsumer : Consumer
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
-    private RecipeScriptableObject myRecipe;
+    [SerializeField] private RecipeScriptableObject myRecipe;
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
@@ -74,7 +74,7 @@ public class RecipeConsumer : Consumer
     public override void SetIngredientLists()
     {
         myRecipe = GetRandomRecipe();
-        recipeIngredients = myRecipe.Ingredients;
+        recipeIngredients = new List<IngredientScriptableObject>(myRecipe.Ingredients);
         ingredientHandler.SetAllIngredientLists(recipeIngredients);
     }
 
