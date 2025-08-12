@@ -40,8 +40,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumer = null;
-    // 레시피 손님이 가져간 재료 수
-    private int currPickCount = 0;
 
     void Start()
     {
@@ -136,14 +134,12 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
-        Debug.Log("셀렉트 이벤트 받았다");
         // ingredient 클릭 활성화
         SwitchClickable(true);
     }
 
     private void HandleIngredientDeselectMode()
     {
-        Debug.Log("디셀렉트 이벤트 받았다");
         // ingredient 클릭 비활성화
         SwitchClickable(false);
     }
@@ -197,21 +193,17 @@ public class IngredientManager : Singleton<IngredientManager>
         return shuffledList;
     }
 
-    public void ReceiveRecipeConsumer(RecipeConsumer recipeConsumer)
+    #region RecipeConsumer 관리
+
+
+    public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
-        currentRecipeConsumer = recipeConsumer;
+        currentRecipeConsumer = consumer;
     }
 
-    public void DeleteRecipeConsumer()
+    public void RemoveRecipeConsumer(RecipeConsumer consumer)
     {
-        if (currentRecipeConsumer == null)
-        {
-            Debug.LogWarning($"현재 돕고 있는 손님이 없습니다");
-            return;
-        }
-
-        currentRecipeConsumer = null;
-        currPickCount = 0;
+        if(currentRecipeConsumer == consumer) currentRecipeConsumer = null;
     }
 
     public IngredientScriptableObject FindMatchingIngredient(string ingredientName)
@@ -232,31 +224,39 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == null)
         {
             Debug.LogError("currentRecipeConsumer 가 없습니다.");
+            return;
         }
         ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
         if (ingredientHandler == null)
         {
             Debug.LogError("ConsumerIngredientHandler 가 없습니다.");
+            return;
         }
 
         ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
         if (isNoDuplicate)
         {
-            currPickCount++;
+            currentRecipeConsumer.AddPickCount();
         }
         else
         {
             ConsumerSpeech consumerSpeech = currentRecipeConsumer.GetComponent<ConsumerSpeech>();
-            if (consumerSpeech == null) Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
+            if (consumerSpeech == null)
+            {
+                Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
+                return;
+            }
 
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
         }
 
-        if (currPickCount >= MAX_INGREDIENT_NUMBER)
+        if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
         {
             currentRecipeConsumer.IsAllIngredientSelected = true;
-            currPickCount = 0;
+            currentRecipeConsumer.ResetPickCount();
             IsIngredientSelectMode = false;
         }
     }
+
+    #endregion
 }
