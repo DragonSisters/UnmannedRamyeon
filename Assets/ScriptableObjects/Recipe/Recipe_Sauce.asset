@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
-  m_Name: Recipe_Mayo
+  m_Name: Recipe_Sauce
   m_EditorClassIdentifier: 
-  recipeName: "\uB9C8\uC694\uB77C\uBA74"
+  recipeName: "\uC18C\uC2A4\uB77C\uBA74"
   ingredients:
+  - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
   - {fileID: 11400000, guid: c64a017040e7f904db63a7f265add602, type: 2}
-  - {fileID: 11400000, guid: 9b58fdb61e28ff9429cbd8b7cd12ee5a, type: 2}
-  - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}
-  - {fileID: 11400000, guid: 8b056db4f74f6374185768919999717d, type: 2}
-  price: 5500
+  - {fileID: 11400000, guid: 61aca6203f78a6d45b0710a6a5279897, type: 2}
+  - {fileID: 11400000, guid: 10e7096c5bb9493468c784907e73c43e, type: 2}
+  price: 5300

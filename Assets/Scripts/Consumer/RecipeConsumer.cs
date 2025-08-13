@@ -15,7 +15,9 @@ public class RecipeConsumer : Consumer
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
+
     public bool IsAllIngredientSelected = false;
+    public int CurrPickCount { get; private set; } = 0;
 
     internal override void HandleChildEnter()
     {
@@ -25,7 +27,8 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildExit()
     {
-        IngredientManager.Instance.DeleteRecipeConsumer();
+        ResetPickCount();
+        IngredientManager.Instance.RemoveRecipeConsumer(this);
     }
 
     internal override IEnumerator HandleChildIssue()
@@ -64,14 +67,12 @@ public class RecipeConsumer : Consumer
         var waitingPoint = MoveManager.Instance.RandomShoutPoint;
         moveScript.MoveTo(waitingPoint);
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
-
-        yield return new WaitForSeconds(recipeOrderDuration);
     }
 
     public override void SetIngredientLists()
     {
         myRecipe = GetRandomRecipe();
-        recipeIngredients = myRecipe.Ingredients;
+        recipeIngredients = new List<IngredientScriptableObject>(myRecipe.Ingredients);
         ingredientHandler.SetAllIngredientLists(recipeIngredients);
     }
 
@@ -104,11 +105,22 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclicked()
     {
+        ResetPickCount();
+
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
 
         // IngredientManager 에 내 정보 삭제 요청
-        IngredientManager.Instance.DeleteRecipeConsumer();
+        IngredientManager.Instance.RemoveRecipeConsumer(this);
     }
 
+    public void AddPickCount()
+    {
+        CurrPickCount++;
+    }
+
+    public void ResetPickCount()
+    {
+        CurrPickCount = 0;
+    }
 }

@@ -64,7 +64,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         }
         else
         {
-            paidIngredients = ingredientList;
+            paidIngredients = new List<IngredientScriptableObject>(ingredientList);
             Debug.Log($"레시피 손님이 고른 재료 : {string.Join(", ", ingredientList)}");
         }
 
@@ -113,6 +113,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     public IngredientInfo GetAttemptIngredientInfo()
     {
+        if (AttemptIngredients.Count <= 0) throw new System.Exception("AttemptIngredients 리스트가 비어있습니다.");
         var ingredientInfo = AttemptIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
         return ingredientInfo;
     }
