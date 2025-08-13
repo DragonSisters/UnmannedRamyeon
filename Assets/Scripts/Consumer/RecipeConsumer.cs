@@ -11,7 +11,7 @@ public class RecipeConsumer : Consumer
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
-    [SerializeField] private RecipeScriptableObject myRecipe;
+    private RecipeScriptableObject myRecipe;
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
@@ -67,8 +67,6 @@ public class RecipeConsumer : Consumer
         var waitingPoint = MoveManager.Instance.RandomShoutPoint;
         moveScript.MoveTo(waitingPoint);
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
-
-        yield return new WaitForSeconds(recipeOrderDuration);
     }
 
     public override void SetIngredientLists()
