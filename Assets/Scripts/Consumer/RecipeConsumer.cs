@@ -12,6 +12,7 @@ public class RecipeConsumer : Consumer
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
+    private ConsumerIngredientHandler myConsumerIngredientHandler;
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     [SerializeField] private float recipeOrderDuration = 2f;
@@ -22,6 +23,10 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildEnter()
     {
         StartCoroutine(EnterCoroutine());
+
+        myConsumerIngredientHandler = gameObject.GetComponent<ConsumerIngredientHandler>();
+        if(myConsumerIngredientHandler == null) gameObject.AddComponent<ConsumerIngredientHandler>();
+
         SetState(ConsumerState.Issue);
     }
 
@@ -55,6 +60,8 @@ public class RecipeConsumer : Consumer
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             SetState(ConsumerState.Leave);
         }
+
+        IsAllIngredientSelected = false;
     }
 
     internal override IEnumerator HandleChildUpdate()
@@ -106,6 +113,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildUnclicked()
     {
         ResetPickCount();
+        ingredientHandler.AttemptIngredients.Clear();
 
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
