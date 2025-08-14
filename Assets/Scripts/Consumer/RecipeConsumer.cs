@@ -15,7 +15,9 @@ public class RecipeConsumer : Consumer
     private ConsumerIngredientHandler myConsumerIngredientHandler;
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
-    [SerializeField] private float recipeOrderDuration = 2f;
+    private float recipeOrderDuration = 2f;
+
+    private float stayTime = 15f;
 
     public bool IsAllIngredientSelected = false;
     public int CurrPickCount { get; private set; } = 0;
@@ -33,13 +35,31 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildExit()
     {
         ResetPickCount();
+        ingredientHandler.ResetAllIngredientLists();
         IngredientManager.Instance.RemoveRecipeConsumer(this);
     }
 
     internal override IEnumerator HandleChildIssue()
     {
         StartCoroutine(HandleOrderOnUI());
-        yield return new WaitUntil(() => IsAllIngredientSelected);
+
+        float elapsedTime = 0f;
+
+        while(!IsAllIngredientSelected && elapsedTime < stayTime)
+        {
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        if(!IsAllIngredientSelected)
+        {
+            SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
+            ResetPickCount();
+            ingredientHandler.ResetAllIngredientLists();
+            IngredientManager.Instance.IsIngredientSelectMode = false;
+            SetState(ConsumerState.Leave);
+            yield break;
+        }
 
         bool isAllIngredientCorrect = true;
         foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
@@ -58,6 +78,9 @@ public class RecipeConsumer : Consumer
         else
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
+            ResetPickCount();
+            ingredientHandler.ResetAllIngredientLists();
+            IngredientManager.Instance.IsIngredientSelectMode = false;
             SetState(ConsumerState.Leave);
         }
 
