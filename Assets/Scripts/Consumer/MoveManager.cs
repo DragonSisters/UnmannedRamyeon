@@ -42,7 +42,7 @@ public class MoveManager : Singleton<MoveManager>
     {
         get
         {
-            var randomX = Random.Range(shoutPointMinRange.position.x, shoutPointMaxRange.position.y);
+            var randomX = Random.Range(shoutPointMinRange.position.x, shoutPointMaxRange.position.x);
             var randomY = Random.Range(shoutPointMinRange.position.y, shoutPointMaxRange.position.y);
 
             return new Vector2(randomX, randomY);
