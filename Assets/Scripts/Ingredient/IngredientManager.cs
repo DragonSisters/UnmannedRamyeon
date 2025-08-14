@@ -8,7 +8,8 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float INGREDIENT_PICKUP_TIME = 2f;
     public const float UI_DURATION_ON_COLLECT = 1f;
     public const float UI_DURATION_PREVIEW = 2f;
-    public const float CORRECT_INGREDIENT_PROBAILITY = 9f;
+    public const float CORRECT_INGREDIENT_PROBAILITY = 8f;
+
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
     [SerializeField] private GameObject ingredientBoxPrefab;
