@@ -103,6 +103,9 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildClick()
     {
+        ResetPickCount();
+        ingredientHandler.AttemptIngredients.Clear();
+
         //ingredients 들 클릭 활성화
         IngredientManager.Instance.IsIngredientSelectMode = true;
 
@@ -112,9 +115,6 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclicked()
     {
-        ResetPickCount();
-        ingredientHandler.AttemptIngredients.Clear();
-
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
 
