@@ -75,8 +75,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetIngredientUI: {fileID: 6853413148259845086}
   SpeechBubbleUI: {fileID: 2760120231888590067}
-  CoinGainUI: {fileID: 5113531723747575433}
-  CoinLossUI: {fileID: 8527821648478594865}
   ingredientUis:
   - {fileID: 9179223328281189373}
   - {fileID: 4183970122048812710}
@@ -328,14 +326,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -60
       objectReference: {fileID: 0}
-    - target: {fileID: 2608607745157626474, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Type
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2608607745157626474, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: a7ef133b7ad6c314c8c5f2e56d1b9352, type: 3}
     - target: {fileID: 2644213316632066292, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -375,10 +365,6 @@ PrefabInstance:
     - target: {fileID: 3782117568458462811, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 60
-      objectReference: {fileID: 0}
-    - target: {fileID: 4058593178817360112, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 4441302288876476877, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchorMax.x
@@ -432,22 +418,6 @@ PrefabInstance:
       propertyPath: correctSprite
       value: 
       objectReference: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
-    - target: {fileID: 7474416629315567866, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Padding.m_Top
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7474416629315567866, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Padding.m_Left
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7474416629315567866, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Padding.m_Right
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7474416629315567866, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_Padding.m_Bottom
-      value: 50
-      objectReference: {fileID: 0}
     - target: {fileID: 7730647517171582073, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: -50
@@ -479,10 +449,6 @@ PrefabInstance:
     - target: {fileID: 8145658006162503051, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_SizeDelta.y
       value: 80
-      objectReference: {fileID: 0}
-    - target: {fileID: 8183307709943396222, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-      propertyPath: m_PresetInfoIsWorld
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8602633846562956558, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_IsActive
@@ -525,11 +491,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1364346474841484042, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
   m_PrefabInstance: {fileID: 2917918133184767696}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5113531723747575433 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7964735888729858137, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-  m_PrefabInstance: {fileID: 2917918133184767696}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5209001187431200864 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6932326179282788016, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
@@ -557,11 +518,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &8527821648478594865 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6784232546324824545, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
-  m_PrefabInstance: {fileID: 2917918133184767696}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &9179223328281189373 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6277351502689074477, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
