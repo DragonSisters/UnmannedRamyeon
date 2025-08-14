@@ -95,5 +95,9 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public void SetClickable(bool clickable)
     {
         isClickable = clickable;
+        if(!clickable)
+        {
+            ShaderEffectHelper.SetOutlineEnable(material, false);
+        }
     }
 }
