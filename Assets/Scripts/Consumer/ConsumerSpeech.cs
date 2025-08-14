@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConsumerSpeech : MonoBehaviour
 {
     private ConsumerUI consumerUI;
     private const float SPEECH_INTERVAL = 0.1f;
     private const float SPEECH_END_WAIT_TIME = 3f;
-
-    private string previousLine = null;
 
     Coroutine SpeechCoroutine;
 
@@ -52,11 +50,6 @@ public class ConsumerSpeech : MonoBehaviour
             StopSpeech();
         }
 
-        // Invalid 초기화일 때는 대사를 건너뜁니다.
-        if (situation == ConsumerSituation.Invalid)
-        {
-            throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
-        }
         if (!isRandom && index >= 0)
         {
             throw new System.Exception($"랜덤이 아닌데 인덱스를 설정하지 않았습니다.");
@@ -64,6 +57,19 @@ public class ConsumerSpeech : MonoBehaviour
         if (hasFormat && string.IsNullOrEmpty(format))
         {
             throw new System.Exception($"format이 있는데 매개변수를 설정하지 않았습니다.");
+        }
+        // Invalid 초기화일 때는 대사를 건너뜁니다.
+        if (situation == ConsumerSituation.Invalid)
+        {
+            throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
+        }
+        else if (situation == ConsumerSituation.RecipeOrder)
+        {
+            consumerUI.SetSpeechBubbleColor(Color.yellow);
+        }
+        else
+        {
+            consumerUI.SetSpeechBubbleColor(Color.white);
         }
 
         var line = isRandom ?
@@ -111,6 +117,7 @@ public class ConsumerSpeech : MonoBehaviour
             throw new System.Exception($"format이 있는데 매개변수를 설정하지 않았습니다.");
         }
 
+        consumerUI.SetSpeechBubbleColor(Color.white);
         var line = isRandom ? 
             consumerScriptableObject.GetRandomDialogueFromState(state, format) 
             : consumerScriptableObject.GetDialogueFromState(state, index, format);
