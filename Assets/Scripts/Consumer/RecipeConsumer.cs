@@ -12,7 +12,6 @@ public class RecipeConsumer : Consumer
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
-    private ConsumerIngredientHandler myConsumerIngredientHandler;
 
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
     private float recipeOrderDuration = 2f;
@@ -26,8 +25,7 @@ public class RecipeConsumer : Consumer
     {
         StartCoroutine(EnterCoroutine());
 
-        myConsumerIngredientHandler = gameObject.GetComponent<ConsumerIngredientHandler>();
-        if(myConsumerIngredientHandler == null) gameObject.AddComponent<ConsumerIngredientHandler>();
+        appearanceScript.SetClickable(false);
 
         SetState(ConsumerState.Issue);
     }
@@ -41,8 +39,6 @@ public class RecipeConsumer : Consumer
 
     internal override IEnumerator HandleChildIssue()
     {
-        StartCoroutine(HandleOrderOnUI());
-
         float elapsedTime = 0f;
 
         while(!IsAllIngredientSelected && elapsedTime < stayTime)
@@ -57,6 +53,7 @@ public class RecipeConsumer : Consumer
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
             IngredientManager.Instance.IsIngredientSelectMode = false;
+            appearanceScript.SetClickable(false);
             SetState(ConsumerState.Leave);
             yield break;
         }
@@ -84,6 +81,7 @@ public class RecipeConsumer : Consumer
             SetState(ConsumerState.Leave);
         }
 
+        appearanceScript.SetClickable(false);
         IsAllIngredientSelected = false;
     }
 
@@ -94,9 +92,11 @@ public class RecipeConsumer : Consumer
 
     private IEnumerator EnterCoroutine()
     {
-        var waitingPoint = MoveManager.Instance.RandomShoutPoint;
-        moveScript.MoveTo(waitingPoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
+        var shoutPoint = MoveManager.Instance.RandomShoutPoint;
+        moveScript.MoveTo(shoutPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(shoutPoint));
+        StartCoroutine(HandleOrderOnUI());
+        appearanceScript.SetClickable(true);
     }
 
     public override void SetIngredientLists()

@@ -295,7 +295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 216669399}
   m_Layer: 0
-  m_Name: ShoutPoint
+  m_Name: ShoutMinPoint
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -310,7 +310,7 @@ Transform:
   m_GameObject: {fileID: 216669398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6, y: 1.8, z: 0}
+  m_LocalPosition: {x: 3.5, y: -2.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2145,7 +2145,6 @@ MonoBehaviour:
   spawnParent: {fileID: 1094846348}
   consumerPrefabs:
   - {fileID: 7357440723094547320, guid: 9dd112f23f16df24eb1f4b75ab04b729, type: 3}
-  - {fileID: 7357440723094547320, guid: 3bd381672b6a6de45a4d9c6ba6ce0b11, type: 3}
   poolSize: 10
   minSpawnInterval: 1
   maxSpawnInterval: 3
@@ -2180,8 +2179,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  currentActiveLimit: 15
-  maxActiveLimit: 15
+  currentActiveLimit: 2
+  maxActiveLimit: 5
 --- !u!4 &862743925
 Transform:
   m_ObjectHideFlags: 0
@@ -2230,6 +2229,7 @@ Transform:
   - {fileID: 1614331479}
   - {fileID: 2086347238}
   - {fileID: 216669399}
+  - {fileID: 1870706618}
   - {fileID: 1161070239}
   - {fileID: 1817767190}
   - {fileID: 1313283388}
@@ -2245,6 +2245,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.data[5].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 76e36b2291c2ee94ba31b309b7c34276, type: 3}
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.data[5].Type
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8030835503685078360, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.333334
@@ -3035,7 +3047,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enterPoint: {fileID: 1763879980}
   exitPoint: {fileID: 1614331479}
-  shoutPoint: {fileID: 216669399}
+  shoutPointMinRange: {fileID: 216669399}
+  shoutPointMaxRange: {fileID: 1870706618}
   leavePoint: {fileID: 1161070239}
   lineCount: 4
   lineSpacingFactor: 1
@@ -3731,6 +3744,37 @@ MonoBehaviour:
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
   img_Fail: {fileID: 1606098992}
+--- !u!1 &1870706617
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1870706618}
+  m_Layer: 0
+  m_Name: ShoutMaxPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1870706618
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1870706617}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8, y: 2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 969421795}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1894710029
 GameObject:
   m_ObjectHideFlags: 0

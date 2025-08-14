@@ -91,4 +91,9 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
 
         OnDeselect?.Invoke();
     }
+
+    public void SetClickable(bool clickable)
+    {
+        isClickable = clickable;
+    }
 }
