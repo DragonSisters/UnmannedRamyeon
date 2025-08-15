@@ -43,13 +43,9 @@ public class ConsumerMove : MonoBehaviour
         return ingredient.Point + MoveManager.Instance.RandomIngredientPointFactor;
     }
 
-    public void MoveTo(Vector3 point)
+    public void MoveToNearesetPoint(Vector2 point, out Vector2 nearestPoint)
     {
-        var hasNearestPoint = GetNearestPointOnNavMesh(point, NAVMESH_THRESHOLD, out var nearestPoint);
-        if (!hasNearestPoint)
-        {
-            Debug.LogError($"손님이 도달가능한 NavMesh가 없습니다!");
-        }
+        nearestPoint = GetNearestPointOnNavMesh(point);
         agent.SetDestination(nearestPoint);
     }
 
@@ -57,17 +53,19 @@ public class ConsumerMove : MonoBehaviour
     /// targetPos 근처에서 가장 가까운 NavMesh 위의 위치를 반환.
     /// maxDistance 안에서 NavMesh가 없으면 false 반환.
     /// </summary>
-    public bool GetNearestPointOnNavMesh(Vector3 targetPos, float maxDistance, out Vector3 nearestPos, int areaMask = NavMesh.AllAreas)
+    private Vector2 GetNearestPointOnNavMesh(Vector2 targetPos, int areaMask = NavMesh.AllAreas)
     {
         NavMeshHit hit;
-        if (NavMesh.SamplePosition(targetPos, out hit, maxDistance, areaMask))
+        var nearestPos = targetPos;
+        if (NavMesh.SamplePosition(targetPos, out hit, NAVMESH_THRESHOLD, areaMask))
         {
             nearestPos = hit.position;
-            return true;
         }
-
-        nearestPos = Vector3.zero;
-        return false;
+        else
+        {
+            Debug.LogError($"손님이 도달가능한 NavMesh가 없습니다!");
+        }
+        return nearestPos;
     }
 
     // Destination에 충분히 도달했는지 IsCloseEnough로 확인하고, 충분하다면 Destination을 취소합니다.

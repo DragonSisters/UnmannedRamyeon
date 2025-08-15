@@ -81,6 +81,7 @@ MonoBehaviour:
   - {fileID: 964130593897223540}
   - {fileID: 7470063719677023158}
   speechBubbleText: {fileID: 5209001187431200864}
+  speechBubbleImage: {fileID: 886406454319635642}
 --- !u!114 &5369129573054951317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -503,6 +504,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+--- !u!114 &886406454319635642 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2608607745157626474, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+  m_PrefabInstance: {fileID: 2917918133184767696}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2760120231888590067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &964130593897223540 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2675068633112294308, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}

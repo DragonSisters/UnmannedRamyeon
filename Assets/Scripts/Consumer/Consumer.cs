@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.U2D.Animation;
 
 /// <summary>
 /// 모든 손님에게 상속되어야합니다. 손님의 상태와 재료 등 모든 손님이 가지고 있어야하는 값과 로직을 저장하고 있습니다.
@@ -222,8 +220,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private IEnumerator OnCustomerExit()
     {
         var exitPoint = MoveManager.Instance.RandomExitPoint;
-        moveScript.MoveTo(exitPoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(exitPoint));
+        moveScript.MoveToNearesetPoint(exitPoint, out var nearestPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
 
         priceCalculator.GetFinalPrice(out var gain, out var loss);
 
@@ -246,8 +244,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     private IEnumerator OnLeave()
     {
         var leavePoint = MoveManager.Instance.RandomLeavePoint;
-        moveScript.MoveTo(leavePoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(leavePoint));
+        moveScript.MoveToNearesetPoint(leavePoint, out var nearestPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
 
         HandleChildExit();
         exitCompleted = true;
@@ -257,16 +255,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         // 줄 서러 갑니다
         var waitingPoint = moveScript.GetOrderWaitingPoint(this);
-        moveScript.MoveTo(waitingPoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingPoint));
+        moveScript.MoveToNearesetPoint(waitingPoint, out var nearestWaitingPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestWaitingPoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToOrder);
 
         // 주문하러 갑니다
         var orderPoint = MoveManager.Instance.GetOrderPoint();
-        moveScript.MoveTo(orderPoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(orderPoint));
+        moveScript.MoveToNearesetPoint(orderPoint, out var nearestOrderPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestOrderPoint));
 
         // 주문하는 시간
         yield return new WaitForSeconds(ORDER_WAITING_TIME);
@@ -321,11 +319,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
         // 필요한 재료를 가져옵니다.
         var attemptIngredientInfo = ingredientHandler.GetAttemptIngredientInfo();
-        var point = attemptIngredientInfo.Ingredient.Point;
+        var ingredientPoint = attemptIngredientInfo.Ingredient.Point;
 
         // 해당 재료를 가지러 이동합니다.
-        moveScript.MoveTo(point);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(point));
+        moveScript.MoveToNearesetPoint(ingredientPoint, out var nearestIngredientPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestIngredientPoint));
 
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
@@ -349,16 +347,16 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         // 줄 서러 갑니다.
         var waitingLinePoint = moveScript.GetCookingWaitingPoint(this);
-        moveScript.MoveTo(waitingLinePoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(waitingLinePoint));
+        moveScript.MoveToNearesetPoint(waitingLinePoint, out var nearestLinePoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestLinePoint));
 
         // 내 차례가 될때까지 대기합니다.
         yield return new WaitUntil(() => moveScript.IsMyTurnToCooking);
 
         // 요리하러 갑니다
         var cookingPoint = moveScript.GetCookingPoint();
-        moveScript.MoveTo(cookingPoint);
-        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(cookingPoint));
+        moveScript.MoveToNearesetPoint(cookingPoint, out var nearestCookingPoint);
+        yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestCookingPoint));
 
         // 줄을 줄입니다
         moveScript.GoToCooking();

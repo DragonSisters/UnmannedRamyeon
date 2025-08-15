@@ -2245,18 +2245,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
-      propertyPath: EffectSoundEntries.Array.size
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
-      propertyPath: EffectSoundEntries.Array.data[5].Clip
-      value: 
-      objectReference: {fileID: 8300000, guid: 76e36b2291c2ee94ba31b309b7c34276, type: 3}
-    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
-      propertyPath: EffectSoundEntries.Array.data[5].Type
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8030835503685078360, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.333334

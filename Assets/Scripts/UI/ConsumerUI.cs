@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
+using UnityEngine.UI;
 
 public class ConsumerUI : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class ConsumerUI : MonoBehaviour
 
     [SerializeField] private IngredientUI[] ingredientUis;
     [SerializeField] private TMP_Text speechBubbleText;
+    [SerializeField] private Image speechBubbleImage;
 
     // IngredientUI의 이벤트를 ConsumerIngredientHandler에게 중계해주는 이벤트입니다.
     public delegate void ClickEventTransferHandler(int index);
@@ -34,6 +36,11 @@ public class ConsumerUI : MonoBehaviour
     public void SetSpeechBubbleText(string message)
     {
         speechBubbleText.text = message;
+    }
+
+    public void SetSpeechBubbleColor(Color color)
+    {
+        speechBubbleImage.color = color;
     }
 
     public void InitializeIngredintUI(List<IngredientScriptableObject> ingredients)
