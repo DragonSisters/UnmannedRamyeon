@@ -63,10 +63,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
         startTime = Time.time;
         gameDuration = GameManager.Instance.GameDuration;
 
-        // @anditsoon TODO: 손님 병목 현상 해결되면 에디터에서 보고 커브 수정합니다. 수정한 커브를 나중에 여기에 스크립트로 설정하겠습니다. (아마 Linear 가 아닐 것 같아서)
-        spawnSpeedCurve = AnimationCurve.Linear(0, 1, 1, spawnIntervalLimit);
-        activeCountCurve = AnimationCurve.Linear(0, 1, 1, maxActiveLimit);
-
         // 모든 오브젝트 정리
         if (pools != null)
         {
