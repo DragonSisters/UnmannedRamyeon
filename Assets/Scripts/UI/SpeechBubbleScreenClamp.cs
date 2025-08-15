@@ -3,7 +3,7 @@
 public class SpeechBubbleScreenClamp : MonoBehaviour
 {
     private Camera cam;
-    private Vector2 padding = new Vector2(50f, 50f); // 화면 경계 여백
+    private Vector2 padding = new Vector2(80f, 50f); // 화면 경계 여백
     private Vector3 initialLocalPosition; // 초기 localPosition 저장
     private float lerpSpeed = 10f; // 위치 보간 속도
 
