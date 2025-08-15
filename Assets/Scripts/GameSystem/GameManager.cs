@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -21,7 +22,9 @@ public class GameManager : Singleton<GameManager>
     [Header("EndCanvas 관련 변수들")]
     [SerializeField] private GameObject endCanvas;
     [SerializeField] private GameObject img_Success;
+    [SerializeField] private TMP_Text txt_MoneySuccess;
     [SerializeField] private GameObject img_Fail;
+    [SerializeField] private TMP_Text txt_MoneyFail;
 
     private void Start()
     {
@@ -90,10 +93,12 @@ public class GameManager : Singleton<GameManager>
         if (FinanceManager.Instance.IsSuccess)
         {
             img_Success.SetActive(true);
+            txt_MoneySuccess.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
         }
         else
         {
             img_Fail.SetActive(true);
+            txt_MoneyFail.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
         }
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.End);
