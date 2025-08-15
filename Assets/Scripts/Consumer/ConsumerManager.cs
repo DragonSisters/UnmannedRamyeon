@@ -23,8 +23,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [SerializeField] private AnimationCurve spawnSpeedCurve = new AnimationCurve();
     [SerializeField] private float spawnIntervalLimit = 0.5f;
 
-    [Header("최대 소환 개수 변화 곡선")]
-    [SerializeField] private AnimationCurve activeCountCurve = new AnimationCurve();
+    // 최대 소환 개수 변화 곡선
+    private AnimationCurve activeCountCurve = new AnimationCurve();
 
     [Header("최대 소환 갯수")]
     [SerializeField] private int currentActiveLimit = 3;
@@ -62,6 +62,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         startTime = Time.time;
         gameDuration = GameManager.Instance.GameDuration;
+
+        activeCountCurve = AnimationCurve.Linear(0, 1, 1, maxActiveLimit);
 
         // 모든 오브젝트 정리
         if (pools != null)
