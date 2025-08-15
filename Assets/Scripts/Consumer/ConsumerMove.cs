@@ -6,6 +6,7 @@ public class ConsumerMove : MonoBehaviour
     private float moveSpeed;
     private NavMeshAgent agent;
     private const float RANGE_THRESHOLD = 0.5f;
+    private const float NAVMESH_THRESHOLD = 2f;
     private const int MIN_AVOIDANCE_PRIORITY = 30;
     private const int MAX_AVOIDANCE_PRIORITY = 70;
     public bool IsMyTurnToOrder => orderTurn == 0;
@@ -44,7 +45,29 @@ public class ConsumerMove : MonoBehaviour
 
     public void MoveTo(Vector3 point)
     {
-        agent.SetDestination(point);
+        var hasNearestPoint = GetNearestPointOnNavMesh(point, NAVMESH_THRESHOLD, out var nearestPoint);
+        if (!hasNearestPoint)
+        {
+            Debug.LogError($"손님이 도달가능한 NavMesh가 없습니다!");
+        }
+        agent.SetDestination(nearestPoint);
+    }
+
+    /// <summary>
+    /// targetPos 근처에서 가장 가까운 NavMesh 위의 위치를 반환.
+    /// maxDistance 안에서 NavMesh가 없으면 false 반환.
+    /// </summary>
+    public bool GetNearestPointOnNavMesh(Vector3 targetPos, float maxDistance, out Vector3 nearestPos, int areaMask = NavMesh.AllAreas)
+    {
+        NavMeshHit hit;
+        if (NavMesh.SamplePosition(targetPos, out hit, maxDistance, areaMask))
+        {
+            nearestPos = hit.position;
+            return true;
+        }
+
+        nearestPos = Vector3.zero;
+        return false;
     }
 
     // Destination에 충분히 도달했는지 IsCloseEnough로 확인하고, 충분하다면 Destination을 취소합니다.

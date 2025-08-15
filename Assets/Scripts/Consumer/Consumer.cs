@@ -309,7 +309,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     private IEnumerator SearchIngredient()
     {
-        if(ingredientHandler.IsIngredientSelectDone)
+        if (ingredientHandler.IsIngredientSelectDone)
         {
             // 잠시 서서 기다리는 시간도 포함합니다.
             yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
@@ -333,6 +333,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         ingredientHandler.AddOwnIngredient(attemptIngredientInfo.Ingredient, attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
         // UI를 업데이트 합니다.
         consumerUI.ActivateFeedbackUIs(attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
+
+        if (!attemptIngredientInfo.IsCorrect)
+        {
+            SoundManager.Instance.PlayEffectSound(EffectSoundType.WrongIngredientPick);
+        }
 
         // 재료를 얻으면 잠시동안 얻은 재료를 표시해줍니다
         consumerUI.ActivateIngredientUI(true);

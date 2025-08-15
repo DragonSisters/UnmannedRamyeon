@@ -67,7 +67,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 93d3a82be5cba214a9c5f240ec3d2d22, type: 2}
   - {fileID: 11400000, guid: 1dc6ce9e5287a474a911b2072bcb2c51, type: 2}
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
-  recipeOrderDuration: 2
   IsAllIngredientSelected: 0
 --- !u!114 &1264228265461581360
 MonoBehaviour:
@@ -382,6 +381,38 @@ PrefabInstance:
       propertyPath: correctSprite
       value: 
       objectReference: {fileID: 21300000, guid: 49608c0248e15ce479643441783c6d6b, type: 3}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093291763693898370, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4058593178817360112, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4058593178817360112, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4441302288876476877, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -481,6 +512,10 @@ PrefabInstance:
     - target: {fileID: 8145658006162503051, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8183307709943396222, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

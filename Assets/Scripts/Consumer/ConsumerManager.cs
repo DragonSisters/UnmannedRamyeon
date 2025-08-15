@@ -21,7 +21,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [Header("스폰 속도 변화 곡선 (X: 게임 시간 진행 비율, Y: 스폰 간격 배율)")]
     // Y: 스폰 대기 시간에 곱하는 간격 배율 (값이 작을수록 간격이 작아져서 빠른 스폰)
     [SerializeField] private AnimationCurve spawnSpeedCurve = new AnimationCurve();
-    [SerializeField] private float spawnIntervalLimit = 0.2f;
+    [SerializeField] private float spawnIntervalLimit = 0.5f;
 
     [Header("최대 소환 개수 변화 곡선")]
     [SerializeField] private AnimationCurve activeCountCurve = new AnimationCurve();
