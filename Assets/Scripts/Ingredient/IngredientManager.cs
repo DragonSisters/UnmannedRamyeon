@@ -206,7 +206,7 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == consumer) currentRecipeConsumer = null;
     }
 
-    public bool CheckRecipeConsumer(RecipeConsumer consumer)
+    public bool IsCurrentRecipeConsumer(RecipeConsumer consumer)
     {
         return (currentRecipeConsumer == consumer);
     }

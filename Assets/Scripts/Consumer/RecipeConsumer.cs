@@ -52,7 +52,7 @@ public class RecipeConsumer : Consumer
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if(IngredientManager.Instance.CheckRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
+            if(IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             appearanceScript.SetClickable(false);
             SetState(ConsumerState.Leave);
             yield break;
@@ -77,7 +77,7 @@ public class RecipeConsumer : Consumer
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if (IngredientManager.Instance.CheckRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
+            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             SetState(ConsumerState.Leave);
         }
 
