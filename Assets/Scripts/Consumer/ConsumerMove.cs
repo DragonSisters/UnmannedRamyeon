@@ -111,16 +111,16 @@ public class ConsumerMove : MonoBehaviour
         var separation = Vector2.zero;
         int count = 0;
         var allAgents = ConsumerManager.Instance.GetAllActiveConsumerToList();
-        foreach (var agent in allAgents)
+        foreach (var otherAgent in allAgents)
         {
-            if (agent == consumer)
+            if (otherAgent == consumer)
             {
                 continue; // 자기 자신은 제외
             }
-            float distance = Vector2.Distance(agent.transform.position, transform.position);
+            float distance = Vector2.Distance(otherAgent.transform.position, transform.position);
             if (distance < separationRadius && distance > 0.01f) // 0 방지
             {
-                Vector2 direction = (Vector2)(transform.position - agent.transform.position).normalized;
+                Vector2 direction = (Vector2)(transform.position - otherAgent.transform.position).normalized;
                 separation += direction / distance; // 거리에 반비례하여 힘을 적용
                 count++;
             }
