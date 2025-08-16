@@ -16,7 +16,8 @@ public enum EffectSoundType
     Fail,
     CoinGain,
     CoinLoss,
-    WrongIngredientPick
+    WrongIngredientPick,
+    WrongIngredientCorrected
 }
 
 [Serializable]

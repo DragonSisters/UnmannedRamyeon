@@ -48,6 +48,7 @@ public class IngredientUI : MonoBehaviour, IClickableSprite
         // 재료를 isCorrect = true로 만듭니다
         OnClicked?.Invoke(index);
         feedbackImage.sprite = correctSprite;
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.WrongIngredientCorrected);
         isClickable = false;
     }
 
