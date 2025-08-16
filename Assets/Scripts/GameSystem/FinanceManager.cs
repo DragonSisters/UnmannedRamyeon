@@ -10,7 +10,7 @@ public class FinanceManager : Singleton<FinanceManager>
     /// 목표 매출액
     /// </summary>
     [Header ("목표 매출액")]
-    [SerializeField] private int goalMoney = 500000;
+    [SerializeField] private int goalMoney = 50000;
 
     [Header("UI관련")]
     [SerializeField] private TMP_Text goalMoneyUi;

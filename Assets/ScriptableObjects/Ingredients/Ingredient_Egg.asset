@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Ingredient_Egg
   m_EditorClassIdentifier: 
   name: "\uACC4\uB780"
-  bgSprite: {fileID: 21300000, guid: 719108982216dbf46b388e35aae470a3, type: 3}
-  icon: {fileID: 21300000, guid: 845e5550d744b7c40bbd03380469423a, type: 3}
+  bgSprite: {fileID: 21300000, guid: e366e86e0e9ff49449bc0599f91b9be2, type: 3}
+  icon: {fileID: 21300000, guid: ea2842a3e92cc98478019eb656c796ea, type: 3}
   isOutsideBox: 0
   price: 1000
   ingredientCreatePosition: {x: 1, y: -3.5}

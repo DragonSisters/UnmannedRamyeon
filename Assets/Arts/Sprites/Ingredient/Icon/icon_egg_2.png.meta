@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 2af7583c221bd3b428d47b703fd1e00c
+guid: ea2842a3e92cc98478019eb656c796ea
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3894031997293618949
-    second: icon_cursor_0
+      213: 9008839038889097674
+    second: icon_egg_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -24,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 1
+  isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -57,7 +57,7 @@ TextureImporter:
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 7
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 32
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: icon_cursor_0
+      name: icon_egg_2_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 2
-        width: 216
-        height: 249
+        x: 46
+        y: 15
+        width: 170
+        height: 226
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 507e0b658716a0630800000000000000
-      internalID: 3894031997293618949
+      spriteID: ac9f7afff53d50d70800000000000000
+      internalID: 9008839038889097674
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      icon_cursor_0: 3894031997293618949
+      icon_egg_2_0: 9008839038889097674
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

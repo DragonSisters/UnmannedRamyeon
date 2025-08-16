@@ -196,7 +196,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
     #region RecipeConsumer 관리
 
-
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
         currentRecipeConsumer = consumer;
@@ -205,6 +204,11 @@ public class IngredientManager : Singleton<IngredientManager>
     public void RemoveRecipeConsumer(RecipeConsumer consumer)
     {
         if(currentRecipeConsumer == consumer) currentRecipeConsumer = null;
+    }
+
+    public bool CheckRecipeConsumer(RecipeConsumer consumer)
+    {
+        return (currentRecipeConsumer == consumer);
     }
 
     public IngredientScriptableObject FindMatchingIngredient(string ingredientName)

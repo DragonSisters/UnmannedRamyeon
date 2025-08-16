@@ -1513,6 +1513,17 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &778596791 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 192197532353826654, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 2337158840259677246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &805193174
 GameObject:
   m_ObjectHideFlags: 0
@@ -1718,6 +1729,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &900699707 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 317123329247096834, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 2337158840259677246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &969421794
 GameObject:
   m_ObjectHideFlags: 0
@@ -2209,7 +2231,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36b3372b2aa10845bb7e5774c5f2e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  goalMoney: 500000
+  goalMoney: 50000
   goalMoneyUi: {fileID: 8691856409321491833}
   totalMoneyUi: {fileID: 6623439802585752344}
   priceUiPrefab: {fileID: 4681973138784411824, guid: 8282752b469927c409237ca0ef21d027, type: 3}
@@ -2630,7 +2652,9 @@ MonoBehaviour:
   GameDuration: 180
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
+  txt_MoneySuccess: {fileID: 778596791}
   img_Fail: {fileID: 1606098992}
+  txt_MoneyFail: {fileID: 900699707}
 --- !u!1 &1870706617
 GameObject:
   m_ObjectHideFlags: 0
