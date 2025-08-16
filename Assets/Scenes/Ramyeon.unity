@@ -1713,6 +1713,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   spawnIntervalLimit: 0.5
   currentActiveLimit: 2
+  recipeActiveLimit: 5
   maxActiveLimit: 10
 --- !u!4 &862743925
 Transform:
