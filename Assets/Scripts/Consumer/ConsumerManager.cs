@@ -28,6 +28,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     [Header("최대 소환 갯수")]
     [SerializeField] private int currentActiveLimit = 3;
+    [SerializeField] private int recipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
     [SerializeField] private int maxActiveLimit = 15;
 
     private Dictionary<GameObject, ObjectPool<Consumer>> pools;
@@ -167,9 +168,21 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
-        if(!pools[prefab].CanActiveMore(currentActiveLimit))
+        bool isRecipe = prefab.GetComponent<RecipeConsumer>() != null;
+
+        if(isRecipe)
         {
-            return;
+            if (!pools[prefab].CanActiveMore(recipeActiveLimit))
+            {
+                return;
+            }
+        }
+        else
+        {
+            if (!pools[prefab].CanActiveMore(currentActiveLimit))
+            {
+                return;
+            }
         }
 
         Consumer obj = pools[prefab].GetOrCreate();
