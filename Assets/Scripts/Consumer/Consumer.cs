@@ -153,6 +153,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         while (!ShouldDespawn())
         {
             appearanceScript.OnUpdate();
+            moveScript.OnUpdate();
             yield return null;
         }        
     }
