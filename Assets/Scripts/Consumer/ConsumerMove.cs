@@ -3,8 +3,14 @@ using UnityEngine.AI;
 
 public class ConsumerMove : MonoBehaviour
 {
+    private Consumer consumer;
     private float moveSpeed;
     private NavMeshAgent agent;
+
+    private float separationRadius = 1.0f;
+    private float separationStrength = 2.0f;
+    private float separationSpeed = 5.0f;
+
     private const float RANGE_THRESHOLD = 0.5f;
     private const float NAVMESH_THRESHOLD = 2f;
     private const int MIN_AVOIDANCE_PRIORITY = 30;
@@ -19,6 +25,12 @@ public class ConsumerMove : MonoBehaviour
 
     public void Initialize()
     {
+        consumer = gameObject.GetComponent<Consumer>();
+        if(consumer == null)
+        {
+            Debug.LogError("Consumer 컴포넌트를 찾을 수 없습니다. ConsumerMove 스크립트가 Consumer 컴포넌트와 함께 사용되어야 합니다.");
+            return;
+        }
         moveSpeed = MoveManager.Instance.RandomMoveSpeed;
 
         agent = gameObject.GetComponent<NavMeshAgent>();
@@ -36,6 +48,15 @@ public class ConsumerMove : MonoBehaviour
         agent.avoidancePriority = Random.Range(MIN_AVOIDANCE_PRIORITY, MAX_AVOIDANCE_PRIORITY);
 
         gameObject.transform.position = MoveManager.Instance.RandomEnterPoint;
+    }
+
+    public void OnUpdate()
+    {
+        //  움직이지 않는 agent가 다른 에이전트를 위해 피해줍시다.
+        if (!agent.hasPath)
+        {
+            AvoidNearbyAgents();
+        }
     }
 
     public Vector2 GetIngredientPoint(IngredientScriptableObject ingredient)
@@ -83,6 +104,41 @@ public class ConsumerMove : MonoBehaviour
     {
         float distance = Vector2.Distance(gameObject.transform.position, point);
         return distance <= RANGE_THRESHOLD;
+    }
+
+    public void AvoidNearbyAgents()
+    {
+        var separation = Vector2.zero;
+        int count = 0;
+        var allAgents = ConsumerManager.Instance.GetAllActiveConsumerToList();
+        foreach (var otherAgent in allAgents)
+        {
+            if (otherAgent == consumer)
+            {
+                continue; // 자기 자신은 제외
+            }
+            float distance = Vector2.Distance(otherAgent.transform.position, transform.position);
+            if (distance < separationRadius && distance > 0.01f) // 0 방지
+            {
+                Vector2 direction = (Vector2)(transform.position - otherAgent.transform.position).normalized;
+                separation += direction / distance; // 거리에 반비례하여 힘을 적용
+                count++;
+            }
+        }
+
+        if (count > 0)
+        {
+            separation /= count; // 평균화
+            separation *= separationStrength; // 힘의 크기 조절
+            var desired = (Vector2)agent.desiredVelocity + separation;
+
+            // NaN 방지
+            if (!float.IsNaN(desired.x) && !float.IsNaN(desired.y))
+            {
+                // 약간 밀어내기
+                agent.velocity = Vector3.Lerp(agent.velocity, desired, Time.deltaTime * separationSpeed);
+            }
+        }
     }
 
     public Vector2 GetOrderWaitingPoint(Consumer consumer)

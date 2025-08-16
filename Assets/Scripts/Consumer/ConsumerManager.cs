@@ -27,9 +27,10 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private AnimationCurve activeCountCurve = new AnimationCurve();
 
     [Header("최대 소환 갯수")]
-    [SerializeField] private int currentActiveLimit = 3;
-    [SerializeField] private int recipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
+    [SerializeField] private int minActiveLimit = 1;
     [SerializeField] private int maxActiveLimit = 15;
+    [SerializeField] private int recipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
+    private int currentActiveLimit = 3;
 
     private Dictionary<GameObject, ObjectPool<Consumer>> pools;
 
@@ -39,32 +40,12 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private float startTime;
     private float gameDuration;
 
-    public void DeselectOtherConsumers()
-    {
-        foreach (var consumer in pools)
-        {
-            var activeObjs = consumer.Value.GetActiveObjects();
-            foreach (var obj in activeObjs)
-            {
-                var apearanceGameobject = obj.GetComponentInChildren<ConsumerAppearance>();
-                if (apearanceGameobject == null)
-                {
-                    Debug.LogError($"손님에게 {nameof(ConsumerAppearance)}가 생성되지 않았는데 찾아오려고 했습니다.");
-                }
-                if (apearanceGameobject.IsClicked && ((IClickableSprite)apearanceGameobject != SpriteClickHandler.Instance.CurrentClickedSprite))
-                {
-                    apearanceGameobject.OnSpriteDeselected();
-                }
-            }
-        }
-    }
-
     public void InitializeConsumerManagerSetting()
     {
         startTime = Time.time;
         gameDuration = GameManager.Instance.GameDuration;
 
-        activeCountCurve = AnimationCurve.Linear(0, 1, 1, maxActiveLimit);
+        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
 
         // 모든 오브젝트 정리
         if (pools != null)
@@ -115,6 +96,36 @@ public class ConsumerManager : Singleton<ConsumerManager>
         {
             StopCoroutine(despawnCoroutine);
         }
+    }
+
+    public void DeselectOtherConsumers()
+    {
+        foreach (var consumer in pools)
+        {
+            var activeObjs = consumer.Value.GetActiveObjects();
+            foreach (var obj in activeObjs)
+            {
+                var apearanceGameobject = obj.GetComponentInChildren<ConsumerAppearance>();
+                if (apearanceGameobject == null)
+                {
+                    Debug.LogError($"손님에게 {nameof(ConsumerAppearance)}가 생성되지 않았는데 찾아오려고 했습니다.");
+                }
+                if (apearanceGameobject.IsClicked && ((IClickableSprite)apearanceGameobject != SpriteClickHandler.Instance.CurrentClickedSprite))
+                {
+                    apearanceGameobject.OnSpriteDeselected();
+                }
+            }
+        }
+    }
+
+    public List<Consumer> GetAllActiveConsumerToList()
+    {
+        var list = new List<Consumer>();
+        foreach (var pool in pools.Values)
+        {
+            list.AddRange(pool.GetActiveObjects());
+        }
+        return list;
     }
 
     private IEnumerator SpawnRoutine()
