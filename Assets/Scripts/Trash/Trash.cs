@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Unity.VisualScripting;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
@@ -17,6 +17,13 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private Vector2 mousePrePosition;
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
     private float alphaDecreaseAmount = 0.02f; // 알파값 감소량
+
+    public float affectRadius = 2f; // Trash 주변 영향 반경
+    public int moodDecraseAmount = 31; // Trash 주변 영향 반경
+    private HashSet<Consumer> affectedConsumers = new();
+    private Coroutine decreaseMoodCoroutine;
+
+
 
     private void Initiailize()
     { 
@@ -38,11 +45,14 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
+        affectedConsumers.Clear();
     }
 
     public void OnSpawn()
     {
         Initiailize();
+
+        decreaseMoodCoroutine = StartCoroutine(DecreaseMood());
     }
 
     public void OnDespawn()
@@ -53,6 +63,12 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
         // 성공 소리를 내준다
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
+        
+        if(decreaseMoodCoroutine != null)
+        {
+            StopCoroutine(decreaseMoodCoroutine);
+            decreaseMoodCoroutine = null;
+        }
     }
 
     public bool ShouldDespawn()
@@ -92,5 +108,34 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         GameManager.Instance.SetCursor(originCursorIcon);
         // 뽀득뽀득 소리가 멈춘다
         SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
+    }
+
+    private IEnumerator DecreaseMood()
+    {
+        // Trash가 생성된 후 일정 시간마다 주변 Consumer의 기분을 감소시킵니다.
+        while (!ShouldDespawn())
+        {
+            AffectNearbyConsumers();
+            yield return new WaitForSeconds(1f); // 1초마다 영향을 줍니다.
+        }
+    }
+
+    private void AffectNearbyConsumers()
+    {
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position, affectRadius);
+
+        for (int i = 0; i < colliders.Length; i++)
+        {
+            Consumer consumer = colliders[i].GetComponentInParent<Consumer>();
+            if (consumer != null && !affectedConsumers.Contains(consumer))
+            {
+                ConsumerMood moodScript = consumer.moodScript;
+                if (moodScript != null)
+                {
+                    moodScript.DecreaseMood(moodDecraseAmount);
+                    affectedConsumers.Add(consumer); // 이미 영향을 준 Consumer로 등록
+                }
+            }
+        }
     }
 }
