@@ -26,18 +26,28 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         {
             throw new System.Exception("쓰레기 프리팹에 스프라이트 렌더러가 추가되어있지 않습니다. 확인해주세요");
         }
-        var collider = gameObject.GetOrAddComponent<BoxCollider2D>();
+        spriteRenderer.sprite = trashImages[Random.Range(0, trashImages.Count)];
+        spriteRenderer.color = originColor;
+
+        var collider = gameObject.GetComponent<PolygonCollider2D>();
+        if(collider == null)
+        {
+            collider = gameObject.AddComponent<PolygonCollider2D>();
+        }
         collider.isTrigger = true;
+
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
-
-        spriteRenderer.color = originColor;
-        spriteRenderer.sprite = trashImages[Random.Range(0, trashImages.Count)];
     }
 
     public void OnDespawn()
     {
-        CleaningDone();
+        // 커서가 다시 손가락으로 바뀐다.
+        GameManager.Instance.SetCursor(originCursorIcon);
+        // 뽀득뽀득 소리가 멈춘다
+        SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
+        // 성공 소리를 내준다
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
     }
 
     public bool ShouldDespawn()
@@ -72,11 +82,6 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     }
 
     public void OnSpriteUp()
-    {
-        CleaningDone();
-    }
-
-    private void CleaningDone()
     {
         // 커서가 다시 손가락으로 바뀐다.
         GameManager.Instance.SetCursor(originCursorIcon);
