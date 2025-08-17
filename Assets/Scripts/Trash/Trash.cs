@@ -18,8 +18,8 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
     private float alphaDecreaseAmount = 0.02f; // 알파값 감소량
 
-    public void OnSpawn()
-    {
+    private void Initiailize()
+    { 
         //  초기화
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
@@ -30,7 +30,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         spriteRenderer.color = originColor;
 
         var collider = gameObject.GetComponent<PolygonCollider2D>();
-        if(collider == null)
+        if (collider == null)
         {
             collider = gameObject.AddComponent<PolygonCollider2D>();
         }
@@ -38,6 +38,11 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
+    }
+
+    public void OnSpawn()
+    {
+        Initiailize();
     }
 
     public void OnDespawn()

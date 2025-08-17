@@ -53,6 +53,7 @@ MonoBehaviour:
   - {fileID: -1767848384598160048, guid: 3ca54f62b21891742bede6ac658b7bc9, type: 3}
   - {fileID: 7589261669418626697, guid: 06a0d6dfb7cacb04c81c0a74b063c3ce, type: 3}
   - {fileID: -8239525390077900780, guid: ffb734f871f0c31419e24664e8453aa3, type: 3}
+  trashDecreaseMoodAmount: 10
 --- !u!212 &8859554619389461534
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -96,7 +97,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

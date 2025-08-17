@@ -7,10 +7,10 @@ public enum MoodState
 {
     Invalid = -1,
 
-    veryDissatisfied = 0,
-    dissatisfied = 30,
-    satisfied = 50,
-    verySatisfied = 70,
+    Angry = 0,
+    Bad = 30,
+    Good = 50,
+    Happy = 70,
 }
 
 public class ConsumerMood : MonoBehaviour
@@ -20,10 +20,10 @@ public class ConsumerMood : MonoBehaviour
     private const int DECREASE_AMOUNT = 5; // 서서히 감소할 양
     private const float DECREASE_INTERVAL = 0.5f; // n초에 1번씩 줄어듦
 
-    private const float VERY_DISSATISFIED_RATIO = 0.5f;
-    private const float DISSATISFIED_RATIO = 0.8f;
-    private const float SATISFIED_RATIO = 0.9f;
-    private const float VERY_SATISFIED_RATIO = 1f;
+    private const float ANGRY_RATIO = 0.5f;
+    private const float BAD_RATIO = 0.8f;
+    private const float GOOD_RATIO = 0.9f;
+    private const float HAPPY_RATIO = 1f;
 
     private Coroutine decreaseCoroutine;
 
@@ -100,14 +100,14 @@ public class ConsumerMood : MonoBehaviour
     {
         switch(Mood)
         {
-            case MoodState.veryDissatisfied:
-                return VERY_DISSATISFIED_RATIO;
-            case MoodState.dissatisfied:
-                return DISSATISFIED_RATIO;
-            case MoodState.satisfied:
-                return SATISFIED_RATIO;
-            case MoodState.verySatisfied:
-                return VERY_SATISFIED_RATIO;
+            case MoodState.Angry:
+                return ANGRY_RATIO;
+            case MoodState.Bad:
+                return BAD_RATIO;
+            case MoodState.Good:
+                return GOOD_RATIO;
+            case MoodState.Happy:
+                return HAPPY_RATIO;
         }
 
         return 0;
