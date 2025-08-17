@@ -38,6 +38,10 @@ public class ConsumerMood : MonoBehaviour
             .FirstOrDefault();
         }
     }
+
+    private MoodState lastMoodState = MoodState.Invalid;
+    public event Action<MoodState> OnMoodChanged;
+
     public int CurrentAmount => currentAmount;
     public int currentAmount;
 
@@ -53,6 +57,11 @@ public class ConsumerMood : MonoBehaviour
     public void DecreaseMood(int decreaseAmount)
     {
         currentAmount -= decreaseAmount;
+        if (currentAmount < MIN_MOOD)
+        {
+            currentAmount = MIN_MOOD;
+        }
+        CheckMoodStateChanged();
         Debug.Log($"손님 기분 저하: {Mood}, {currentAmount}");
     }
 
@@ -63,8 +72,24 @@ public class ConsumerMood : MonoBehaviour
     public void IncreaseMood(int increaseAmount)
     {
         currentAmount += increaseAmount;
+        if (currentAmount > MAX_MOOD)
+        {
+            currentAmount = MAX_MOOD;
+        }
+        CheckMoodStateChanged();
         Debug.Log($"손님 기분 증가: {Mood}, {currentAmount}");
     }
+
+    private void CheckMoodStateChanged()
+    {
+        var currentMoodState = Mood;
+        if (currentMoodState != lastMoodState)
+        {
+            lastMoodState = currentMoodState;
+            OnMoodChanged?.Invoke(currentMoodState);
+        }
+    }
+
 
     public void StartDecrease()
     {
