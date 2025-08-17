@@ -10,6 +10,10 @@ public class TrashManager : Singleton<TrashManager>
     [SerializeField] private Transform trashParent;
     [SerializeField] private int poolSize = 10;
 
+    [Header("스폰 위치 설정")]
+    [SerializeField] private Transform spawnAreaMax;
+    [SerializeField] private Transform spawnAreaMin;
+
     [Header("스폰 간격 설정")]
     [SerializeField] private float minSpawnInterval = 3f;
     [SerializeField] private float maxSpawnInterval = 10f;
@@ -18,7 +22,7 @@ public class TrashManager : Singleton<TrashManager>
 
     [Header("스폰 확률 설정")]
     [SerializeField] private float spawnStartDelay = 30f; // 30초 후 스폰 시작
-    [SerializeField, Range(0f, 1f)] private float spawnProbability = 0.4f; // 40% 확률
+    [SerializeField, Range(0f, 1f)] private float spawnProbability = 0.5f; // 50% 확률
 
     private ObjectPool<Trash> trashPool;
     private Coroutine spawnCoroutine;
@@ -64,7 +68,7 @@ public class TrashManager : Singleton<TrashManager>
 
     public void StopSpawn()
     {
-        CheckAndDespawnCustomers(true);
+        CheckAndDespawnTrash(true);
 
         // 모든 코루틴을 멈춥니다.
         if (spawnCoroutine != null)
@@ -104,16 +108,16 @@ public class TrashManager : Singleton<TrashManager>
     {
         while (IsAvailableSpawn())
         {
-            CheckAndDespawnCustomers();
+            CheckAndDespawnTrash();
             yield return new WaitUntil(() => Time.frameCount % 30 == 0);
         }
     }
 
     /// <summary>
-    /// 스폰되어있는 손님들을 디스폰합니다.
+    /// 스폰되어있는 쓰레기들을 디스폰합니다.
     /// </summary>
     /// <param name="skipCheck">조건없이 모두 디스폰할 것인지 선택합니다</param>
-    private void CheckAndDespawnCustomers(bool skipCheck = false)
+    private void CheckAndDespawnTrash(bool skipCheck = false)
     {
         var activeObjects = trashPool.GetActiveObjects();
 
@@ -137,7 +141,6 @@ public class TrashManager : Singleton<TrashManager>
         }
 
         GameObject prefab = trashPrefabs[Random.Range(0, trashPrefabs.Count)];
-        bool isRecipe = prefab.GetComponent<RecipeConsumer>() != null;
 
         if (!trashPool.CanActiveMore(maxActiveLimit))
         {
@@ -145,6 +148,10 @@ public class TrashManager : Singleton<TrashManager>
         }
 
         var obj = trashPool.GetOrCreate();
+        obj.transform.position = new Vector2(
+            Random.Range(spawnAreaMin.position.x, spawnAreaMax.position.x),
+            Random.Range(spawnAreaMin.position.y, spawnAreaMax.position.y)
+        );
         obj.OnSpawn();
     }
 

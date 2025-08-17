@@ -1,8 +1,11 @@
-﻿using Unity.VisualScripting;
+﻿using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 {
+    [SerializeField] private List<Sprite> trashImages = new();
+
     public bool IsDraggable => isDraggable;
     private bool isDraggable = true;
 
@@ -11,7 +14,9 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private float thredholdAlpha = 0.1f; // 알파값이 이 값 이하로 떨어지면 파괴됩니다.
     private Texture2D originCursorIcon;
     private Texture2D cleaningCursorIcon;
-
+    private Vector2 mousePrePosition;
+    private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
+    private float alphaDecreaseAmount = 0.02f; // 알파값 감소량
 
     public void OnSpawn()
     {
@@ -21,18 +26,18 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         {
             throw new System.Exception("쓰레기 프리팹에 스프라이트 렌더러가 추가되어있지 않습니다. 확인해주세요");
         }
-        var collider = gameObject.GetOrAddComponent<PolygonCollider2D>();
+        var collider = gameObject.GetOrAddComponent<BoxCollider2D>();
         collider.isTrigger = true;
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
 
-
         spriteRenderer.color = originColor;
+        spriteRenderer.sprite = trashImages[Random.Range(0, trashImages.Count)];
     }
 
     public void OnDespawn()
     {
-        
+        CleaningDone();
     }
 
     public bool ShouldDespawn()
@@ -50,14 +55,32 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     public void OnSpriteDragging()
     {
         // 마우스가 움직이고 있다면 알파값을 조절한다
-        // 뽀득뽀득 소리가 들린다
-        Debug.Log("닦는중~");
+        // 이전 마우스 값과 비교해서 얼만큼 움직였는지 계산하여 distance가 일정이상일 때 움직였다고 판단한다
+        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        float distance = Vector2.Distance(mousePrePosition, mousePos);
+        if (distance > mousePositionThredhold)
+        {
+            // 알파값을 감소시킨다. 0보다 작아지지 않게 Clamp
+            Color color = spriteRenderer.color;
+            color.a = Mathf.Clamp01(color.a - alphaDecreaseAmount);
+            spriteRenderer.color = color;
+
+            // 뽀득뽀득 소리가 들린다
+            SoundManager.Instance.PlayContinousSound(ContinousSoundType.TrashCleaning);
+        }
+        mousePrePosition = mousePos;
     }
 
     public void OnSpriteUp()
     {
-        // 커서가 다시 손가락으로 바뀐다.
-        GameManager.Instance.SetCursor(originCursorIcon);
+        CleaningDone();
     }
 
+    private void CleaningDone()
+    {
+        // 커서가 다시 손가락으로 바뀐다.
+        GameManager.Instance.SetCursor(originCursorIcon);
+        // 뽀득뽀득 소리가 멈춘다
+        SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
+    }
 }

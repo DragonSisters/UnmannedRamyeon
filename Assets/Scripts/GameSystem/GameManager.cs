@@ -83,6 +83,7 @@ public class GameManager : Singleton<GameManager>
     {
         while (isGameStarted)
         {
+            SpriteDragHandler.Instance.UpdateHandler();
             SpriteClickHandler.Instance.UpdateHandler();
             yield return null;
         }
