@@ -105,6 +105,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
             moodScript = gameObject.AddComponent<ConsumerMood>();
         }
         moodScript.Initialize();
+        moodScript.OnMoodChanged += OnMoodChanged;
+
         // 손님 이동 스크립트 추가
         moveScript = gameObject.GetComponent<ConsumerMove>();
         if (moveScript == null)
@@ -393,5 +395,11 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     public void WrongIngredientSpeech(int tmp = 0)
     {
         StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.WrongIngredientDetected, false, false, true, false));
+    }
+
+    private void OnMoodChanged(MoodState newMood)
+    {
+        // MoodState를 int로 변환해서 전달
+        consumerUI.SetMoodFeedbackUI(newMood);
     }
 }

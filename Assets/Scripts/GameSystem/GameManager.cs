@@ -11,11 +11,16 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject btn_Start;
     [SerializeField] private GameObject img_Start;
     [SerializeField] private Texture2D cursorIcon;
+    public Texture2D CursorIcon => cursorIcon;
     private const float START_DELAY_TIME = 1f;
 
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
-    [SerializeField] public float GameDuration = 180;
+    [SerializeField] private float gameDuration = 180;
+    public float GameDuration => gameDuration;
+    public float GameStartTime => gameStartTime;
+    private float gameStartTime;
+
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
 
@@ -28,16 +33,20 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        Cursor.SetCursor(cursorIcon, Vector2.zero, CursorMode.Auto);
+        SetCursor(cursorIcon);
+        ConsumerManager.Instance.InitializeConsumerManagerSetting();
+        TrashManager.Instance.Initialize();
+    }
+
+    public void SetCursor(Texture2D icon)
+    {
+        Cursor.SetCursor(icon, Vector2.zero, CursorMode.Auto);
     }
 
     // Start 버튼에 연결할 함수입니다
     public void OnStartButtonClick()
     {
         StartCoroutine(nameof(UnableStartUI));
-        // @charotiti9 TODO: 손님 풀을 미리 만들어두어야합니다. 지금은 자리가 마땅치 않아서 게임 시작 버튼을 누르면 생성하도록 만들었습니다.
-        // 추후 더 괜찮은 자리가 나오면 자리를 옮겨줍시다.
-        ConsumerManager.Instance.InitializeConsumerManagerSetting();
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
@@ -58,12 +67,14 @@ public class GameManager : Singleton<GameManager>
     private void StartGame()
     {
         isGameStarted = true;
+        gameStartTime = Time.time;
         startCanvas.SetActive(false);
         inGameCanvas.SetActive(true);
         StartCoroutine(UpdateGame());
 
         FinanceManager.Instance.OnGameEnter();
         ConsumerManager.Instance.StartSpawn();
+        TrashManager.Instance.StartSpawn();
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
     }
@@ -72,6 +83,7 @@ public class GameManager : Singleton<GameManager>
     {
         while (isGameStarted)
         {
+            SpriteDragHandler.Instance.UpdateHandler();
             SpriteClickHandler.Instance.UpdateHandler();
             yield return null;
         }
@@ -84,6 +96,7 @@ public class GameManager : Singleton<GameManager>
         FinanceManager.Instance.OnGameEnd();
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
         ConsumerManager.Instance.StopSpawn();
+        TrashManager.Instance.StopSpawn();
         // 생성했던 재료들을 모두 비활성화합니다.
         IngredientManager.Instance.OnGameEnd();
 

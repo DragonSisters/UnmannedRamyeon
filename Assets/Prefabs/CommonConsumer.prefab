@@ -75,6 +75,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetIngredientUI: {fileID: 6853413148259845086}
   SpeechBubbleUI: {fileID: 2760120231888590067}
+  MoodFeedbackUI: {fileID: 1453233349142835584}
   ingredientUis:
   - {fileID: 9179223328281189373}
   - {fileID: 4183970122048812710}
@@ -82,6 +83,12 @@ MonoBehaviour:
   - {fileID: 7470063719677023158}
   speechBubbleText: {fileID: 5209001187431200864}
   speechBubbleImage: {fileID: 886406454319635642}
+  moodAnimation: {fileID: 7012630701328199490}
+  moodTextures:
+  - {fileID: 21300000, guid: 75ec65f7889ff0a4c86e29e9cefb2e0a, type: 3}
+  - {fileID: 21300000, guid: 46b80f2caf7255f43a62c1ce4f958f0a, type: 3}
+  - {fileID: 21300000, guid: 28bcc4a60f77c294cab8a89040806f89, type: 3}
+  - {fileID: 21300000, guid: 81e7bf36e7c811c44bd305edc39e6dc7, type: 3}
 --- !u!114 &5369129573054951317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -407,6 +414,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4347217313075746640, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4441302288876476877, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0.5
@@ -526,6 +537,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1542244687b07144ebe0b0e84d83d635, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1453233349142835584 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4347217313075746640, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+  m_PrefabInstance: {fileID: 2917918133184767696}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2760120231888590067 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1023282139588768291, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
@@ -561,6 +577,11 @@ MonoBehaviour:
 --- !u!1 &6853413148259845086 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8602633846562956558, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
+  m_PrefabInstance: {fileID: 2917918133184767696}
+  m_PrefabAsset: {fileID: 0}
+--- !u!111 &7012630701328199490 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 5273531970168310162, guid: 23e4150999c43e243a2aabcd199ee95a, type: 3}
   m_PrefabInstance: {fileID: 2917918133184767696}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7470063719677023158 stripped

@@ -42,9 +42,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void InitializeConsumerManagerSetting()
     {
-        startTime = Time.time;
-        gameDuration = GameManager.Instance.GameDuration;
-
         activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
 
         // 모든 오브젝트 정리
@@ -77,6 +74,9 @@ public class ConsumerManager : Singleton<ConsumerManager>
             {
                 StopCoroutine(despawnCoroutine);
             }
+
+            startTime = GameManager.Instance.GameStartTime;
+            gameDuration = GameManager.Instance.GameDuration;
 
             spawnCoroutine = StartCoroutine(SpawnRoutine()); 
             despawnCoroutine = StartCoroutine(DespawnRoutine());
