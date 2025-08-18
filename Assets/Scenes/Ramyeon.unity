@@ -470,11 +470,11 @@ MonoBehaviour:
   poolSize: 10
   spawnAreaMax: {fileID: 845674786}
   spawnAreaMin: {fileID: 886228600}
-  minSpawnInterval: 3
+  minSpawnInterval: 5
   maxSpawnInterval: 10
   maxActiveLimit: 5
   spawnStartDelay: 30
-  spawnProbability: 0.7
+  spawnProbability: 0.6
 --- !u!4 &319635784
 Transform:
   m_ObjectHideFlags: 0

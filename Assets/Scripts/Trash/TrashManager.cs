@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TrashManager : Singleton<TrashManager>
 {
@@ -28,6 +29,7 @@ public class TrashManager : Singleton<TrashManager>
     private Coroutine spawnCoroutine;
     private Coroutine despawnCoroutine;
     private float startTime;
+    private float navMeshSampleRadius = 3f; // NavMesh 샘플링 반경
 
     public void Initialize()
     {
@@ -148,10 +150,22 @@ public class TrashManager : Singleton<TrashManager>
         }
 
         var obj = trashPool.GetOrCreate();
-        obj.transform.position = new Vector2(
+        var position = new Vector2(
             Random.Range(spawnAreaMin.position.x, spawnAreaMax.position.x),
             Random.Range(spawnAreaMin.position.y, spawnAreaMax.position.y)
         );
+
+        // navMesh가 닿는 범위 안에 있는지 검사하고 닿지 않는다면 가장 가까운 곳으로 위치시키
+        if (NavMesh.SamplePosition(position, out var hit, navMeshSampleRadius, NavMesh.AllAreas))
+        {
+            position = hit.position;
+        }
+        else
+        {
+            Debug.LogWarning("스폰 위치가 NavMesh에 닿는 곳이 없습니다.");
+        }
+
+        obj.transform.position = position;
         obj.OnSpawn();
     }
 
