@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
     [Header("시작 화면 관련 변수들")]
     [SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject btn_Start;
-    [SerializeField] private GameObject img_Start;
+    [SerializeField] private GameObject img_Title;
     [SerializeField] private Texture2D cursorIcon;
     public Texture2D CursorIcon => cursorIcon;
     private const float START_DELAY_TIME = 1f;
 
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
+    [SerializeField] private Timer timer;
     [SerializeField] private float gameDuration = 180;
     public float GameDuration => gameDuration;
     public float GameStartTime => gameStartTime;
@@ -56,14 +56,13 @@ public class GameManager : Singleton<GameManager>
     {
         SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         btn_Start.SetActive(false);
-        img_Start.SetActive(true);
+        img_Title.SetActive(true);
         yield return new WaitForSeconds(START_DELAY_TIME);
-        img_Start.SetActive(false);
+        img_Title.SetActive(false);
         StartGame();
     }
 
     // inGameUI 를 활성화합니다
-    // 활성화되며 캔버스에 붙어있는 TimerUI 가 자동으로 실행됩니다
     private void StartGame()
     {
         isGameStarted = true;
@@ -77,6 +76,7 @@ public class GameManager : Singleton<GameManager>
         TrashManager.Instance.StartSpawn();
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
+        timer.ExecuteTimer();
     }
 
     private IEnumerator UpdateGame()
@@ -92,6 +92,7 @@ public class GameManager : Singleton<GameManager>
     public void EndGame()
     {
         isGameStarted = false;
+        inGameCanvas.SetActive(false);
 
         FinanceManager.Instance.OnGameEnd();
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
@@ -115,5 +116,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.End);
+    }
+
+    public void OnRestartButtonClick()
+    {
+        endCanvas.SetActive(false);
+        startCanvas.SetActive(true);
+        btn_Start.SetActive(true);
+        img_Title.SetActive(true);
+
+        SoundManager.Instance.PlayBgmSound(BgmSoundType.Start);
     }
 }

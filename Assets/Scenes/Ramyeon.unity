@@ -2798,10 +2798,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startCanvas: {fileID: 484616438}
   btn_Start: {fileID: 1670351672}
-  img_Start: {fileID: 1375198433}
+  img_Title: {fileID: 1375198433}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
-  gameDuration: 180
+  gameDuration: 10
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
   txt_MoneySuccess: {fileID: 778596791}
@@ -3035,7 +3035,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2845287433870563890, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1855267297}
     - target: {fileID: 6601293359447222136, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1855267297}
+    - target: {fileID: 8177556428609957892, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1855267297}
