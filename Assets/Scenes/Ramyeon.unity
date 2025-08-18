@@ -2813,7 +2813,7 @@ MonoBehaviour:
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
   timer: {fileID: 329972254}
-  gameDuration: 10
+  gameDuration: 180
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
   txt_MoneySuccess: {fileID: 778596791}
