@@ -16,7 +16,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private Texture2D cleaningCursorIcon;
     private Vector2 mousePrePosition;
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
-    private float alphaDecreaseAmount = 0.02f; // 알파값 감소량
+    private float alphaDecreaseAmount = 0.03f; // 알파값 감소량
 
     public float affectRadius = 2f; // Trash 주변 영향 반경
     public int moodDecraseAmount = 31; // Trash 주변 영향 반경
@@ -116,7 +116,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         while (!ShouldDespawn())
         {
             AffectNearbyConsumers();
-            yield return new WaitForSeconds(1f); // 1초마다 영향을 줍니다.
+            yield return null;
         }
     }
 
