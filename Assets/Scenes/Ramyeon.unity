@@ -474,7 +474,7 @@ MonoBehaviour:
   maxSpawnInterval: 10
   maxActiveLimit: 5
   spawnStartDelay: 30
-  spawnProbability: 0.6
+  spawnProbability: 0.4
 --- !u!4 &319635784
 Transform:
   m_ObjectHideFlags: 0
