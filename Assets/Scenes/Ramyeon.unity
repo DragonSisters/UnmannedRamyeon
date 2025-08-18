@@ -495,6 +495,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5108156327801712018, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 2337158840259677246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &329972254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 679590046620698560, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 2337158840259677246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329972252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b5a28b15c30c44aa7abdd4f2895402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &340036697
 GameObject:
   m_ObjectHideFlags: 0
@@ -2801,6 +2812,7 @@ MonoBehaviour:
   img_Title: {fileID: 1375198433}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
+  timer: {fileID: 329972254}
   gameDuration: 10
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}

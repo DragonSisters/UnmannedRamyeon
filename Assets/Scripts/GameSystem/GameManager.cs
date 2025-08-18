@@ -46,6 +46,7 @@ public class GameManager : Singleton<GameManager>
     // Start 버튼에 연결할 함수입니다
     public void OnStartButtonClick()
     {
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
         StartCoroutine(nameof(UnableStartUI));
     }
 
@@ -120,6 +121,8 @@ public class GameManager : Singleton<GameManager>
 
     public void OnRestartButtonClick()
     {
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
+
         endCanvas.SetActive(false);
         startCanvas.SetActive(true);
         btn_Start.SetActive(true);
