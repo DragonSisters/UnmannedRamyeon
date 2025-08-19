@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
     [Header("시작 화면 관련 변수들")]
     [SerializeField] private GameObject startCanvas;
     [SerializeField] private GameObject btn_Start;
-    [SerializeField] private GameObject img_Title;
+    [SerializeField] private GameObject obj_Title;
     [SerializeField] private Texture2D cursorIcon;
     public Texture2D CursorIcon => cursorIcon;
     private const float START_DELAY_TIME = 1f;
@@ -56,10 +56,11 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator UnableStartUI()
     {
         SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
-        btn_Start.SetActive(false);
-        img_Title.SetActive(true);
+        obj_Title.SetActive(true);
+        StartCoroutine(UIEffectManager.Instance.Flicker(obj_Title.GetComponent<Image>()));
         yield return new WaitForSeconds(START_DELAY_TIME);
-        img_Title.SetActive(false);
+        obj_Title.SetActive(false);
+        btn_Start.SetActive(false);
         StartGame();
     }
 
@@ -126,7 +127,7 @@ public class GameManager : Singleton<GameManager>
         endCanvas.SetActive(false);
         startCanvas.SetActive(true);
         btn_Start.SetActive(true);
-        img_Title.SetActive(true);
+        obj_Title.SetActive(true);
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.Start);
     }
