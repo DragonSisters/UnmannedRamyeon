@@ -18,12 +18,11 @@ public class UIEffectManager : Singleton<UIEffectManager>
 
         for (int i = 0; i < flickerCount; i++) // 2번 깜빡임
         {
-            // 어두워짐 (네온이 순간적으로 꺼지는 느낌) + 조금 작아짐
+            // 어두워짐 (네온이 순간적으로 꺼지는 느낌)
             targetImage.color = originalColor * dimFactor;
-            targetImage.rectTransform.localScale = originalScale;
             yield return new WaitForSeconds(firstFlickerInterval);
 
-            // 다시 밝아짐 + 조금 커짐
+            // 다시 밝아짐 + 순간적으로 조금 커짐
             targetImage.color = originalColor;
             targetImage.rectTransform.localScale = originalScale * scaleFactor;
             yield return new WaitForSeconds(secondFlickerInterval);

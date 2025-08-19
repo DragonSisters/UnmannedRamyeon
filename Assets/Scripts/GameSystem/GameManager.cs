@@ -7,7 +7,6 @@ public class GameManager : Singleton<GameManager>
 {
     [Header("시작 화면 관련 변수들")]
     [SerializeField] private GameObject startCanvas;
-    [SerializeField] private GameObject btn_Start;
     [SerializeField] private GameObject obj_Title;
     [SerializeField] private Texture2D cursorIcon;
     public Texture2D CursorIcon => cursorIcon;
@@ -73,7 +72,6 @@ public class GameManager : Singleton<GameManager>
         yield return new WaitForSeconds(START_DELAY_TIME);
 
         obj_Title.SetActive(false);
-        btn_Start.SetActive(false);
 
         StartGame();
     }
@@ -140,7 +138,6 @@ public class GameManager : Singleton<GameManager>
 
         endCanvas.SetActive(false);
         startCanvas.SetActive(true);
-        btn_Start.SetActive(true);
         obj_Title.SetActive(true);
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.Start);
