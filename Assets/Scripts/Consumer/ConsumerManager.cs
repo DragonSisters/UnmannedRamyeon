@@ -29,9 +29,13 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     [Header("최대 소환 갯수")]
     [SerializeField] private int minActiveLimit = 1;
-    [SerializeField] private int maxActiveLimit = 15;
+    [SerializeField] private int maxEasyActiveLimit = 8;
+    [SerializeField] private int maxHardActiveLimit = 15;
+    [SerializeField] private int maxActiveLimit;
     [SerializeField] private int minRecipeActiveLimit = 1;
-    [SerializeField] private int maxRecipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
+    [SerializeField] private int maxEasyRecipeActiveLimit = 3;
+    [SerializeField] private int maxHardRecipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
+    [SerializeField] private int maxRecipeActiveLimit;
     private int currentActiveLimit;
     private int currentRecipeActiveLimit;
 
@@ -45,9 +49,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void InitializeConsumerManagerSetting()
     {
-        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
-        recipeActiveCountCurve = AnimationCurve.Linear(0, minRecipeActiveLimit, 1, maxRecipeActiveLimit);
-
         // 모든 오브젝트 정리
         if (pools != null)
         {
@@ -66,8 +67,22 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
     }
 
-    public void StartSpawn()
+    public void StartSpawn(bool isHardMode)
     {
+        if(isHardMode)
+        {
+            maxActiveLimit = maxHardActiveLimit;
+            maxRecipeActiveLimit = maxHardRecipeActiveLimit;
+        }
+        else
+        {
+            maxActiveLimit = maxEasyActiveLimit;
+            maxRecipeActiveLimit = maxEasyRecipeActiveLimit;
+        }
+
+        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
+        recipeActiveCountCurve = AnimationCurve.Linear(0, minRecipeActiveLimit, 1, maxRecipeActiveLimit);
+
         if (IsAvailableSpawn())
         {
             if (spawnCoroutine != null)
@@ -82,7 +97,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             startTime = GameManager.Instance.GameStartTime;
             gameDuration = GameManager.Instance.GameDuration;
 
-            spawnCoroutine = StartCoroutine(SpawnRoutine()); 
+            spawnCoroutine = StartCoroutine(SpawnRoutine());
             despawnCoroutine = StartCoroutine(DespawnRoutine());
         }
     }

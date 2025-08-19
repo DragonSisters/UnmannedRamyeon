@@ -16,6 +16,8 @@ public class GameManager : Singleton<GameManager>
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
     [SerializeField] private Timer timer;
+    [SerializeField] private Button btn_easyMode;
+    [SerializeField] private Button btn_hardMode;
     [SerializeField] private float gameDuration = 180;
     public float GameDuration => gameDuration;
     public float GameStartTime => gameStartTime;
@@ -23,6 +25,8 @@ public class GameManager : Singleton<GameManager>
 
     public bool IsGameStarted => isGameStarted;
     private bool isGameStarted;
+    public bool IsHardMode => isHardMode;
+    private bool isHardMode = false;
 
     [Header("EndCanvas 관련 변수들")]
     [SerializeField] private GameObject endCanvas;
@@ -34,6 +38,7 @@ public class GameManager : Singleton<GameManager>
     private void Start()
     {
         SetCursor(cursorIcon);
+        SetModeButtons();
         ConsumerManager.Instance.InitializeConsumerManagerSetting();
         TrashManager.Instance.Initialize();
     }
@@ -43,7 +48,13 @@ public class GameManager : Singleton<GameManager>
         Cursor.SetCursor(icon, Vector2.zero, CursorMode.Auto);
     }
 
-    // Start 버튼에 연결할 함수입니다
+    private void SetModeButtons()
+    {
+        btn_easyMode.onClick.AddListener(() => isHardMode = false);
+        btn_hardMode.onClick.AddListener(() => isHardMode = true);  
+    }
+
+    // Start 버튼에 연결된 함수입니다
     public void OnStartButtonClick()
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
@@ -58,9 +69,12 @@ public class GameManager : Singleton<GameManager>
         SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
         obj_Title.SetActive(true);
         StartCoroutine(UIEffectManager.Instance.Flicker(obj_Title.GetComponent<Image>()));
+
         yield return new WaitForSeconds(START_DELAY_TIME);
+
         obj_Title.SetActive(false);
         btn_Start.SetActive(false);
+
         StartGame();
     }
 
@@ -74,7 +88,7 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(UpdateGame());
 
         FinanceManager.Instance.OnGameEnter();
-        ConsumerManager.Instance.StartSpawn();
+        ConsumerManager.Instance.StartSpawn(isHardMode);
         TrashManager.Instance.StartSpawn();
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();

@@ -33,7 +33,7 @@ public class DebugManager : MonoBehaviour
         // 손님시스템
         if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StartSpawn"))
         {
-            ConsumerManager.Instance.StartSpawn();
+            ConsumerManager.Instance.StartSpawn(true); // @anditsoon TODO: 수정 후 에러 떠서 일단은 임의로 하드모드로 설정합니다. 어차피 디버그 매니저라 나중에 지울 거 같아서요.
         }
         if (GUI.Button(new Rect(10, CountUpY(), 150, 30), "Consumer StopSpawn"))
         {
