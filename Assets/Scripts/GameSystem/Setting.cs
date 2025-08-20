@@ -24,12 +24,22 @@ public class Setting : MonoBehaviour
     // Bgm 슬라이더 (slider_Bgm) 에 연결된 함수입니다.
     public void OnBgmVolumeChanged()
     {
+        if (slider_bgm == null)
+        {
+            Debug.LogWarning("slider_bgm 가 할당되지 않았습니다.");
+            return;
+        }
         SoundManager.Instance.SetBgmVolume(slider_bgm.value);
     }
 
     // Effect 슬라이더 (slider_Effect) 에 연결된 함수입니다.
     public void OnEffectVolumeChanged()
     {
+        if (slider_effect == null)
+        {
+            Debug.LogWarning("slider_effect 가 할당되지 않았습니다.");
+            return;
+        }
         SoundManager.Instance.SetEffectVolume(slider_effect.value);
     }
 

@@ -2825,7 +2825,7 @@ MonoBehaviour:
   timer: {fileID: 329972254}
   btn_easyMode: {fileID: 2098935368}
   btn_hardMode: {fileID: 1670351673}
-  gameDuration: 10
+  gameDuration: 180
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
   txt_MoneySuccess: {fileID: 778596791}
