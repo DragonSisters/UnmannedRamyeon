@@ -58,8 +58,13 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource ContinousAudio;
 
     /// <summary>
+    /// Audio Volume
+    /// </summary>
+    [Range(0f, 1f)] private float bgmVolume = 0.5f;     // BGM 볼륨
+    [Range(0f, 1f)] private float effectVolume = 0.5f;  // 효과음(Effect + Continuous) 볼륨
+
+    /// <summary>
     /// audio clip 을 여러 개 담아 놓을 변수
-    /// Effect 를 세부적으로 나누고 싶으면 더 나눠도 됩니다. 작은 볼륨의 게임이라 일단은 하나로 만들었습니다.
     /// </summary>
     [Header("Effect Clips")]
     public List<EffectSoundEntry> EffectSoundEntries = new();
@@ -155,5 +160,18 @@ public class SoundManager : Singleton<SoundManager>
             ContinousAudio.Stop();
             curContinousSoundType = ContinousSoundType.Invalid; // 현재 연속 사운드 타입 초기화
         }
+    }
+
+    public void SetEffectVolume(float volume)
+    {
+        effectVolume = Mathf.Clamp01(volume);
+        EffectAudio.volume = effectVolume;
+        ContinousAudio.volume = effectVolume;
+    }
+
+    public void SetBgmVolume(float volume)
+    {
+        bgmVolume = Mathf.Clamp01(volume);
+        BgmAudio.volume = bgmVolume;
     }
 }

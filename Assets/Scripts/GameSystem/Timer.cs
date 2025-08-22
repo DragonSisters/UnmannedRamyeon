@@ -10,8 +10,7 @@ public class Timer : MonoBehaviour
     private float gameDuration;
     private float curLeftTime;
 
-    // GameManager 에 의해 inGameCanvas 가 활성화되면 자동으로 실행됩니다.
-    void Start()
+    public void ExecuteTimer()
     {
         gameDuration = GameManager.Instance.GameDuration;
         StartCoroutine(nameof(StartTimer));

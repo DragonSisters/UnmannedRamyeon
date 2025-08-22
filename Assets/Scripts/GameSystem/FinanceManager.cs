@@ -40,6 +40,9 @@ public class FinanceManager : Singleton<FinanceManager>
         priceUiPool = new ObjectPool<PriceUI>(priceUiPrefab, poolSize, parent);
         // 목표 매출액 UI 업데이트
         goalMoneyUi.text = string.Format("목표금액: {0}원", goalMoney);
+        // currentMoney 초기화
+        currentMoney = 0;
+        UpdatePrices();
     }
 
     public void OnGameEnd()

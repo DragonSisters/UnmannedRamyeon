@@ -495,6 +495,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5108156327801712018, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 2337158840259677246}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &329972254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 679590046620698560, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 2337158840259677246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329972252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01b5a28b15c30c44aa7abdd4f2895402, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &340036697
 GameObject:
   m_ObjectHideFlags: 0
@@ -1831,8 +1842,13 @@ MonoBehaviour:
     m_RotationOrder: 4
   spawnIntervalLimit: 0.5
   minActiveLimit: 1
+  maxEasyActiveLimit: 8
+  maxHardActiveLimit: 15
   maxActiveLimit: 10
-  recipeActiveLimit: 5
+  minRecipeActiveLimit: 1
+  maxEasyRecipeActiveLimit: 3
+  maxHardRecipeActiveLimit: 5
+  maxRecipeActiveLimit: 5
 --- !u!4 &862743925
 Transform:
   m_ObjectHideFlags: 0
@@ -2576,11 +2592,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 969421795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1670351672 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7410153038673810202, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+--- !u!114 &1670351673 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6601293359447222136, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 2337158840259677246}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1708394661 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4536369648372881766, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
@@ -2797,10 +2819,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startCanvas: {fileID: 484616438}
-  btn_Start: {fileID: 1670351672}
-  img_Start: {fileID: 1375198433}
+  obj_Title: {fileID: 1375198433}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
+  timer: {fileID: 329972254}
+  btn_easyMode: {fileID: 2098935368}
+  btn_hardMode: {fileID: 1670351673}
   gameDuration: 180
   endCanvas: {fileID: 1708394661}
   img_Success: {fileID: 1220836009}
@@ -2900,6 +2924,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 969421795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2098935368 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5838477595640836635, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 2337158840259677246}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2128109390
 GameObject:
   m_ObjectHideFlags: 0
@@ -3035,7 +3070,19 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2845287433870563890, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1855267297}
+    - target: {fileID: 5838477595640836635, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1855267297}
     - target: {fileID: 6601293359447222136, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1855267297}
+    - target: {fileID: 8177556428609957892, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1855267297}

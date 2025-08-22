@@ -23,14 +23,21 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [SerializeField] private AnimationCurve spawnSpeedCurve = new AnimationCurve();
     [SerializeField] private float spawnIntervalLimit = 0.5f;
 
-    // 최대 소환 개수 변화 곡선
+    // 최대 소환 개수 변화 곡선 - 일반 손님 레시피 손님 따로
     private AnimationCurve activeCountCurve = new AnimationCurve();
+    private AnimationCurve recipeActiveCountCurve = new AnimationCurve();
 
     [Header("최대 소환 갯수")]
     [SerializeField] private int minActiveLimit = 1;
-    [SerializeField] private int maxActiveLimit = 15;
-    [SerializeField] private int recipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
-    private int currentActiveLimit = 3;
+    [SerializeField] private int maxEasyActiveLimit = 8;
+    [SerializeField] private int maxHardActiveLimit = 15;
+    [SerializeField] private int maxActiveLimit;
+    [SerializeField] private int minRecipeActiveLimit = 1;
+    [SerializeField] private int maxEasyRecipeActiveLimit = 3;
+    [SerializeField] private int maxHardRecipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
+    [SerializeField] private int maxRecipeActiveLimit;
+    private int currentActiveLimit;
+    private int currentRecipeActiveLimit;
 
     private Dictionary<GameObject, ObjectPool<Consumer>> pools;
 
@@ -42,8 +49,6 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
     public void InitializeConsumerManagerSetting()
     {
-        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
-
         // 모든 오브젝트 정리
         if (pools != null)
         {
@@ -62,8 +67,22 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
     }
 
-    public void StartSpawn()
+    public void StartSpawn(bool isHardMode)
     {
+        if(isHardMode)
+        {
+            maxActiveLimit = maxHardActiveLimit;
+            maxRecipeActiveLimit = maxHardRecipeActiveLimit;
+        }
+        else
+        {
+            maxActiveLimit = maxEasyActiveLimit;
+            maxRecipeActiveLimit = maxEasyRecipeActiveLimit;
+        }
+
+        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
+        recipeActiveCountCurve = AnimationCurve.Linear(0, minRecipeActiveLimit, 1, maxRecipeActiveLimit);
+
         if (IsAvailableSpawn())
         {
             if (spawnCoroutine != null)
@@ -78,7 +97,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             startTime = GameManager.Instance.GameStartTime;
             gameDuration = GameManager.Instance.GameDuration;
 
-            spawnCoroutine = StartCoroutine(SpawnRoutine()); 
+            spawnCoroutine = StartCoroutine(SpawnRoutine());
             despawnCoroutine = StartCoroutine(DespawnRoutine());
         }
     }
@@ -139,6 +158,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
             float speedMultiplier = spawnSpeedCurve.Evaluate(t);
             float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval) * speedMultiplier;
             currentActiveLimit = Mathf.RoundToInt(activeCountCurve.Evaluate(t));
+            currentRecipeActiveLimit = Mathf.RoundToInt(recipeActiveCountCurve.Evaluate(t));
 
             yield return new WaitForSeconds(waitTime);
 
@@ -183,7 +203,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
         if(isRecipe)
         {
-            if (!pools[prefab].CanActiveMore(recipeActiveLimit))
+            if (!pools[prefab].CanActiveMore(currentRecipeActiveLimit))
             {
                 return;
             }
