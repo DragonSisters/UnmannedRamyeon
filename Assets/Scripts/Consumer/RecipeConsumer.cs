@@ -136,7 +136,7 @@ public class RecipeConsumer : Consumer
         IngredientManager.Instance.ReceiveRecipeConsumer(this);
     }
 
-    internal override void HandleChildUnclicked()
+    internal override void HandleChildUnclick()
     {
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
