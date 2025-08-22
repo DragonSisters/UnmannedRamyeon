@@ -452,11 +452,13 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 76e36b2291c2ee94ba31b309b7c34276, type: 3}
   - Type: 6
     Clip: {fileID: 8300000, guid: d7aa45c776040f34f864de2f8ac07512, type: 3}
+  - Type: 7
+    Clip: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
   BgmSoundEntries:
   - Type: 0
-    Clip: {fileID: 8300000, guid: ce2bdc71de8221046b5109f02c551f46, type: 3}
+    Clip: {fileID: 8300000, guid: 315174e311f641540b57cb678218ff93, type: 3}
   - Type: 1
-    Clip: {fileID: 8300000, guid: 2cebe5ef59f447d4d803665e3ecf1a2f, type: 3}
+    Clip: {fileID: 8300000, guid: 0175e9dcbfb21bf47aacd1411b42727d, type: 3}
   - Type: 2
     Clip: {fileID: 8300000, guid: 9669960e415ea604d81fb0784634df79, type: 3}
   ContinousSoundEntries:

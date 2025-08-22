@@ -474,7 +474,8 @@ MonoBehaviour:
   maxSpawnInterval: 10
   maxActiveLimit: 5
   spawnStartDelay: 30
-  spawnProbability: 0.4
+  hardModeSpawnProbability: 0.7
+  easyModeSpawnProbability: 0.5
 --- !u!4 &319635784
 Transform:
   m_ObjectHideFlags: 0
@@ -2365,9 +2366,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 969421795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1375198433 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5156528473305168521, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+--- !u!111 &1375198437 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 2629356911440418761, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 2337158840259677246}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1379267038
@@ -2819,7 +2820,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startCanvas: {fileID: 484616438}
-  obj_Title: {fileID: 1375198433}
+  startGameAnimation: {fileID: 1375198437}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
   timer: {fileID: 329972254}

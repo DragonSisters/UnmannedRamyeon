@@ -11,6 +11,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
     private SpriteRenderer spriteRenderer;
     private Color originColor = new Color(1f, 1f, 1f, 1f); // 초기 색상은 흰색, 알파값은 1로 설정합니다.
+    private Vector2 colliderSize = new Vector2(1.5f, 1.5f);
     private float thredholdAlpha = 0.1f; // 알파값이 이 값 이하로 떨어지면 파괴됩니다.
     private Texture2D originCursorIcon;
     private Texture2D cleaningCursorIcon;
@@ -18,6 +19,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
     private float alphaDecreaseAmount = 0.03f; // 알파값 감소량
 
+    private float moodDecreaseDelayTime = 2f; // Trash가 생성되고, 기분이 내려갈때까지 걸리는 딜레이
     public float affectRadius = 2f; // Trash 주변 영향 반경
     public int moodDecraseAmount = 31; // Trash 주변 영향 반경
     private HashSet<Consumer> affectedConsumers = new();
@@ -26,7 +28,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
 
     private void Initiailize()
-    { 
+    {
         //  초기화
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
@@ -36,12 +38,13 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         spriteRenderer.sprite = trashImages[Random.Range(0, trashImages.Count)];
         spriteRenderer.color = originColor;
 
-        var collider = gameObject.GetComponent<PolygonCollider2D>();
+        var collider = gameObject.GetComponent<BoxCollider2D>();
         if (collider == null)
         {
-            collider = gameObject.AddComponent<PolygonCollider2D>();
+            collider = gameObject.AddComponent<BoxCollider2D>();
+            collider.isTrigger = true;
+            collider.size = colliderSize;
         }
-        collider.isTrigger = true;
 
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
@@ -85,6 +88,11 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
     public void OnSpriteDragging()
     {
+        if(ShouldDespawn())
+        {
+            return;
+        }
+
         // 마우스가 움직이고 있다면 알파값을 조절한다
         // 이전 마우스 값과 비교해서 얼만큼 움직였는지 계산하여 distance가 일정이상일 때 움직였다고 판단한다
         Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -112,6 +120,9 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
     private IEnumerator DecreaseMood()
     {
+        // 쓰레기가 생겼을 때 바로 기분 깎지 말고 한 1초뒤에 깎게 하기
+        yield return new WaitForSeconds(moodDecreaseDelayTime);
+
         // Trash가 생성된 후 일정 시간마다 주변 Consumer의 기분을 감소시킵니다.
         while (!ShouldDespawn())
         {

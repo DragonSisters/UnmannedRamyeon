@@ -79,7 +79,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         StopCoroutine(UpdateCustomerBehavior());
         StopCoroutine(HandleChildUpdate());
-        consumerUI.DeactivateAllFeedbackUIs();
+
         //외형 삭제
         Destroy(appearanceGameObject);
     }
@@ -138,6 +138,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
             speechScript = gameObject.AddComponent<ConsumerSpeech>();
         }
         speechScript.Initialize(consumerUI);
+
+        consumerUI.Initialize();
         consumerUI.TransferClickEvent += WrongIngredientSpeech;
 
         SetState(ConsumerState.Invalid);
