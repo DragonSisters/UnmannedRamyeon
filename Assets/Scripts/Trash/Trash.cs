@@ -11,6 +11,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
     private SpriteRenderer spriteRenderer;
     private Color originColor = new Color(1f, 1f, 1f, 1f); // 초기 색상은 흰색, 알파값은 1로 설정합니다.
+    private Vector2 colliderSize = new Vector2(1.5f, 1.5f);
     private float thredholdAlpha = 0.1f; // 알파값이 이 값 이하로 떨어지면 파괴됩니다.
     private Texture2D originCursorIcon;
     private Texture2D cleaningCursorIcon;
@@ -36,12 +37,13 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
         spriteRenderer.sprite = trashImages[Random.Range(0, trashImages.Count)];
         spriteRenderer.color = originColor;
 
-        var collider = gameObject.GetComponent<PolygonCollider2D>();
+        var collider = gameObject.GetComponent<BoxCollider2D>();
         if (collider == null)
         {
-            collider = gameObject.AddComponent<PolygonCollider2D>();
+            collider = gameObject.AddComponent<BoxCollider2D>();
+            collider.isTrigger = true;
+            collider.size = colliderSize;
         }
-        collider.isTrigger = true;
 
         originCursorIcon = GameManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
