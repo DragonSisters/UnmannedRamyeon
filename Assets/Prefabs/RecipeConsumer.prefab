@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 2016393823506895713}
   - component: {fileID: 5171296980062182679}
   - component: {fileID: 2508191280378125581}
+  - component: {fileID: 8754026810042307967}
   m_Layer: 0
   m_Name: Img_TimerBackground
   m_TagString: Untagged
@@ -111,6 +112,23 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!111 &8754026810042307967
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4496291105666656674}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: d766cc422edf9594c90c2653e7836dcd, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: d766cc422edf9594c90c2653e7836dcd, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &7049942040751406222
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,6 +317,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   consumerTimerBackground: {fileID: 2508191280378125581}
   consumerTimerFill: {fileID: 8899943076406536653}
+  startFillColor: {r: 0.1622122, g: 0.49685526, b: 0.08280916, a: 1}
+  closeToEndFillColor: {r: 0.8113208, g: 0.06378291, b: 0.06378291, a: 1}
+  shakeAnimation: {fileID: 8754026810042307967}
 --- !u!114 &5369129573054951317
 MonoBehaviour:
   m_ObjectHideFlags: 0

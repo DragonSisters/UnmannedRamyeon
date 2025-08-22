@@ -59,9 +59,6 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(nameof(StartGameEffect));
     }
 
-    // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
-    // @anditsoon TODO: 지금은 임시로 1초 간 나타났다 사라지게 만들었지만, 추후 날아오는 효과라던가 깜박이는 효과 등을 추가할 예정입니다.
-    // 1초 뒤 게임 시작 UI 가 사라지고 인게임 UI 가 나타납니다.
     private IEnumerator StartGameEffect()
     {
         if (!startGameAnimation.isPlaying)

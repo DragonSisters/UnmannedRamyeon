@@ -6,8 +6,13 @@ public class RecipeConsumerTimerUI : MonoBehaviour
 {
     [SerializeField] private Image consumerTimerBackground;
     [SerializeField] private Image consumerTimerFill;
+    [SerializeField] private Color startFillColor;
+    [SerializeField] private Color closeToEndFillColor;
+    [SerializeField] private Animation shakeAnimation;
     private float elapsedTime = 0;
     private float fillAmount = 0;
+    private float closeToEnd = 0.35f;
+    private bool isCloseToEnd = false;
 
     public IEnumerator FillTimerRoutine(float stayTime)
     {
@@ -15,31 +20,39 @@ public class RecipeConsumerTimerUI : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
             fillAmount = Mathf.Clamp01(1 - elapsedTime / stayTime);
+
+            if(fillAmount < closeToEnd && !isCloseToEnd)
+            {
+                isCloseToEnd = true;
+                consumerTimerFill.color = closeToEndFillColor;
+                
+                if(!shakeAnimation.isPlaying)
+                {
+                    shakeAnimation.Play();
+                }
+            }
+
             consumerTimerFill.fillAmount = fillAmount;
             yield return null;
         }
 
         if(elapsedTime > stayTime)
         {
-            elapsedTime = 0;
             DeactivateTimer();
         }
     }
 
-    public void FillTimer(float fillAmount)
-    {
-        fillAmount = Mathf.Clamp01(fillAmount);
-        consumerTimerFill.fillAmount = fillAmount;
-    }
-
     public void ActivateTimer()
     {
+        consumerTimerFill.color = startFillColor;
         consumerTimerBackground.gameObject.SetActive(true);
         consumerTimerFill.gameObject.SetActive(true);
     }
 
     public void DeactivateTimer()
     {
+        elapsedTime = 0;
+        isCloseToEnd = false;
         consumerTimerFill.fillAmount = 1;
         consumerTimerBackground.gameObject.SetActive(false);
         consumerTimerFill.gameObject.SetActive(false);
