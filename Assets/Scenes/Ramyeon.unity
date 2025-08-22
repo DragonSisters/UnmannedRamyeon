@@ -474,7 +474,8 @@ MonoBehaviour:
   maxSpawnInterval: 10
   maxActiveLimit: 5
   spawnStartDelay: 30
-  spawnProbability: 0.4
+  hardModeSpawnProbability: 0.7
+  easyModeSpawnProbability: 0.5
 --- !u!4 &319635784
 Transform:
   m_ObjectHideFlags: 0
@@ -1957,6 +1958,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.data[7].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 52320e590bf774734a288886eba557ba, type: 3}
+    - target: {fileID: 7716502257656899695, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
+      propertyPath: EffectSoundEntries.Array.data[7].Type
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8030835503685078360, guid: 66ec72fc8505b804d9d26082a7ea71b9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 9.333334
@@ -2365,9 +2378,9 @@ Transform:
   m_Children: []
   m_Father: {fileID: 969421795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1375198433 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5156528473305168521, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+--- !u!111 &1375198437 stripped
+Animation:
+  m_CorrespondingSourceObject: {fileID: 2629356911440418761, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 2337158840259677246}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1379267038
@@ -2819,7 +2832,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startCanvas: {fileID: 484616438}
-  obj_Title: {fileID: 1375198433}
+  startGameAnimation: {fileID: 1375198437}
   cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
   inGameCanvas: {fileID: 329972252}
   timer: {fileID: 329972254}

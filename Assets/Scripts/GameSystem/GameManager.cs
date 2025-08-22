@@ -7,10 +7,9 @@ public class GameManager : Singleton<GameManager>
 {
     [Header("시작 화면 관련 변수들")]
     [SerializeField] private GameObject startCanvas;
-    [SerializeField] private GameObject obj_Title;
+    [SerializeField] private Animation startGameAnimation;
     [SerializeField] private Texture2D cursorIcon;
     public Texture2D CursorIcon => cursorIcon;
-    private const float START_DELAY_TIME = 1f;
 
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
@@ -56,22 +55,21 @@ public class GameManager : Singleton<GameManager>
     // Start 버튼에 연결된 함수입니다
     public void OnStartButtonClick()
     {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
-        StartCoroutine(nameof(UnableStartUI));
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.GameStart);
+        StartCoroutine(nameof(StartGameEffet));
     }
 
     // 시작 화면에서 버튼이 사라지고, 게임이 시작된다는 UI (img_Start) 가 나옵니다.
     // @anditsoon TODO: 지금은 임시로 1초 간 나타났다 사라지게 만들었지만, 추후 날아오는 효과라던가 깜박이는 효과 등을 추가할 예정입니다.
     // 1초 뒤 게임 시작 UI 가 사라지고 인게임 UI 가 나타납니다.
-    private IEnumerator UnableStartUI()
+    private IEnumerator StartGameEffet()
     {
-        SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
-        obj_Title.SetActive(true);
-        StartCoroutine(UIEffectManager.Instance.Flicker(obj_Title.GetComponent<Image>()));
+        if (!startGameAnimation.isPlaying)
+        {
+            startGameAnimation.Play();
+        }
 
-        yield return new WaitForSeconds(START_DELAY_TIME);
-
-        obj_Title.SetActive(false);
+        yield return new WaitUntil(() => !startGameAnimation.isPlaying);
 
         StartGame();
     }
@@ -91,6 +89,7 @@ public class GameManager : Singleton<GameManager>
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
         timer.ExecuteTimer();
+        SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
     }
 
     private IEnumerator UpdateGame()
@@ -138,7 +137,6 @@ public class GameManager : Singleton<GameManager>
 
         endCanvas.SetActive(false);
         startCanvas.SetActive(true);
-        obj_Title.SetActive(true);
 
         SoundManager.Instance.PlayBgmSound(BgmSoundType.Start);
     }

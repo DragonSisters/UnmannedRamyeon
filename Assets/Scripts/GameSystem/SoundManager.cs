@@ -17,7 +17,8 @@ public enum EffectSoundType
     CoinGain,
     CoinLoss,
     WrongIngredientPick,
-    WrongIngredientCorrected
+    WrongIngredientCorrected,
+    GameStart
 }
 
 public enum ContinousSoundType
