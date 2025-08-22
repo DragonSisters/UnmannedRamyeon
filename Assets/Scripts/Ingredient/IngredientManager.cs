@@ -73,6 +73,8 @@ public class IngredientManager : Singleton<IngredientManager>
     public void OnGameEnd()
     {
         ActivateIngredientObjOnPosition(false);
+        currentRecipeConsumer = null;
+        HandleIngredientDeselectMode();
     }
 
     public void CreateIngredientObjOnPosition()

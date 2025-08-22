@@ -65,7 +65,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal abstract IEnumerator HandleChildIssue();
     internal abstract IEnumerator HandleChildUpdate();
     internal abstract void HandleChildClick();
-    internal abstract void HandleChildUnclicked();
+    internal abstract void HandleChildUnclick();
 
     public void OnSpawn()
     {
@@ -391,7 +391,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 
     public void OnSpriteDeselected()
     {
-        HandleChildUnclicked();
+        HandleChildUnclick();
     }
 
     public void WrongIngredientSpeech(int tmp = 0)

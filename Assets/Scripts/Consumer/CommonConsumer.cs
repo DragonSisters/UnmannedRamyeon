@@ -47,7 +47,7 @@ public class CommonConsumer : Consumer
         // 이슈상태가 아니라면 재료가 보이도록 합니다.
         consumerUI.ActivateIngredientUI(true);
     }
-    internal override void HandleChildUnclicked()
+    internal override void HandleChildUnclick()
     {
         // 다른 스프라이트가 클릭되었다면 재료가 사라집니다.
         consumerUI.ActivateIngredientUI(false);

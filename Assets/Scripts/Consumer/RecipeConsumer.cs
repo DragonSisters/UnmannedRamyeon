@@ -8,6 +8,8 @@ using System.Collections.Generic;
 /// </summary>
 public class RecipeConsumer : Consumer
 {
+    [SerializeField] private RecipeConsumerTimerUI timerUI;
+
     // 레시피 선택 관련 변수
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
@@ -40,6 +42,8 @@ public class RecipeConsumer : Consumer
     internal override IEnumerator HandleChildIssue()
     {
         float elapsedTime = 0f;
+        timerUI.ActivateTimer();
+        StartCoroutine(timerUI.FillTimerRoutine(stayTime));
 
         while(!IsAllIngredientSelected && elapsedTime < stayTime)
         {
@@ -57,6 +61,8 @@ public class RecipeConsumer : Consumer
             SetState(ConsumerState.Leave);
             yield break;
         }
+
+        timerUI.DeactivateTimer();
 
         bool isAllIngredientCorrect = true;
         foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
@@ -136,7 +142,7 @@ public class RecipeConsumer : Consumer
         IngredientManager.Instance.ReceiveRecipeConsumer(this);
     }
 
-    internal override void HandleChildUnclicked()
+    internal override void HandleChildUnclick()
     {
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
