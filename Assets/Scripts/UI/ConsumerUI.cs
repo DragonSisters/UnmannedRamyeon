@@ -19,7 +19,7 @@ public class ConsumerUI : MonoBehaviour
     public delegate void ClickEventTransferHandler(int index);
     public event ClickEventTransferHandler TransferClickEvent;
 
-    public void Initiailize()
+    public void Initialize()
     {
         this.ActivateIngredientUI(false);
         this.ActivateMoodFeedbackUI(false);

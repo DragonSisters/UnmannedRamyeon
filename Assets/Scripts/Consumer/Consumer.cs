@@ -139,7 +139,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         }
         speechScript.Initialize(consumerUI);
 
-        consumerUI.Initiailize();
+        consumerUI.Initialize();
         consumerUI.TransferClickEvent += WrongIngredientSpeech;
 
         SetState(ConsumerState.Invalid);
