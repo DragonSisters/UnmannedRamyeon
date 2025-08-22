@@ -19,6 +19,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
     private float alphaDecreaseAmount = 0.03f; // 알파값 감소량
 
+    private float moodDecreaseDelayTime = 1f; // Trash가 생성된 시간
     public float affectRadius = 2f; // Trash 주변 영향 반경
     public int moodDecraseAmount = 31; // Trash 주변 영향 반경
     private HashSet<Consumer> affectedConsumers = new();
@@ -27,7 +28,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
 
     private void Initiailize()
-    { 
+    {
         //  초기화
         spriteRenderer = GetComponent<SpriteRenderer>();
         if (spriteRenderer == null)
@@ -119,6 +120,9 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
     private IEnumerator DecreaseMood()
     {
+        // 쓰레기가 생겼을 때 바로 기분 깎지 말고 한 1초뒤에 깎게 하기
+        yield return new WaitForSeconds(moodDecreaseDelayTime);
+
         // Trash가 생성된 후 일정 시간마다 주변 Consumer의 기분을 감소시킵니다.
         while (!ShouldDespawn())
         {
