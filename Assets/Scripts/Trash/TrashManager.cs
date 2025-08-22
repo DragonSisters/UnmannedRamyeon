@@ -23,7 +23,8 @@ public class TrashManager : Singleton<TrashManager>
 
     [Header("스폰 확률 설정")]
     [SerializeField] private float spawnStartDelay = 30f; // 30초 후 스폰 시작
-    [SerializeField, Range(0f, 1f)] private float spawnProbability = 0.7f; // 70% 확률
+    [SerializeField, Range(0f, 1f)] private float hardModeSpawnProbability = 0.7f; // 70% 확률
+    [SerializeField, Range(0f, 1f)] private float easyModeSpawnProbability = 0.5f; // 50% 확률
 
     private ObjectPool<Trash> trashPool;
     private Coroutine spawnCoroutine;
@@ -96,7 +97,10 @@ public class TrashManager : Singleton<TrashManager>
             }
 
             float randomProbability = Random.value;
-            if (randomProbability > spawnProbability)
+            var isHardMode = GameManager.Instance.IsHardMode;
+            float SpawnProbability = isHardMode ? hardModeSpawnProbability : easyModeSpawnProbability;
+
+            if (randomProbability > SpawnProbability)
             {
                 // 쓰레기 스폰 확률에 의해 스폰하지 않습니다
                 continue;
