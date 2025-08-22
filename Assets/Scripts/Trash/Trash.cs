@@ -19,7 +19,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     private float mousePositionThredhold = 0.1f; // 마우스가 움직였다고 판단하는 최소 거리
     private float alphaDecreaseAmount = 0.03f; // 알파값 감소량
 
-    private float moodDecreaseDelayTime = 1f; // Trash가 생성된 시간
+    private float moodDecreaseDelayTime = 2f; // Trash가 생성되고, 기분이 내려갈때까지 걸리는 딜레이
     public float affectRadius = 2f; // Trash 주변 영향 반경
     public int moodDecraseAmount = 31; // Trash 주변 영향 반경
     private HashSet<Consumer> affectedConsumers = new();
