@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
+/// 레시피로 주문하는 손님의 동작을 이곳에서 정리합니다.
 /// </summary>
 public class RecipeConsumer : Consumer
 {
@@ -76,7 +76,7 @@ public class RecipeConsumer : Consumer
         if (isAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
-            SetState(ConsumerState.Order);
+            SetState(ConsumerState.LineUp);
         }
         else
         {

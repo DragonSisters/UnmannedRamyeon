@@ -28,6 +28,11 @@ public class IngredientBox : MonoBehaviour
         ingredientSprite.sortingOrder = isBottom ? bottomDrawingOrder + 1: topDrawingOrder + 1;
     }
 
+    public void SetLayerForSprite()
+    {
+        ingredientSprite.gameObject.layer = LayerMask.NameToLayer("SharpMask");
+    }
+
     public void GetOrAddCollision()
     {
         // 콜라이더 추가

@@ -90,6 +90,7 @@ public class IngredientManager : Singleton<IngredientManager>
         {
             GameObject ingredientGameObj = Instantiate(ingredientBoxPrefab, ingredientsParent);
             ingredientGameObj.name = ingredient.name;
+            ingredientGameObj.layer = LayerMask.NameToLayer("SharpMask");
 
             ingredientGameObj.transform.position = ingredient.IngredientCreatePosition; // 각 재료별 좌표로 옮김
 
@@ -98,6 +99,7 @@ public class IngredientManager : Singleton<IngredientManager>
             {
                 Debug.Log($"재료 박스 프리팹에 스크립트가 부착되지 않았습니다.");
             }
+            ingredientBox.SetLayerForSprite();
             ingredientBox.SetIngredientSprite(ingredient.BgSprite);
             ingredientBox.SetIngredientName(ingredient.Name);
             ingredientBox.GetOrAddCollision();
@@ -137,6 +139,9 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
+        // 패널 깔고
+
+
         // ingredient 클릭 활성화
         SwitchClickable(true);
     }
