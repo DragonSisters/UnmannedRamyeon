@@ -46,6 +46,11 @@ public class GameManager : Singleton<GameManager>
         Cursor.SetCursor(icon, Vector2.zero, CursorMode.Auto);
     }
 
+    public void ResetCursor()
+    {
+        Cursor.SetCursor(cursorIcon, Vector2.zero, CursorMode.Auto);
+    }
+
     private void SetModeButtons()
     {
         btn_easyMode.onClick.AddListener(() => isHardMode = false);

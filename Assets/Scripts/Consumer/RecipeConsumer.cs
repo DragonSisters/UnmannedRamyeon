@@ -149,6 +149,8 @@ public class RecipeConsumer : Consumer
 
         // IngredientManager 에 내 정보 삭제 요청
         IngredientManager.Instance.RemoveRecipeConsumer(this);
+
+        IngredientManager.Instance.OnRecipeConsumerFinished();
     }
 
     public void AddPickCount()

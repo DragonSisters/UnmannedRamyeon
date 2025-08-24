@@ -21,7 +21,9 @@ Shader "Hidden/URP/BlurWithStencil"
             Stencil
             {
                 Ref 1
-                Comp Equal
+                Comp NotEqual
+                ReadMask 255
+                WriteMask 0
             }
 
             HLSLPROGRAM
