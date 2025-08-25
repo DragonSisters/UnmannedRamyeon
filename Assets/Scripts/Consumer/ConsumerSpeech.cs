@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.InputSystem.HID.HID;
 
 public class ConsumerSpeech : MonoBehaviour
 {
@@ -63,14 +64,9 @@ public class ConsumerSpeech : MonoBehaviour
         {
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
-        else if (situation == ConsumerSituation.RecipeOrder)
-        {
-            consumerUI.SetSpeechBubbleColor(Color.yellow);
-        }
-        else
-        {
-            consumerUI.SetSpeechBubbleColor(Color.white);
-        }
+
+        Color color = ConsumerSituationColors.SituationColors[situation];
+        consumerUI.SetSpeechBubbleColor(color);
 
         var line = isRandom ?
             consumerScriptableObject.GetRandomDialogueFromSituation(situation, format)
@@ -93,7 +89,7 @@ public class ConsumerSpeech : MonoBehaviour
         int index = -1,
         string format = "")
     {
-        if(isGetPreviousLine)
+        if (isGetPreviousLine)
         {
             yield return new WaitUntil(() => !isSpeaking);
         }

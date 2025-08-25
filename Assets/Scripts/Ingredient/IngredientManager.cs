@@ -79,6 +79,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void OnGameEnd()
     {
+        OnRecipeConsumerFinished();
         ActivateIngredientObjOnPosition(false);
         currentRecipeConsumer = null;
         HandleIngredientDeselectMode();
@@ -242,9 +243,11 @@ public class IngredientManager : Singleton<IngredientManager>
         return (currentRecipeConsumer == consumer);
     }
 
-    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
+    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
-        if(currentRecipeConsumer == null)
+        isNoDuplicate = false;
+
+        if (currentRecipeConsumer == null)
         {
             Debug.LogError("currentRecipeConsumer 가 없습니다.");
             return;
@@ -256,7 +259,7 @@ public class IngredientManager : Singleton<IngredientManager>
             return;
         }
 
-        ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
+        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate);
         if (isNoDuplicate)
         {
             currentRecipeConsumer.AddPickCount();
@@ -270,7 +273,8 @@ public class IngredientManager : Singleton<IngredientManager>
                 return;
             }
 
-            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
+            //Debug.LogError("여기");
+            //StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
         }
 
         if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)

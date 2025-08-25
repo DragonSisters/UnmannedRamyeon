@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using System;
+using System.Linq;
 
 public class IngredientDrag : MonoBehaviour, IDraggableSprite
 {
@@ -108,19 +109,27 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         {
             if (currentMode == DragMode.Add)
             {
-                spritesInPot[currPickNumIdx].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
+                IngredientManager.Instance.SendIngredientToCorrectConsumer(ingredientScriptableObject, out bool isNoDuplicate);
+                if (!isNoDuplicate)
+                {
+                    // 중복이면 UI 갱신 X
+                    currentMode = DragMode.None;
+                    return;
+                }
+
                 int index = GetNextAvailableSlotIndex();
+                spritesInPot[index].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
                 AddIngredientToPot(index);
-                IngredientManager.Instance.SendIngredientToCorrectConsumer(ingredientScriptableObject);
+
                 if (IsCorrectIngredient())
                 {
                     ShaderEffectHelper.SetOutlineColor(material, answerColor);
-                    ShaderEffectHelper.SetOutlineColor(spritesInPot[currPickNumIdx - 1].material, answerColor);
+                    ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, answerColor);
                 }
                 else
                 {
                     ShaderEffectHelper.SetOutlineColor(material, wrongColor);
-                    ShaderEffectHelper.SetOutlineColor(spritesInPot[currPickNumIdx - 1].material, wrongColor);
+                    ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
                 }
             }
         }

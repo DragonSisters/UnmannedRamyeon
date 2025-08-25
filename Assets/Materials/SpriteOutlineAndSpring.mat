@@ -94,7 +94,7 @@ Material:
     - _Parallax: 0.02
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpringScale: 1
+    - _SpringScale: 1.0929621
     - _SpriteOverlay: 0
     - _SrcBlend: 1
     - _Thickness: 4

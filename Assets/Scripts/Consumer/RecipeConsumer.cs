@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Burst.Intrinsics;
 using UnityEngine;
 
 /// <summary>
@@ -194,5 +193,14 @@ public class RecipeConsumer : Consumer
     public void ClearIngredientsInPot()
     {
         Array.Clear(ingredientsInPot, 0, ingredientsInPot.Length);
+    }
+
+    public bool IsIngredientsInPot(IngredientScriptableObject ingredient)
+    {
+        foreach(IngredientScriptableObject scriptableObject in ingredientsInPot)
+        {
+            if (scriptableObject == ingredient) return true;
+        }
+        return false;
     }
 }
