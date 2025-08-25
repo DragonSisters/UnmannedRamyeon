@@ -51,6 +51,7 @@ public class RecipeConsumer : Consumer
             yield return null;
         }
 
+        // 시간 안에 재료를 다 고르지 못했다.
         if(!IsAllIngredientSelected)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
@@ -58,6 +59,10 @@ public class RecipeConsumer : Consumer
             ingredientHandler.ResetAllIngredientLists();
             if(IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             appearanceScript.SetClickable(false);
+            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
+            {
+                IngredientManager.Instance.OnRecipeConsumerFinished();
+            }
             SetState(ConsumerState.Leave);
             yield break;
         }
@@ -73,17 +78,25 @@ public class RecipeConsumer : Consumer
             }
         }
 
+        // 시간 안에 재료를 다 골랐고, 그 재료가 다 맞다
         if (isAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
+            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
+            {
+                IngredientManager.Instance.OnRecipeConsumerFinished();
+            }
             SetState(ConsumerState.LineUp);
         }
-        else
+        else // 시간 안에 재료를 다 골랐지만, 그 재료 중에 단 하나라도 틀린 재료가 있다.
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
+            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
+            {
+                IngredientManager.Instance.OnRecipeConsumerFinished();
+            }
             SetState(ConsumerState.Leave);
         }
 
@@ -147,10 +160,11 @@ public class RecipeConsumer : Consumer
         //ingredients 들 클릭 비활성화
         IngredientManager.Instance.IsIngredientSelectMode = false;
 
+        // 냄비 속 UI 정리
+        IngredientManager.Instance.OnRecipeConsumerFinished();
+        
         // IngredientManager 에 내 정보 삭제 요청
         IngredientManager.Instance.RemoveRecipeConsumer(this);
-
-        IngredientManager.Instance.OnRecipeConsumerFinished();
     }
 
     public void AddPickCount()

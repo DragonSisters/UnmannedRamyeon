@@ -12,14 +12,16 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float CORRECT_INGREDIENT_PROBAILITY = 8f;
 
     [SerializeField] private GameObject pot;
-    [SerializeField] private RectTransform potRectTransform;
-    [SerializeField] private List<Image> ingredientsInPot;
+    [SerializeField] private CapsuleCollider2D potCollider;
+    [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
     [SerializeField] private GameObject ingredientBoxPrefab;
-    List<IngredientClick> ingredientsClickable = new List<IngredientClick>();
-    List<GameObject> ingredientGameObjs = new List<GameObject>();
+    [SerializeField] private List<IngredientDrag> ingredientsDraggable = new List<IngredientDrag>();
+    private List<GameObject> ingredientGameObjs = new List<GameObject>();
+    private int ingredientNumIncludingInPot = 18;
+    private bool isInitializeInPot = false;
 
     private bool isIngredientSelectMode = false;
     public bool IsIngredientSelectMode
@@ -86,7 +88,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public void CreateIngredientObjOnPosition()
     {
         // 이미 생성되어 있다면 생성하지 않고 Activate만 해줍니다.
-        if(ingredientGameObjs.Count == IngredientScriptableObject.Count)
+        if(ingredientGameObjs.Count + 4 == IngredientScriptableObject.Count)
         {
             ActivateIngredientObjOnPosition(true);
             return;
@@ -112,24 +114,36 @@ public class IngredientManager : Singleton<IngredientManager>
             ingredientBox.SetBoxVisible(ingredient.IsOutsideBox);
             ingredientBox.SetSpriteDrawingOrder(ingredient.IngredientCreatePosition);
 
-            IngredientClick ingredientClick = ingredientBox.Ingredient.GetOrAddComponent<IngredientClick>();
-            ingredientClick.Initialize(ingredient, potRectTransform, ingredientsInPot);
-            ingredientsClickable.Add(ingredientClick);
+            IngredientDrag ingredientDrag = ingredientBox.Ingredient.GetOrAddComponent<IngredientDrag>();
+            ingredientDrag.Initialize(ingredient, potCollider, ingredientsInPot);
+            ingredientsDraggable.Add(ingredientDrag);
             ingredientGameObjs.Add(ingredientGameObj);
         }
     }
 
-    public void SwitchClickable(bool clickable)
+    public void SwitchDraggable(bool draggable)
     {
-        if(ingredientsClickable == null || ingredientsClickable.Count == 0)
+        if(ingredientsDraggable == null || ingredientsDraggable.Count == 0)
         {
-            Debug.LogWarning("ingredientsClickable 리스트가 비어있습니다.");
+            Debug.LogWarning("ingredientsDraggable 리스트가 비어있습니다.");
             return;
         }
 
-        foreach(IngredientClick ingredientClick in ingredientsClickable)
+        // Pot 안의 재료들의 IngredientDrag 에서만, 가장 처음 한 번만
+        if(!isInitializeInPot && ingredientsDraggable.Count > ingredientNumIncludingInPot)
         {
-            ingredientClick.SetDraggable(clickable);
+            isInitializeInPot = true;
+
+            for(int i = 0; i < ingredientsInPot.Count; i++)
+            {
+                // 시작할 때에는 IngredientScriptableObject 리스트의 처음 네 IngredientScriptableObject 로 넣어놓습니다. (나중에 재료를 냄비에 넣을 때 업데이트)
+                ingredientsDraggable[i].Initialize(IngredientScriptableObject[i], potCollider, ingredientsInPot);
+            }
+        }
+
+        foreach(IngredientDrag ingredientDrag in ingredientsDraggable)
+        {
+            ingredientDrag.SetDraggable(draggable);
         }
     }
 
@@ -149,13 +163,13 @@ public class IngredientManager : Singleton<IngredientManager>
         pot.SetActive(true);
 
         // ingredient 클릭 활성화
-        SwitchClickable(true);
+        SwitchDraggable(true);
     }
 
     private void HandleIngredientDeselectMode()
     {
         // ingredient 클릭 비활성화
-        SwitchClickable(false);
+        SwitchDraggable(false);
     }
 
     private bool IsValidate(IngredientScriptableObject ingredient)
@@ -224,19 +238,6 @@ public class IngredientManager : Singleton<IngredientManager>
         return (currentRecipeConsumer == consumer);
     }
 
-    //public IngredientScriptableObject FindMatchingIngredient(string ingredientName)
-    //{
-    //    foreach(IngredientScriptableObject ingredient in IngredientScriptableObject)
-    //    {
-    //        if(ingredient.name == ingredientName)
-    //        {
-    //            return ingredient;
-    //        }
-    //    }
-
-    //    throw new System.Exception($"{ingredientName}이라는 이름과 일치하는 재료가 없습니다.");
-    //}
-
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
     {
         if(currentRecipeConsumer == null)
@@ -270,8 +271,8 @@ public class IngredientManager : Singleton<IngredientManager>
 
         if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
         {
+            //OnRecipeConsumerFinished();
             currentRecipeConsumer.IsAllIngredientSelected = true;
-            OnRecipeConsumerFinished();
         }
     }
 
@@ -288,16 +289,19 @@ public class IngredientManager : Singleton<IngredientManager>
             Debug.LogError("ConsumerIngredientHandler 가 없습니다.");
             return;
         }
+
+        currentRecipeConsumer.GetComponent<ConsumerIngredientHandler>().RemoveWrongIngredient(ingredient);
     }
 
     public void OnRecipeConsumerFinished()
     {
-        foreach (Image image in ingredientsInPot)
+        foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
         {
-            UIEffectControl.Instance.SetAlpha(image, 0);
+            spriteRenderer.gameObject.SetActive(false);
         }
-        IsIngredientSelectMode = false;
+
         pot.SetActive(false);
+        IsIngredientSelectMode = false;
     }
 
     #endregion
