@@ -43,6 +43,8 @@ public class RecipeConsumer : Consumer
 
     internal override IEnumerator HandleChildIssue()
     {
+        yield return new WaitUntil(() => !moveScript.IsMoving);
+
         float elapsedTime = 0f;
         timerUI.ActivateTimer();
         StartCoroutine(timerUI.FillTimerRoutine(stayTime));
@@ -146,7 +148,7 @@ public class RecipeConsumer : Consumer
     }
 
     internal override void HandleChildClick()
-    {
+    { 
         ResetPickCount();
         ingredientHandler.AttemptIngredients.Clear();
 

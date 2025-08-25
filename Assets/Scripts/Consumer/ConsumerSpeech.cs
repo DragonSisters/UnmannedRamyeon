@@ -1,8 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using static UnityEngine.InputSystem.HID.HID;
 
 public class ConsumerSpeech : MonoBehaviour
 {
@@ -13,6 +12,7 @@ public class ConsumerSpeech : MonoBehaviour
     Coroutine SpeechCoroutine;
 
     private bool isSpeaking;
+    public bool IsSpeaking => isSpeaking;
 
     public void Initialize(in ConsumerUI consumerUI) // in키워드 = call by ref
     {
@@ -22,11 +22,9 @@ public class ConsumerSpeech : MonoBehaviour
 
     public void StopSpeech()
     {
-        if (SpeechCoroutine != null)
-        {
-            StopCoroutine(SpeechCoroutine);
-        }
+        StopCoroutine(SpeechCoroutine);
         consumerUI.SetSpeechBubbleUI(false);
+        SpeechCoroutine = null;
         isSpeaking = false;
     }
 
@@ -43,9 +41,9 @@ public class ConsumerSpeech : MonoBehaviour
         if (isGetPreviousLine)
         {
             // 말이 끝날 때까지 기다립니다
-            yield return new WaitUntil(() => !isSpeaking);
+            yield return new WaitUntil(() => SpeechCoroutine == null);
         }
-        else if (isSpeaking)
+        else if (SpeechCoroutine != null)
         {
             // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
@@ -91,9 +89,9 @@ public class ConsumerSpeech : MonoBehaviour
     {
         if (isGetPreviousLine)
         {
-            yield return new WaitUntil(() => !isSpeaking);
+            yield return new WaitUntil(() => SpeechCoroutine == null);
         }
-        else if (isSpeaking)
+        else if (SpeechCoroutine != null)
         {
             // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
@@ -151,5 +149,6 @@ public class ConsumerSpeech : MonoBehaviour
         }
 
         isSpeaking = false;
+        SpeechCoroutine = null;
     }
 }

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class IngredientManager : Singleton<IngredientManager>
 {
@@ -230,12 +231,17 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
+        Debug.LogWarning($"[ReceiveRecipeConsumer] {consumer.GetInstanceID()} 클릭되었음");
         currentRecipeConsumer = consumer;
     }
 
     public void RemoveRecipeConsumer(RecipeConsumer consumer)
     {
-        if(currentRecipeConsumer == consumer) currentRecipeConsumer = null;
+        if (currentRecipeConsumer == consumer)
+        {
+            Debug.LogWarning($"[RemoveRecipeConsumer] {consumer.GetInstanceID()} 제거");
+            currentRecipeConsumer = null;
+        }
     }
 
     public bool IsCurrentRecipeConsumer(RecipeConsumer consumer)
@@ -272,9 +278,7 @@ public class IngredientManager : Singleton<IngredientManager>
                 Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
                 return;
             }
-
-            //Debug.LogError("여기");
-            //StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
+            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
         if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
@@ -287,7 +291,8 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if (currentRecipeConsumer == null)
         {
-            Debug.LogError("currentRecipeConsumer 가 없습니다.");
+            Debug.LogError("currentRecipeConsumer 가 없습니다.", this);
+            Debug.LogError(Environment.StackTrace);
             return;
         }
         ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
@@ -299,6 +304,12 @@ public class IngredientManager : Singleton<IngredientManager>
 
         currentRecipeConsumer.GetComponent<ConsumerIngredientHandler>().RemoveWrongIngredient(ingredient);
     }
+
+    //private IEnumerator RepeatRecipeOrder(ConsumerSpeech consumerSpeech)
+    //{
+    //    yield return new WaitUntil(() => consumerSpeech.IsSpeaking);
+    //StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
+    //}
 
     public void OnRecipeConsumerFinished()
     {

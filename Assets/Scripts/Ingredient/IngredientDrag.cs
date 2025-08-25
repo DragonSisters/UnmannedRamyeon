@@ -27,7 +27,15 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         get
         {
-            return IngredientManager.Instance.CurrentRecipeConsumer.CurrPickCount;
+            RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
+            if (recipeConsumer != null)
+            {
+                return IngredientManager.Instance.CurrentRecipeConsumer.CurrPickCount;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
     private int chosenIndex = -1;
@@ -138,6 +146,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
             RemoveIngredientFromPot(chosenIndex);
         }
 
+        Debug.LogError(currPickNumIdx);
         if (currPickNumIdx >= 4)
         {
             ShaderEffectHelper.SetOutlineColor(material, clickableColor);
@@ -172,7 +181,8 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         spritesInPot[index].gameObject.SetActive(false);
 
         // 냄비 속에 더 이상 이 재료가 없다
-        IngredientManager.Instance.CurrentRecipeConsumer.RemoveIngredientsInPot(index);
+        RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
+        if(recipeConsumer != null) recipeConsumer.RemoveIngredientsInPot(index);
 
         // 가지고 올 재료 리스트와 가지고 있는 재료 리스트에서 제거
         IngredientManager.Instance.RemoveIngredientFromCorrectCunsumer(ingredientScriptableObject);

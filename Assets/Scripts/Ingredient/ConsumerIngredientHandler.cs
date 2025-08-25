@@ -131,6 +131,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
             }
         }
 
+        // 중복된 재료일 경우
         if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
         {
             Debug.Log("중복된 재료입니다!");
