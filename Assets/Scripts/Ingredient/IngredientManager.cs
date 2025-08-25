@@ -20,7 +20,6 @@ public class IngredientManager : Singleton<IngredientManager>
     [SerializeField] private GameObject ingredientBoxPrefab;
     [SerializeField] private List<IngredientDrag> ingredientsDraggable = new List<IngredientDrag>();
     private List<GameObject> ingredientGameObjs = new List<GameObject>();
-    private int ingredientNumIncludingInPot = 18;
     private bool isInitializeInPot = false;
 
     private bool isIngredientSelectMode = false;
@@ -88,7 +87,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public void CreateIngredientObjOnPosition()
     {
         // 이미 생성되어 있다면 생성하지 않고 Activate만 해줍니다.
-        if(ingredientGameObjs.Count + 4 == IngredientScriptableObject.Count)
+        if(ingredientGameObjs.Count == IngredientScriptableObject.Count)
         {
             ActivateIngredientObjOnPosition(true);
             return;
@@ -130,14 +129,19 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         // Pot 안의 재료들의 IngredientDrag 에서만, 가장 처음 한 번만
-        if(!isInitializeInPot && ingredientsDraggable.Count > ingredientNumIncludingInPot)
+        if(!isInitializeInPot)
         {
             isInitializeInPot = true;
 
             for(int i = 0; i < ingredientsInPot.Count; i++)
             {
-                // 시작할 때에는 IngredientScriptableObject 리스트의 처음 네 IngredientScriptableObject 로 넣어놓습니다. (나중에 재료를 냄비에 넣을 때 업데이트)
-                ingredientsDraggable[i].Initialize(IngredientScriptableObject[i], potCollider, ingredientsInPot);
+                var ingredientDrag = ingredientsInPot[i].gameObject.GetComponent<IngredientDrag>();
+                if(ingredientDrag != null)
+                {
+                    // 시작할 때에는 IngredientScriptableObject 리스트의 처음 네 IngredientScriptableObject 로 넣어놓습니다. (나중에 재료를 냄비에 넣을 때 업데이트)
+                    ingredientDrag.Initialize(IngredientScriptableObject[i], potCollider, ingredientsInPot);
+                    ingredientsDraggable.Add(ingredientDrag);
+                }
             }
         }
 
@@ -271,7 +275,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
         if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
         {
-            //OnRecipeConsumerFinished();
             currentRecipeConsumer.IsAllIngredientSelected = true;
         }
     }
@@ -299,6 +302,8 @@ public class IngredientManager : Singleton<IngredientManager>
         {
             spriteRenderer.gameObject.SetActive(false);
         }
+
+        currentRecipeConsumer.ClearIngredientsInPot();
 
         pot.SetActive(false);
         IsIngredientSelectMode = false;

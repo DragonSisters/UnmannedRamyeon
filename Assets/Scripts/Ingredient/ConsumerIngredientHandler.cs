@@ -206,19 +206,11 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     public void RemoveWrongIngredient(IngredientScriptableObject ingredient)
     {
-        foreach(IngredientInfo info in AttemptIngredients)
+        for (int i = AttemptIngredients.Count - 1; i >= 0; i--)
         {
-            if(info.Ingredient == ingredient)
+            if (AttemptIngredients[i].Ingredient == ingredient)
             {
-                AttemptIngredients.Remove(info);
-            }
-        }
-
-        foreach(IngredientInfo info in OwnedIngredients)
-        {
-            if(info.Ingredient == ingredient)
-            {
-                OwnedIngredients.Remove(info);
+                AttemptIngredients.RemoveAt(i);
             }
         }
     }

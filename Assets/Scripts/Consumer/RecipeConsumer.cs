@@ -1,7 +1,8 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.Intrinsics;
+using UnityEngine;
 
 /// <summary>
 /// 레시피로 주문하는 손님의 동작을 이곳에서 정리합니다.
@@ -22,6 +23,8 @@ public class RecipeConsumer : Consumer
 
     public bool IsAllIngredientSelected = false;
     public int CurrPickCount { get; private set; } = 0;
+
+    private IngredientScriptableObject[] ingredientsInPot = new IngredientScriptableObject[4];
 
     internal override void HandleChildEnter()
     {
@@ -175,5 +178,21 @@ public class RecipeConsumer : Consumer
     public void ResetPickCount()
     {
         CurrPickCount = 0;
+    }
+
+    public void AddIngredientsInPot(int index, IngredientScriptableObject ingredient)
+    {
+        ingredientsInPot[index] = ingredient;
+    }
+
+    public void RemoveIngredientsInPot(int index)
+    {
+        ingredientsInPot[index] = null;
+        CurrPickCount--;
+    }
+
+    public void ClearIngredientsInPot()
+    {
+        Array.Clear(ingredientsInPot, 0, ingredientsInPot.Length);
     }
 }

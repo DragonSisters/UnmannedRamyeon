@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System;
 
 public class IngredientDrag : MonoBehaviour, IDraggableSprite
 {
@@ -19,7 +20,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     private readonly float outlineWidth = 4f;
 
     [SerializeField] private CapsuleCollider2D potCollider;
-    private List<SpriteRenderer> ingredientsInPot = new List<SpriteRenderer>();
+    private List<SpriteRenderer> spritesInPot = new List<SpriteRenderer>();
     private List<PolygonCollider2D> ingredientsInPotCollider = new List<PolygonCollider2D>();
     private int currPickNumIdx
     {
@@ -28,15 +29,16 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
             return IngredientManager.Instance.CurrentRecipeConsumer.CurrPickCount;
         }
     }
+    private int chosenIndex = -1;
 
     public void Initialize(IngredientScriptableObject ingredient, CapsuleCollider2D potRectTransform, List<SpriteRenderer> ingredients)
     {
         ingredientScriptableObject = ingredient;
         potCollider = potRectTransform;
-        ingredientsInPot.Clear();
-        ingredientsInPot = ingredients;
+        spritesInPot.Clear();
+        spritesInPot = ingredients;
         ingredientsInPotCollider.Clear();
-        foreach(SpriteRenderer spriteRenderer in ingredientsInPot)
+        foreach(SpriteRenderer spriteRenderer in spritesInPot)
         {
             ingredientsInPotCollider.Add(spriteRenderer.gameObject.GetComponent<PolygonCollider2D>());
         }
@@ -48,7 +50,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         }
 
         material = spriteRenderer.material;
-        foreach(SpriteRenderer spriteRenderer in ingredientsInPot)
+        foreach(SpriteRenderer spriteRenderer in spritesInPot)
         {
             spriteRenderer.material = new Material(material);
         }
@@ -75,16 +77,15 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     public void OnSpriteDown()
     {
-        Debug.LogError($"localPoint = {Input.mousePosition}, potRect = {potCollider.transform}");
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
         StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
         SetCursor();
 
         if (IsPointerOverPot(Input.mousePosition))
         {
-            Debug.LogError("빼기 준비");
             // 냄비에서 시작 : 빼기 준비
             currentMode = DragMode.Remove;
+            chosenIndex = GetPickedIngredientIndex(Input.mousePosition);
         }
         else
         {
@@ -105,32 +106,30 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
         if (IsPointerOverPot(Input.mousePosition))
         {
-            Debug.LogError("여기");
             if (currentMode == DragMode.Add)
             {
-                AddIngredientToPot(currPickNumIdx);
+                spritesInPot[currPickNumIdx].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
+                int index = GetNextAvailableSlotIndex();
+                AddIngredientToPot(index);
                 IngredientManager.Instance.SendIngredientToCorrectConsumer(ingredientScriptableObject);
                 if (IsCorrectIngredient())
                 {
                     ShaderEffectHelper.SetOutlineColor(material, answerColor);
-                    ShaderEffectHelper.SetOutlineColor(ingredientsInPot[currPickNumIdx - 1].material, answerColor);
+                    ShaderEffectHelper.SetOutlineColor(spritesInPot[currPickNumIdx - 1].material, answerColor);
                 }
                 else
                 {
                     ShaderEffectHelper.SetOutlineColor(material, wrongColor);
-                    ShaderEffectHelper.SetOutlineColor(ingredientsInPot[currPickNumIdx - 1].material, wrongColor);
+                    ShaderEffectHelper.SetOutlineColor(spritesInPot[currPickNumIdx - 1].material, wrongColor);
                 }
             }
-            else if (currentMode == DragMode.Remove)
-            {
-                Debug.LogError("Remove 모드");
-                int index = GetPickedIngredientIndex(Input.mousePosition);
-                Debug.LogError(index);
-                RemoveIngredientFromPot(index);
-            }
+        }
+        else if (currentMode == DragMode.Remove)
+        {
+            RemoveIngredientFromPot(chosenIndex);
         }
 
-        if(currPickNumIdx >= 4)
+        if (currPickNumIdx >= 4)
         {
             ShaderEffectHelper.SetOutlineColor(material, clickableColor);
         }
@@ -138,27 +137,46 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         currentMode = DragMode.None;
     }
 
-    private void AddIngredientToPot(int ingredientCount)
+    private void AddIngredientToPot(int index)
     {
-        ingredientsInPot[ingredientCount].sprite = ingredientScriptableObject.Icon;
-        ingredientsInPot[ingredientCount].gameObject.SetActive(true);
+        if (index < 0 || index >= spritesInPot.Count) return;
+
+        IngredientManager.Instance.CurrentRecipeConsumer.AddIngredientsInPot(index, ingredientScriptableObject);
+
+        spritesInPot[index].sprite = ingredientScriptableObject.Icon;
+        spritesInPot[index].gameObject.SetActive(true);
         // 콜라이더 추가
-        var collider = ingredientsInPot[ingredientCount].gameObject.GetComponent<PolygonCollider2D>();
+        var collider = spritesInPot[index].gameObject.GetComponent<PolygonCollider2D>();
         if (collider == null)
         {
-            collider = ingredientsInPot[ingredientCount].gameObject.AddComponent<PolygonCollider2D>();
+            collider = spritesInPot[index].gameObject.AddComponent<PolygonCollider2D>();
             collider.autoTiling = true;
             collider.isTrigger = true; // 충돌되지 않도록 trigger on
         }
     }
 
-    private void RemoveIngredientFromPot(int Index)
+    private void RemoveIngredientFromPot(int index)
     {
+        if (index < 0 || index >= spritesInPot.Count) return;
+
         // 냄비 속 재료 안 보이게 없애기
-        ingredientsInPot[Index].gameObject.SetActive(false);
+        spritesInPot[index].gameObject.SetActive(false);
+
+        // 냄비 속에 더 이상 이 재료가 없다
+        IngredientManager.Instance.CurrentRecipeConsumer.RemoveIngredientsInPot(index);
 
         // 가지고 올 재료 리스트와 가지고 있는 재료 리스트에서 제거
         IngredientManager.Instance.RemoveIngredientFromCorrectCunsumer(ingredientScriptableObject);
+    }
+
+    private int GetNextAvailableSlotIndex()
+    {
+        for (int i = 0; i < spritesInPot.Count; i++)
+        {
+            if (!spritesInPot[i].gameObject.activeSelf) // 비어있는 슬롯
+                return i;
+        }
+        return -1; // 꽉 찼을 때
     }
 
     private void SetCursor()
@@ -196,6 +214,11 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         return index;
     }
 
+    public void SetIngredientScriptableObject(IngredientScriptableObject ingredient)
+    {
+        ingredientScriptableObject = ingredient;
+    }
+
     private bool IsCorrectIngredient()
     {
         return IngredientManager.Instance.IsCorrectIngredient(ingredientScriptableObject);
@@ -206,8 +229,4 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         ShaderEffectHelper.SetOutlineColor(material, clickableColor);
     }
-
-
-    // @anditsoon TODO: 
-    // 게임 종료될 때 : IngredientInPot.Clear(); 
 }
