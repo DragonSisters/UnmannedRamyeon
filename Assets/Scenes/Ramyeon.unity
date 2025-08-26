@@ -3137,7 +3137,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   easyModeGoalMoney: 50000
-  hardModeGoalMoney: 80000
+  hardModeGoalMoney: 100000
   goalMoneyUi: {fileID: 8841245354502379933}
   totalMoneyUi: {fileID: 3715662388115491120}
   priceUiPrefab: {fileID: 4681973138784411824, guid: 8282752b469927c409237ca0ef21d027, type: 3}
