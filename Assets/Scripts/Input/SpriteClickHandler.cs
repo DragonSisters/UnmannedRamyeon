@@ -34,23 +34,17 @@ public class SpriteClickHandler : Singleton<SpriteClickHandler>
         // 2D 렌더링 순서에 맞게 정렬 (앞쪽이 먼저)
         System.Array.Sort(hits, CompareSpriteRenderOrder);
 
-        // IClickableSprite 인터페이스를 구현한 오브젝트들만 필터링
-        var clickableSprites = new List<IClickableSprite>();
-
-        foreach (var hit in hits)
+        IClickableSprite clickable = hits[0].collider.GetComponent<IClickableSprite>();
+        if (clickable == null)
         {
-            IClickableSprite clickable = hit.collider.GetComponent<IClickableSprite>();
-            if (clickable != null)
-            {
-                clickableSprites.Add(clickable);
-            }
+            return;
         }
 
         // 클릭할 수 있을 때만 클릭처리합니다.
-        if (clickableSprites.Count > 0 && clickableSprites[0].IsClickable)
+        if (clickable.IsClickable)
         {
-            currentClickedSprite = clickableSprites[0];
-            clickableSprites[0].OnSpriteClicked();
+            currentClickedSprite = clickable;
+            currentClickedSprite.OnSpriteClicked();
         }
     }
 

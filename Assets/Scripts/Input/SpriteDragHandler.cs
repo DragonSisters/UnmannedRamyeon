@@ -49,24 +49,13 @@ public class SpriteDragHandler : Singleton<SpriteDragHandler>
         // 2D 렌더링 순서에 맞게 정렬 (앞쪽이 먼저)
         System.Array.Sort(hits, CompareSpriteRenderOrder);
 
-        // IClickableSprite 인터페이스를 구현한 오브젝트들만 필터링
-        var draggableSprites = new List<IDraggableSprite>();
-
-        foreach (var hit in hits)
+        var selectedDraggable = hits[0].collider.GetComponent<IDraggableSprite>();
+        if (selectedDraggable == null || !selectedDraggable.IsDraggable)
         {
-            var selectedDraggable = hit.collider.GetComponent<IDraggableSprite>();
-            if (selectedDraggable != null && selectedDraggable.IsDraggable)
-            {
-                draggableSprites.Add(selectedDraggable);
-            }
+            return false;
         }
 
-        if(draggableSprites.Count == 0)
-        {
-            return false; // 드래그 가능한 스프라이트가 없으면 종료
-        }
-
-        selectedSprite = draggableSprites[0];
+        selectedSprite = selectedDraggable;
         return true;
     }
 
