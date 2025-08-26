@@ -117,7 +117,6 @@ public class GameManager : Singleton<GameManager>
         IngredientManager.Instance.OnGameEnd();
 
         // 게임 결과에 따라 성공/실패 화면을 불러옵니다.
-        // @anditsoon TODO: 게임 결과창에 최종 금액 나오게 하기 -> 추후 아트 받아서 적용 후 구현하겠습니다
         endCanvas.SetActive(true);
         if (FinanceManager.Instance.IsSuccess)
         {
