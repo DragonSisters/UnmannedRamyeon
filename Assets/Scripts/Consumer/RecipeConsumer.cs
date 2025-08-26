@@ -1,10 +1,10 @@
 ﻿using System;
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
-/// 클릭을 해서 주의를 주어야할 필요성이 있는 손님의 동작을 이곳에서 정리합니다.
+/// 레시피로 주문하는 손님의 동작을 이곳에서 정리합니다.
 /// </summary>
 public class RecipeConsumer : Consumer
 {
@@ -23,6 +23,8 @@ public class RecipeConsumer : Consumer
     public bool IsAllIngredientSelected = false;
     public int CurrPickCount { get; private set; } = 0;
 
+    private IngredientScriptableObject[] ingredientsInPot = new IngredientScriptableObject[4];
+
     internal override void HandleChildEnter()
     {
         StartCoroutine(EnterCoroutine());
@@ -36,11 +38,12 @@ public class RecipeConsumer : Consumer
     {
         ResetPickCount();
         ingredientHandler.ResetAllIngredientLists();
-        IngredientManager.Instance.RemoveRecipeConsumer(this);
     }
 
     internal override IEnumerator HandleChildIssue()
     {
+        yield return new WaitUntil(() => !moveScript.IsMoving);
+
         float elapsedTime = 0f;
         timerUI.ActivateTimer();
         StartCoroutine(timerUI.FillTimerRoutine(stayTime));
@@ -51,13 +54,16 @@ public class RecipeConsumer : Consumer
             yield return null;
         }
 
+        // 시간 안에 재료를 다 고르지 못했다.
         if(!IsAllIngredientSelected)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if(IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             appearanceScript.SetClickable(false);
+
+            IngredientManager.Instance.OnRecipeConsumerFinished(this);
+
             SetState(ConsumerState.Leave);
             yield break;
         }
@@ -73,19 +79,21 @@ public class RecipeConsumer : Consumer
             }
         }
 
+        // 시간 안에 재료를 다 골랐고, 그 재료가 다 맞다
         if (isAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
-            SetState(ConsumerState.Order);
+            SetState(ConsumerState.LineUp);
         }
-        else
+        else // 시간 안에 재료를 다 골랐지만, 그 재료 중에 단 하나라도 틀린 재료가 있다.
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             SetState(ConsumerState.Leave);
         }
+
+        IngredientManager.Instance.OnRecipeConsumerFinished(this);
 
         appearanceScript.SetClickable(false);
         IsAllIngredientSelected = false;
@@ -131,7 +139,7 @@ public class RecipeConsumer : Consumer
     }
 
     internal override void HandleChildClick()
-    {
+    { 
         ResetPickCount();
         ingredientHandler.AttemptIngredients.Clear();
 
@@ -144,11 +152,7 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclick()
     {
-        //ingredients 들 클릭 비활성화
-        IngredientManager.Instance.IsIngredientSelectMode = false;
-
-        // IngredientManager 에 내 정보 삭제 요청
-        IngredientManager.Instance.RemoveRecipeConsumer(this);
+        IngredientManager.Instance.OnRecipeConsumerFinished(this);
     }
 
     public void AddPickCount()
@@ -159,5 +163,30 @@ public class RecipeConsumer : Consumer
     public void ResetPickCount()
     {
         CurrPickCount = 0;
+    }
+
+    public void AddIngredientsInPot(int index, IngredientScriptableObject ingredient)
+    {
+        ingredientsInPot[index] = ingredient;
+    }
+
+    public void RemoveIngredientsInPot(int index)
+    {
+        ingredientsInPot[index] = null;
+        CurrPickCount--;
+    }
+
+    public void ClearIngredientsInPot()
+    {
+        Array.Clear(ingredientsInPot, 0, ingredientsInPot.Length);
+    }
+
+    public bool IsIngredientsInPot(IngredientScriptableObject ingredient)
+    {
+        foreach(IngredientScriptableObject scriptableObject in ingredientsInPot)
+        {
+            if (scriptableObject == ingredient) return true;
+        }
+        return false;
     }
 }

@@ -1,13 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ConsumerSpeech : MonoBehaviour
 {
     private ConsumerUI consumerUI;
     private const float SPEECH_INTERVAL = 0.1f;
-    private const float SPEECH_END_WAIT_TIME = 3f;
+    private const float SPEECH_END_WAIT_TIME = 1f;
 
     Coroutine SpeechCoroutine;
 
@@ -17,6 +17,7 @@ public class ConsumerSpeech : MonoBehaviour
     {
         this.consumerUI = consumerUI;
         SpeechCoroutine = null;
+        isSpeaking = false;
     }
 
     public void StopSpeech()
@@ -26,6 +27,7 @@ public class ConsumerSpeech : MonoBehaviour
             StopCoroutine(SpeechCoroutine);
         }
         consumerUI.SetSpeechBubbleUI(false);
+        SpeechCoroutine = null;
         isSpeaking = false;
     }
 
@@ -63,14 +65,9 @@ public class ConsumerSpeech : MonoBehaviour
         {
             throw new System.Exception($"초기화되지 않은 상태로 손님이 말하려고 했습니다.");
         }
-        else if (situation == ConsumerSituation.RecipeOrder)
-        {
-            consumerUI.SetSpeechBubbleColor(Color.yellow);
-        }
-        else
-        {
-            consumerUI.SetSpeechBubbleColor(Color.white);
-        }
+
+        Color color = ConsumerSituationColors.SituationColors[situation];
+        consumerUI.SetSpeechBubbleColor(color);
 
         var line = isRandom ?
             consumerScriptableObject.GetRandomDialogueFromSituation(situation, format)
@@ -93,7 +90,7 @@ public class ConsumerSpeech : MonoBehaviour
         int index = -1,
         string format = "")
     {
-        if(isGetPreviousLine)
+        if (isGetPreviousLine)
         {
             yield return new WaitUntil(() => !isSpeaking);
         }
@@ -154,6 +151,7 @@ public class ConsumerSpeech : MonoBehaviour
             consumerUI.SetSpeechBubbleUI(false);
         }
 
+        SpeechCoroutine = null;
         isSpeaking = false;
     }
 }

@@ -6,6 +6,8 @@ public class ConsumerMove : MonoBehaviour
     private Consumer consumer;
     private float moveSpeed;
     private NavMeshAgent agent;
+    private bool isMoving = false;
+    public bool IsMoving => isMoving;
 
     private float separationRadius = 1.0f;
     private float separationStrength = 2.0f;
@@ -66,6 +68,7 @@ public class ConsumerMove : MonoBehaviour
 
     public void MoveToNearesetPoint(Vector2 point, out Vector2 nearestPoint)
     {
+        isMoving = true;
         nearestPoint = GetNearestPointOnNavMesh(point);
         agent.SetDestination(nearestPoint);
     }
@@ -94,6 +97,7 @@ public class ConsumerMove : MonoBehaviour
     {
         if (IsCloseEnough(point))
         {
+            isMoving = false;
             agent.ResetPath();
             return true;
         }

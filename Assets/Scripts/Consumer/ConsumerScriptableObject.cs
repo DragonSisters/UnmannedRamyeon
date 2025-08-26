@@ -27,6 +27,19 @@ public enum ConsumerSituation
 
     DuplicateIngredientDetected, // 중복된 재료를 골랐을 때
 }
+
+public static class ConsumerSituationColors
+{
+    public static readonly Dictionary<ConsumerSituation, Color> SituationColors = new()
+    {
+        { ConsumerSituation.Invalid, Color.red },
+        { ConsumerSituation.WrongIngredientDetected, Color.white },
+        { ConsumerSituation.RecipeOrder, Color.yellow },
+        { ConsumerSituation.DuplicateIngredientDetected, Color.gray }
+    };
+}
+
+
 [CreateAssetMenu(fileName = "Consumer", menuName = "Scriptable Objects/Consumer")]
 public class ConsumerScriptableObject : ScriptableObject
 {

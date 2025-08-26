@@ -15,6 +15,7 @@ MonoBehaviour:
   name: "\uB300\uD30C"
   bgSprite: {fileID: 21300000, guid: 55bf73a96400f384f865ab5d1a131d59, type: 3}
   icon: {fileID: 21300000, guid: 689fe592f2401f24698513d2d9873ef4, type: 3}
+  cursorIcon: {fileID: 2800000, guid: d6451b182fe565e4abbab1190dbf6225, type: 3}
   isOutsideBox: 0
   price: 500
   ingredientCreatePosition: {x: -3.3, y: 4.4}

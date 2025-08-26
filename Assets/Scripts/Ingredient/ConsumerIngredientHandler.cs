@@ -32,7 +32,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     /// <summary>
     /// 실제로 가져오려는 재료 목록. 가져왔다면 목록에서 삭제됩니다.
     /// </summary>
-    public Queue<IngredientInfo> AttemptIngredients = new();
+    public List<IngredientInfo> AttemptIngredients = new();
     /// <summary>
     /// 현재 갖고 있는 재료 목록
     /// </summary>
@@ -108,14 +108,14 @@ public class ConsumerIngredientHandler : MonoBehaviour
             var currentIndex = orderList[i];
             GetAttemptIngredient(currentIndex, out var ingredient, out var isCorrect);
             // 이후에 재료를 얻었을 때를 대비해서 미리 저장해둡니다.
-            AttemptIngredients.Enqueue(new IngredientInfo(ingredient, currentIndex, isCorrect));
+            AttemptIngredients.Add(new IngredientInfo(ingredient, currentIndex, isCorrect));
         }
     }
 
     public IngredientInfo GetAttemptIngredientInfo()
     {
         if (AttemptIngredients.Count <= 0) throw new System.Exception("AttemptIngredients 리스트가 비어있습니다.");
-        var ingredientInfo = AttemptIngredients.Peek(); // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
+        var ingredientInfo = AttemptIngredients[AttemptIngredients.Count - 1]; // 제거하지 않고 반환만 합니다. 언제 issue단계가 올지 모르기 때문에
         return ingredientInfo;
     }
 
@@ -131,23 +131,17 @@ public class ConsumerIngredientHandler : MonoBehaviour
             }
         }
 
+        // 중복된 재료일 경우
         if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
         {
             Debug.Log("중복된 재료입니다!");
 
-            ConsumerSpeech consumerSpeech = gameObject.GetComponent<ConsumerSpeech>();
-            if (consumerSpeech == null)
-            {
-                Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
-            }
-
-            StartCoroutine(consumerSpeech.StartSpeechFromSituation(gameObject.GetComponent<Consumer>().currentConsumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, true, false, true, false));
             isNoDuplicate = false;
 
             return;
         }
 
-        AttemptIngredients.Enqueue(info); 
+        AttemptIngredients.Add(info); 
         Debug.Log($"{ingredient.Name} 재료가 attemptedIngredients 리스트에 추가되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
         isNoDuplicate = true;
     }
@@ -155,7 +149,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     public void AddOwnIngredient(IngredientScriptableObject ingredient, int index, bool isCorrect)
     {
         // 필요재료 리스트에서 뺍니다
-        AttemptIngredients.Dequeue();
+        AttemptIngredients.RemoveAt(AttemptIngredients.Count - 1);
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
         OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
         Debug.Log($"가지고 있는 재료: {string.Join(", ", ingredient.Name)}");
@@ -202,5 +196,16 @@ public class ConsumerIngredientHandler : MonoBehaviour
     private int GetRandomIndex(List<IngredientScriptableObject> ingredientList)
     {
         return Random.Range(0, ingredientList.Count - 1);
+    }
+
+    public void RemoveWrongIngredient(IngredientScriptableObject ingredient)
+    {
+        for (int i = AttemptIngredients.Count - 1; i >= 0; i--)
+        {
+            if (AttemptIngredients[i].Ingredient == ingredient)
+            {
+                AttemptIngredients.RemoveAt(i);
+            }
+        }
     }
 }

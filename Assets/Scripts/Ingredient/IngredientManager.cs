@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,13 +11,18 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float UI_DURATION_PREVIEW = 2f;
     public const float CORRECT_INGREDIENT_PROBAILITY = 8f;
 
+    [SerializeField] private GameObject pot;
+    [SerializeField] private CapsuleCollider2D potCollider;
+    [SerializeField] private List<SpriteRenderer> ingredientsInPot;
+
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
     [SerializeField] private GameObject ingredientBoxPrefab;
-    List<IngredientClick> ingredientsClickable = new List<IngredientClick>();
-    List<GameObject> ingredientGameObjs = new List<GameObject>();
+    [SerializeField] private List<IngredientDrag> ingredientsDraggable = new List<IngredientDrag>();
+    private List<GameObject> ingredientGameObjs = new List<GameObject>();
+    private bool isInitializeInPot = false;
 
-    private bool isIngredientSelectMode;
+    private bool isIngredientSelectMode = false;
     public bool IsIngredientSelectMode
     {
         get => isIngredientSelectMode;
@@ -41,6 +47,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumer = null;
+    public RecipeConsumer CurrentRecipeConsumer => currentRecipeConsumer;
 
     void Start()
     {
@@ -72,6 +79,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void OnGameEnd()
     {
+        OnRecipeConsumerFinished(currentRecipeConsumer);
         ActivateIngredientObjOnPosition(false);
         currentRecipeConsumer = null;
         HandleIngredientDeselectMode();
@@ -90,6 +98,7 @@ public class IngredientManager : Singleton<IngredientManager>
         {
             GameObject ingredientGameObj = Instantiate(ingredientBoxPrefab, ingredientsParent);
             ingredientGameObj.name = ingredient.name;
+            ingredientGameObj.layer = LayerMask.NameToLayer("SharpMask");
 
             ingredientGameObj.transform.position = ingredient.IngredientCreatePosition; // 각 재료별 좌표로 옮김
 
@@ -98,30 +107,48 @@ public class IngredientManager : Singleton<IngredientManager>
             {
                 Debug.Log($"재료 박스 프리팹에 스크립트가 부착되지 않았습니다.");
             }
+            ingredientBox.SetLayerForSprite();
             ingredientBox.SetIngredientSprite(ingredient.BgSprite);
             ingredientBox.SetIngredientName(ingredient.Name);
             ingredientBox.GetOrAddCollision();
             ingredientBox.SetBoxVisible(ingredient.IsOutsideBox);
             ingredientBox.SetSpriteDrawingOrder(ingredient.IngredientCreatePosition);
 
-            IngredientClick ingredientClick = ingredientBox.Ingredient.GetOrAddComponent<IngredientClick>();
-            ingredientClick.Initialize();
-            ingredientsClickable.Add(ingredientClick);
+            IngredientDrag ingredientDrag = ingredientBox.Ingredient.GetOrAddComponent<IngredientDrag>();
+            ingredientDrag.Initialize(ingredient, potCollider, ingredientsInPot);
+            ingredientsDraggable.Add(ingredientDrag);
             ingredientGameObjs.Add(ingredientGameObj);
         }
     }
 
-    public void SwitchClickable(bool clickable)
+    public void SwitchDraggable(bool draggable)
     {
-        if(ingredientsClickable == null || ingredientsClickable.Count == 0)
+        if(ingredientsDraggable == null || ingredientsDraggable.Count == 0)
         {
-            Debug.LogWarning("ingredientsClickable 리스트가 비어있습니다.");
+            Debug.LogWarning("ingredientsDraggable 리스트가 비어있습니다.");
             return;
         }
 
-        foreach(IngredientClick ingredientClick in ingredientsClickable)
+        // Pot 안의 재료들의 IngredientDrag 에서만, 가장 처음 한 번만
+        if(!isInitializeInPot)
         {
-             ingredientClick.SetClickable(clickable);
+            isInitializeInPot = true;
+
+            for(int i = 0; i < ingredientsInPot.Count; i++)
+            {
+                var ingredientDrag = ingredientsInPot[i].gameObject.GetComponent<IngredientDrag>();
+                if(ingredientDrag != null)
+                {
+                    // 시작할 때에는 IngredientScriptableObject 리스트의 처음 네 IngredientScriptableObject 로 넣어놓습니다. (나중에 재료를 냄비에 넣을 때 업데이트)
+                    ingredientDrag.Initialize(IngredientScriptableObject[i], potCollider, ingredientsInPot);
+                    ingredientsDraggable.Add(ingredientDrag);
+                }
+            }
+        }
+
+        foreach(IngredientDrag ingredientDrag in ingredientsDraggable)
+        {
+            ingredientDrag.SetDraggable(draggable);
         }
     }
 
@@ -137,14 +164,17 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
+        // @anditsoon TODO: 재료 빼고 나머지 블러 효과 주기
+        pot.SetActive(true);
+
         // ingredient 클릭 활성화
-        SwitchClickable(true);
+        SwitchDraggable(true);
     }
 
     private void HandleIngredientDeselectMode()
     {
         // ingredient 클릭 비활성화
-        SwitchClickable(false);
+        SwitchDraggable(false);
     }
 
     private bool IsValidate(IngredientScriptableObject ingredient)
@@ -200,35 +230,24 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
+        Debug.Log($"[ReceiveRecipeConsumer] {consumer.GetInstanceID()} 클릭되었음");
         currentRecipeConsumer = consumer;
     }
 
     public void RemoveRecipeConsumer(RecipeConsumer consumer)
     {
-        if(currentRecipeConsumer == consumer) currentRecipeConsumer = null;
-    }
-
-    public bool IsCurrentRecipeConsumer(RecipeConsumer consumer)
-    {
-        return (currentRecipeConsumer == consumer);
-    }
-
-    public IngredientScriptableObject FindMatchingIngredient(string ingredientName)
-    {
-        foreach(IngredientScriptableObject ingredient in IngredientScriptableObject)
+        if (currentRecipeConsumer == consumer)
         {
-            if(ingredient.name == ingredientName)
-            {
-                return ingredient;
-            }
+            Debug.Log($"[RemoveRecipeConsumer] {consumer.GetInstanceID()} 제거");
+            currentRecipeConsumer = null;
         }
-
-        throw new System.Exception($"{ingredientName}이라는 이름과 일치하는 재료가 없습니다.");
     }
 
-    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient)
+    public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
-        if(currentRecipeConsumer == null)
+        isNoDuplicate = false;
+
+        if (currentRecipeConsumer == null)
         {
             Debug.LogError("currentRecipeConsumer 가 없습니다.");
             return;
@@ -240,7 +259,7 @@ public class IngredientManager : Singleton<IngredientManager>
             return;
         }
 
-        ingredientHandler.AddAttemptIngredients(ingredient, out bool isNoDuplicate);
+        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate);
         if (isNoDuplicate)
         {
             currentRecipeConsumer.AddPickCount();
@@ -253,16 +272,49 @@ public class IngredientManager : Singleton<IngredientManager>
                 Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
                 return;
             }
-
-            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, currentRecipeConsumer.MyRecipe.Name));
+            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, false, false, true, false));
+            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
         if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
         {
             currentRecipeConsumer.IsAllIngredientSelected = true;
-            currentRecipeConsumer.ResetPickCount();
-            IsIngredientSelectMode = false;
         }
+    }
+
+    public void RemoveIngredientFromCorrectCunsumer(IngredientScriptableObject ingredient)
+    {
+        if (currentRecipeConsumer == null)
+        {
+            Debug.LogError("currentRecipeConsumer 가 없습니다.", this);
+            Debug.LogError(Environment.StackTrace);
+            return;
+        }
+        ConsumerIngredientHandler ingredientHandler = currentRecipeConsumer.gameObject.GetComponent<ConsumerIngredientHandler>();
+        if (ingredientHandler == null)
+        {
+            Debug.LogError("ConsumerIngredientHandler 가 없습니다.");
+            return;
+        }
+
+        currentRecipeConsumer.GetComponent<ConsumerIngredientHandler>().RemoveWrongIngredient(ingredient);
+    }
+
+    public void OnRecipeConsumerFinished(RecipeConsumer consumer)
+    {
+        foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
+        {
+            spriteRenderer.gameObject.SetActive(false);
+        }
+
+        if(currentRecipeConsumer != null)
+        {
+            currentRecipeConsumer.ClearIngredientsInPot();
+            RemoveRecipeConsumer(consumer);
+        }
+
+        pot.SetActive(false);
+        IsIngredientSelectMode = false;
     }
 
     #endregion
