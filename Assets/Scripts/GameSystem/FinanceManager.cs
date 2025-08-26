@@ -9,8 +9,13 @@ public class FinanceManager : Singleton<FinanceManager>
     /// <summary>
     /// 목표 매출액
     /// </summary>
-    [Header ("목표 매출액")]
-    [SerializeField] private int goalMoney = 50000;
+    [Header("목표 매출액")]
+    [SerializeField] private int easyModeGoalMoney = 20000;
+    [SerializeField] private int hardModeGoalMoney = 50000;
+    private int goalMoney
+    {
+        get { return GameManager.Instance.IsHardMode ? hardModeGoalMoney : easyModeGoalMoney; }
+    }
 
     [Header("UI관련")]
     [SerializeField] private TMP_Text goalMoneyUi;
