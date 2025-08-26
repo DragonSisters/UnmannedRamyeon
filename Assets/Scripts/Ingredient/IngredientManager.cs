@@ -12,6 +12,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float CORRECT_INGREDIENT_PROBAILITY = 8f;
 
     [SerializeField] private GameObject pot;
+    [SerializeField] private GameObject stencil;
     [SerializeField] private CapsuleCollider2D potCollider;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
@@ -166,6 +167,7 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         // @anditsoon TODO: 재료 빼고 나머지 블러 효과 주기
         pot.SetActive(true);
+        stencil.SetActive(true);
 
         // ingredient 클릭 활성화
         SwitchDraggable(true);
@@ -314,6 +316,7 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         pot.SetActive(false);
+        stencil.SetActive(false);
         IsIngredientSelectMode = false;
     }
 
