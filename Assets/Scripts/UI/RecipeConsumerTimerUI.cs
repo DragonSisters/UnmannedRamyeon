@@ -44,6 +44,9 @@ public class RecipeConsumerTimerUI : MonoBehaviour
 
     public void ActivateTimer()
     {
+        elapsedTime = 0;
+        consumerTimerFill.fillAmount = 1;
+        isCloseToEnd = false;
         consumerTimerFill.color = startFillColor;
         consumerTimerBackground.gameObject.SetActive(true);
         consumerTimerFill.gameObject.SetActive(true);
@@ -51,9 +54,6 @@ public class RecipeConsumerTimerUI : MonoBehaviour
 
     public void DeactivateTimer()
     {
-        elapsedTime = 0;
-        isCloseToEnd = false;
-        consumerTimerFill.fillAmount = 1;
         consumerTimerBackground.gameObject.SetActive(false);
         consumerTimerFill.gameObject.SetActive(false);
     }
