@@ -14,15 +14,13 @@ public class RecipeConsumer : Consumer
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
-
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
-    private float recipeOrderDuration = 2f;
-
-    private float stayTime = 15f;
 
     public bool IsAllIngredientSelected = false;
     public int CurrPickCount { get; private set; } = 0;
 
+    private float recipeOrderDuration = 2f;
+    private float stayTime = 15f;
     private IngredientScriptableObject[] ingredientsInPot = new IngredientScriptableObject[4];
 
     internal override void HandleChildEnter()
@@ -104,6 +102,24 @@ public class RecipeConsumer : Consumer
         yield break;
     }
 
+    internal override void HandleChildClick()
+    { 
+        ResetPickCount();
+        ingredientHandler.AttemptIngredients.Clear();
+        ingredientHandler.OwnedIngredients.Clear();
+
+        //ingredients 들 클릭 활성화
+        IngredientManager.Instance.IsIngredientSelectMode = true;
+
+        // IngredientManager 에 내 정보 보냄
+        IngredientManager.Instance.ReceiveRecipeConsumer(this);
+    }
+
+    internal override void HandleChildUnclick()
+    {
+        IngredientManager.Instance.OnRecipeConsumerFinished(this);
+    }
+
     private IEnumerator EnterCoroutine()
     {
         var shoutPoint = MoveManager.Instance.RandomShoutPoint;
@@ -136,23 +152,6 @@ public class RecipeConsumer : Consumer
     {
         StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, false, true, true, true, -1, $"{myRecipe.Name}"));
         yield return new WaitForSeconds(recipeOrderDuration);
-    }
-
-    internal override void HandleChildClick()
-    { 
-        ResetPickCount();
-        ingredientHandler.AttemptIngredients.Clear();
-
-        //ingredients 들 클릭 활성화
-        IngredientManager.Instance.IsIngredientSelectMode = true;
-
-        // IngredientManager 에 내 정보 보냄
-        IngredientManager.Instance.ReceiveRecipeConsumer(this);
-    }
-
-    internal override void HandleChildUnclick()
-    {
-        IngredientManager.Instance.OnRecipeConsumerFinished(this);
     }
 
     public void AddPickCount()

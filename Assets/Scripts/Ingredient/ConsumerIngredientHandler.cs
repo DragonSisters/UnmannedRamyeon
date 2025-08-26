@@ -144,15 +144,21 @@ public class ConsumerIngredientHandler : MonoBehaviour
         AttemptIngredients.Add(info); 
         Debug.Log($"{ingredient.Name} 재료가 attemptedIngredients 리스트에 추가되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
         isNoDuplicate = true;
+
+        AddOwnIngredient(info);
     }
 
-    public void AddOwnIngredient(IngredientScriptableObject ingredient, int index, bool isCorrect)
+    public void AddOwnIngredient(IngredientInfo info)
+    {
+        // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
+        OwnedIngredients.Add(info);
+        Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients.Select(x => x.Ingredient.Name))}");
+    }
+
+    public void RemoveFromAttemptIngredients(IngredientInfo info)
     {
         // 필요재료 리스트에서 뺍니다
         AttemptIngredients.RemoveAt(AttemptIngredients.Count - 1);
-        // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
-        OwnedIngredients.Add(new IngredientInfo(ingredient, index, isCorrect));
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", ingredient.Name)}");
     }
 
     public void UpdateCorrectOwnIngredient(int index)
@@ -205,6 +211,14 @@ public class ConsumerIngredientHandler : MonoBehaviour
             if (AttemptIngredients[i].Ingredient == ingredient)
             {
                 AttemptIngredients.RemoveAt(i);
+            }
+        }
+
+        for (int i = OwnedIngredients.Count - 1; i >= 0; i--)
+        {
+            if (OwnedIngredients[i].Ingredient == ingredient)
+            {
+                OwnedIngredients.RemoveAt(i);
             }
         }
     }

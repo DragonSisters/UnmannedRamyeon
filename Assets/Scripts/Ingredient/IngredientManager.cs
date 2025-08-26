@@ -165,7 +165,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
-        // @anditsoon TODO: 재료 빼고 나머지 블러 효과 주기
         pot.SetActive(true);
         stencil.SetActive(true);
 
