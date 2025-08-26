@@ -30,7 +30,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
             RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
             if (recipeConsumer != null)
             {
-                return IngredientManager.Instance.CurrentRecipeConsumer.CurrPickCount;
+                return recipeConsumer.CurrPickCount;
             }
             else
             {

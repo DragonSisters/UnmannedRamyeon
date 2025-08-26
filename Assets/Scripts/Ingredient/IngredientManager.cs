@@ -80,7 +80,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void OnGameEnd()
     {
-        OnRecipeConsumerFinished();
+        OnRecipeConsumerFinished(currentRecipeConsumer);
         ActivateIngredientObjOnPosition(false);
         currentRecipeConsumer = null;
         HandleIngredientDeselectMode();
@@ -311,14 +311,18 @@ public class IngredientManager : Singleton<IngredientManager>
     //StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
     //}
 
-    public void OnRecipeConsumerFinished()
+    public void OnRecipeConsumerFinished(RecipeConsumer consumer)
     {
         foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
         {
             spriteRenderer.gameObject.SetActive(false);
         }
 
-        currentRecipeConsumer.ClearIngredientsInPot();
+        if(currentRecipeConsumer != null)
+        {
+            currentRecipeConsumer.ClearIngredientsInPot();
+            RemoveRecipeConsumer(consumer);
+        }
 
         pot.SetActive(false);
         IsIngredientSelectMode = false;

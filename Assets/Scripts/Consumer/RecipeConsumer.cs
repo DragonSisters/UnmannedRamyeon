@@ -38,7 +38,6 @@ public class RecipeConsumer : Consumer
     {
         ResetPickCount();
         ingredientHandler.ResetAllIngredientLists();
-        IngredientManager.Instance.RemoveRecipeConsumer(this);
     }
 
     internal override IEnumerator HandleChildIssue()
@@ -61,11 +60,10 @@ public class RecipeConsumer : Consumer
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if(IngredientManager.Instance.IsCurrentRecipeConsumer(this)) IngredientManager.Instance.IsIngredientSelectMode = false;
             appearanceScript.SetClickable(false);
             if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
             {
-                IngredientManager.Instance.OnRecipeConsumerFinished();
+                IngredientManager.Instance.OnRecipeConsumerFinished(this);
             }
             SetState(ConsumerState.Leave);
             yield break;
@@ -86,10 +84,6 @@ public class RecipeConsumer : Consumer
         if (isAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
-            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
-            {
-                IngredientManager.Instance.OnRecipeConsumerFinished();
-            }
             SetState(ConsumerState.LineUp);
         }
         else // 시간 안에 재료를 다 골랐지만, 그 재료 중에 단 하나라도 틀린 재료가 있다.
@@ -97,11 +91,12 @@ public class RecipeConsumer : Consumer
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
-            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
-            {
-                IngredientManager.Instance.OnRecipeConsumerFinished();
-            }
             SetState(ConsumerState.Leave);
+        }
+
+        if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
+        {
+            IngredientManager.Instance.OnRecipeConsumerFinished(this);
         }
 
         appearanceScript.SetClickable(false);
@@ -161,14 +156,10 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclick()
     {
-        //ingredients 들 클릭 비활성화
-        IngredientManager.Instance.IsIngredientSelectMode = false;
-
-        // 냄비 속 UI 정리
-        IngredientManager.Instance.OnRecipeConsumerFinished();
-        
-        // IngredientManager 에 내 정보 삭제 요청
-        IngredientManager.Instance.RemoveRecipeConsumer(this);
+        if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
+        {
+            IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        }
     }
 
     public void AddPickCount()
