@@ -290,25 +290,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         SetState(ConsumerState.Leave);
     }
 
-    public void ChooseIngredients()
-    {
-        ingredientHandler.ResetAllIngredientLists();
-        SetIngredientLists();
-    }
-
-    public virtual IEnumerator HandleOrderOnUI()
-    {
-        // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
-        consumerUI.ActivateIngredientUI(true);
-        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
-        consumerUI.ActivateIngredientUI(false);
-    }
-
-    public virtual void SetIngredientLists()
-    {
-        ingredientHandler.SetAllIngredientLists();
-        ingredientHandler.ChooseAllIngredients();
-    }
 
     private IEnumerator SearchIngredient()
     {
@@ -333,7 +314,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         // 잠시 서서 기다리는 시간도 포함합니다.
         yield return new WaitForSeconds(IngredientManager.INGREDIENT_PICKUP_TIME);
 
-        ingredientHandler.AddOwnIngredient(attemptIngredientInfo.Ingredient, attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
+        ingredientHandler.RemoveFromAttemptIngredients(attemptIngredientInfo);
+        ingredientHandler.AddOwnIngredient(attemptIngredientInfo);
         // UI를 업데이트 합니다.
         consumerUI.ActivateFeedbackUIs(attemptIngredientInfo.Index, attemptIngredientInfo.IsCorrect);
 
@@ -392,6 +374,26 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     public void OnSpriteDeselected()
     {
         HandleChildUnclick();
+    }
+
+    public void ChooseIngredients()
+    {
+        ingredientHandler.ResetAllIngredientLists();
+        SetIngredientLists();
+    }
+
+    public virtual void SetIngredientLists()
+    {
+        ingredientHandler.SetAllIngredientLists();
+        ingredientHandler.ChooseAllIngredients();
+    }
+
+    public virtual IEnumerator HandleOrderOnUI()
+    {
+        // 대부분의 손님의 경우: 처음에 주문한 재료를 보여준 뒤 다시 비활성화 합니다
+        consumerUI.ActivateIngredientUI(true);
+        yield return new WaitForSeconds(IngredientManager.UI_DURATION_ON_COLLECT);
+        consumerUI.ActivateIngredientUI(false);
     }
 
     public void WrongIngredientSpeech(int tmp = 0)
