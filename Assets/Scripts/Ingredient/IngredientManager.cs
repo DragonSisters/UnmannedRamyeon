@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -231,7 +230,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
-        Debug.LogWarning($"[ReceiveRecipeConsumer] {consumer.GetInstanceID()} 클릭되었음");
+        Debug.Log($"[ReceiveRecipeConsumer] {consumer.GetInstanceID()} 클릭되었음");
         currentRecipeConsumer = consumer;
     }
 
@@ -239,7 +238,7 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if (currentRecipeConsumer == consumer)
         {
-            Debug.LogWarning($"[RemoveRecipeConsumer] {consumer.GetInstanceID()} 제거");
+            Debug.Log($"[RemoveRecipeConsumer] {consumer.GetInstanceID()} 제거");
             currentRecipeConsumer = null;
         }
     }
@@ -278,6 +277,7 @@ public class IngredientManager : Singleton<IngredientManager>
                 Debug.LogWarning("ConsumerSpeech 를 찾을 수 없습니다");
                 return;
             }
+            StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.DuplicateIngredientDetected, false, false, true, false));
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 

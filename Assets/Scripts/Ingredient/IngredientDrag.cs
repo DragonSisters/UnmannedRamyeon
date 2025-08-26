@@ -146,7 +146,6 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
             RemoveIngredientFromPot(chosenIndex);
         }
 
-        Debug.LogError(currPickNumIdx);
         if (currPickNumIdx >= 4)
         {
             ShaderEffectHelper.SetOutlineColor(material, clickableColor);

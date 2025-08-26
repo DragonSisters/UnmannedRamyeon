@@ -7,22 +7,25 @@ public class ConsumerSpeech : MonoBehaviour
 {
     private ConsumerUI consumerUI;
     private const float SPEECH_INTERVAL = 0.1f;
-    private const float SPEECH_END_WAIT_TIME = 3f;
+    private const float SPEECH_END_WAIT_TIME = 1f;
 
     Coroutine SpeechCoroutine;
 
     private bool isSpeaking;
-    public bool IsSpeaking => isSpeaking;
 
     public void Initialize(in ConsumerUI consumerUI) // in키워드 = call by ref
     {
         this.consumerUI = consumerUI;
         SpeechCoroutine = null;
+        isSpeaking = false;
     }
 
     public void StopSpeech()
     {
-        StopCoroutine(SpeechCoroutine);
+        if (SpeechCoroutine != null)
+        {
+            StopCoroutine(SpeechCoroutine);
+        }
         consumerUI.SetSpeechBubbleUI(false);
         SpeechCoroutine = null;
         isSpeaking = false;
@@ -41,9 +44,9 @@ public class ConsumerSpeech : MonoBehaviour
         if (isGetPreviousLine)
         {
             // 말이 끝날 때까지 기다립니다
-            yield return new WaitUntil(() => SpeechCoroutine == null);
+            yield return new WaitUntil(() => !isSpeaking);
         }
-        else if (SpeechCoroutine != null)
+        else if (isSpeaking)
         {
             // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
@@ -89,9 +92,9 @@ public class ConsumerSpeech : MonoBehaviour
     {
         if (isGetPreviousLine)
         {
-            yield return new WaitUntil(() => SpeechCoroutine == null);
+            yield return new WaitUntil(() => !isSpeaking);
         }
-        else if (SpeechCoroutine != null)
+        else if (isSpeaking)
         {
             // 말하고 있는게 있다면 멈춥니다.
             StopSpeech();
@@ -148,7 +151,7 @@ public class ConsumerSpeech : MonoBehaviour
             consumerUI.SetSpeechBubbleUI(false);
         }
 
-        isSpeaking = false;
         SpeechCoroutine = null;
+        isSpeaking = false;
     }
 }
