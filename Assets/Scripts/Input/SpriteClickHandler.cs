@@ -1,6 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
+class ClickCandidate
+{
+    public GameObject Target;
+    public int SortingLayer;
+    public int SortingOrder;
+    public float Z;
+    public bool IsUI;
+}
 public class SpriteClickHandler : Singleton<SpriteClickHandler>
 {
     public IClickableSprite CurrentClickedSprite => currentClickedSprite;
@@ -21,74 +30,80 @@ public class SpriteClickHandler : Singleton<SpriteClickHandler>
 
     private void HandleSpriteClick()
     {
+        var candidates = new List<ClickCandidate>();
+
+        // 1. UI 수집
+        PointerEventData pointerData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        var uiResults = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, uiResults);
+
+        foreach (var ui in uiResults)
+        {
+            var canvas = ui.gameObject.GetComponentInParent<Canvas>();
+            if (canvas == null) continue;
+
+            candidates.Add(new ClickCandidate
+            {
+                Target = ui.gameObject,
+                SortingLayer = SortingLayer.GetLayerValueFromID(canvas.sortingLayerID),
+                SortingOrder = canvas.sortingOrder,
+                Z = ui.gameObject.transform.position.z,
+                IsUI = true
+            });
+        }
+
+        // 2. Sprite 수집
         var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         var mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
 
-        if (hits.Length == 0)
+        foreach (var hit in hits)
         {
+            var sr = hit.collider.GetComponent<SpriteRenderer>();
+            if (sr == null) continue;
+
+            candidates.Add(new ClickCandidate
+            {
+                Target = hit.collider.gameObject,
+                SortingLayer = SortingLayer.GetLayerValueFromID(sr.sortingLayerID),
+                SortingOrder = sr.sortingOrder,
+                Z = sr.transform.position.z,
+                IsUI = false
+            });
+        }
+
+        if (candidates.Count == 0)
             return;
-        }
 
-        // 2D 렌더링 순서에 맞게 정렬 (앞쪽이 먼저)
-        System.Array.Sort(hits, CompareSpriteRenderOrder);
+        // 3. 공통된 기준으로 정렬
+        candidates.Sort(CompareCandidates);
 
-        IClickableSprite clickable = hits[0].collider.GetComponent<IClickableSprite>();
-        if (clickable == null)
+        // 4. 최상위 오브젝트 클릭 처리
+        var top = candidates[0];
+        var clickable = top.Target.GetComponent<IClickableSprite>();
+        if (clickable != null && clickable.IsClickable)
         {
-            return;
+            clickable.OnSpriteClicked();
         }
 
-        // 클릭할 수 있을 때만 클릭처리합니다.
-        if (clickable.IsClickable)
-        {
-            currentClickedSprite = clickable;
-            currentClickedSprite.OnSpriteClicked();
-        }
     }
 
-    int CompareSpriteRenderOrder(RaycastHit2D hit1, RaycastHit2D hit2)
+    private int CompareCandidates(ClickCandidate a, ClickCandidate b)
     {
-        var sr1 = hit1.collider.GetComponent<SpriteRenderer>();
-        var sr2 = hit2.collider.GetComponent<SpriteRenderer>();
+        // 1. SortingLayer
+        if (a.SortingLayer != b.SortingLayer)
+            return b.SortingLayer.CompareTo(a.SortingLayer);
 
-        // SpriteRenderer가 없으면 뒤쪽으로 보냄
-        if (sr1 == null && sr2 == null)
-        {
-            return 0;
-        }
-        if (sr1 == null)
-        {
-            return 1;
-        }
-        if (sr2 == null)
-        {
-            return -1;
-        }
+        // 2. SortingOrder
+        if (a.SortingOrder != b.SortingOrder)
+            return b.SortingOrder.CompareTo(a.SortingOrder);
 
-        // 1. SortingLayer 비교 (높은 ID가 앞쪽)
-        int layer1 = SortingLayer.GetLayerValueFromID(sr1.sortingLayerID);
-        int layer2 = SortingLayer.GetLayerValueFromID(sr2.sortingLayerID);
-
-        if (layer1 != layer2)
-        {
-            return layer2.CompareTo(layer1); // 높은 레이어가 앞쪽
-        }
-
-        // 2. 같은 레이어면 SortingOrder 비교 (높은 값이 앞쪽)
-        if (sr1.sortingOrder != sr2.sortingOrder)
-        {
-            return sr2.sortingOrder.CompareTo(sr1.sortingOrder);
-        }
-
-        // 3. 같은 sortingOrder면 Y 위치로 비교 (높은 Y가 뒤쪽, 2D 기본 규칙)
-        if (Mathf.Abs(sr1.transform.position.y - sr2.transform.position.y) > 0.01f)
-        {
-            return sr1.transform.position.y.CompareTo(sr2.transform.position.y);
-        }
-
-        // 4. 마지막으로 Z 위치로 비교 (혹시 모를 경우)
-        return sr2.transform.position.z.CompareTo(sr1.transform.position.z);
+        // 3. Z (앞쪽이 더 작음)
+        return a.Z.CompareTo(b.Z);
     }
 }
