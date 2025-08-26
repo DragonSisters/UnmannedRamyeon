@@ -243,11 +243,6 @@ public class IngredientManager : Singleton<IngredientManager>
         }
     }
 
-    public bool IsCurrentRecipeConsumer(RecipeConsumer consumer)
-    {
-        return (currentRecipeConsumer == consumer);
-    }
-
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
         isNoDuplicate = false;
@@ -304,12 +299,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
         currentRecipeConsumer.GetComponent<ConsumerIngredientHandler>().RemoveWrongIngredient(ingredient);
     }
-
-    //private IEnumerator RepeatRecipeOrder(ConsumerSpeech consumerSpeech)
-    //{
-    //    yield return new WaitUntil(() => consumerSpeech.IsSpeaking);
-    //StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
-    //}
 
     public void OnRecipeConsumerFinished(RecipeConsumer consumer)
     {

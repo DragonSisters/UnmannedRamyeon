@@ -61,10 +61,9 @@ public class RecipeConsumer : Consumer
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
             appearanceScript.SetClickable(false);
-            if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
-            {
-                IngredientManager.Instance.OnRecipeConsumerFinished(this);
-            }
+
+            IngredientManager.Instance.OnRecipeConsumerFinished(this);
+
             SetState(ConsumerState.Leave);
             yield break;
         }
@@ -94,10 +93,7 @@ public class RecipeConsumer : Consumer
             SetState(ConsumerState.Leave);
         }
 
-        if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
-        {
-            IngredientManager.Instance.OnRecipeConsumerFinished(this);
-        }
+        IngredientManager.Instance.OnRecipeConsumerFinished(this);
 
         appearanceScript.SetClickable(false);
         IsAllIngredientSelected = false;
@@ -156,10 +152,7 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclick()
     {
-        if (IngredientManager.Instance.IsCurrentRecipeConsumer(this))
-        {
-            IngredientManager.Instance.OnRecipeConsumerFinished(this);
-        }
+        IngredientManager.Instance.OnRecipeConsumerFinished(this);
     }
 
     public void AddPickCount()
