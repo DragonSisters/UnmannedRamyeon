@@ -44,7 +44,6 @@ public class IngredientUI : MonoBehaviour, IClickableSprite
 
     public void OnSpriteClicked()
     {
-        Debug.Log($"재료가 클릭되었습니다");
         // 재료를 isCorrect = true로 만듭니다
         OnClicked?.Invoke(index);
         feedbackImage.sprite = correctSprite;

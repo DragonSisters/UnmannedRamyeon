@@ -110,7 +110,7 @@ public class IngredientManager : Singleton<IngredientManager>
             IngredientBox ingredientBox = ingredientGameObj.GetComponent<IngredientBox>();
             if (ingredientBox == null)
             {
-                Debug.Log($"재료 박스 프리팹에 스크립트가 부착되지 않았습니다.");
+                Debug.LogError($"재료 박스 프리팹에 스크립트가 부착되지 않았습니다.");
             }
             ingredientBox.SetLayerForSprite();
             ingredientBox.SetIngredientSprite(ingredient.BgSprite);
@@ -212,7 +212,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
         // 앞에서 n개만 반환
         var selectedList = shuffledList.GetRange(0, count);
-        Debug.Log($"손님이 고른 재료들: {string.Join(", ", selectedList)}");
         return selectedList;
     }
 
@@ -235,7 +234,6 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
-        Debug.Log($"[ReceiveRecipeConsumer] {consumer.GetInstanceID()} 클릭되었음");
         currentRecipeConsumer = consumer;
     }
 
@@ -243,7 +241,6 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if (currentRecipeConsumer == consumer)
         {
-            Debug.Log($"[RemoveRecipeConsumer] {consumer.GetInstanceID()} 제거");
             currentRecipeConsumer = null;
         }
     }

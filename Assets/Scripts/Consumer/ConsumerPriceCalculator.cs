@@ -31,7 +31,5 @@ public class ConsumerPriceCalculator : MonoBehaviour
         }
 
         gain = Mathf.RoundToInt((float)gain * consumerMood.GetMoodRatio());
-
-        Debug.Log($"최종 금액은 {gain}입니다. 잃은 금액은 {loss}입니다.");
     }
 }

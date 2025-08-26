@@ -69,7 +69,6 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
             return;
         }
 
-        Debug.Log($"손님{gameObject.GetInstanceID()}가 클릭되었습니다.");
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
 
         // 모든 Consumer 검사하여 다른 손님은 Click해제

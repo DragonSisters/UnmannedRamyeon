@@ -39,8 +39,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     /// </summary>
     internal void SetState(ConsumerState newState)
     {
-        Debug.Log($"[SetState] {gameObject.name} 상태 변경: {State} → {newState}");
-
         // 이슈와 관련된 상태가 아니라면 cache해놓습니다.
         if (newState != ConsumerState.Issue 
             && newState != ConsumerState.IssueSolved 

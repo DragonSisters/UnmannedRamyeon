@@ -62,7 +62,6 @@ public class ConsumerMood : MonoBehaviour
             currentAmount = MIN_MOOD;
         }
         CheckMoodStateChanged();
-        Debug.Log($"손님 기분 저하: {Mood}, {currentAmount}");
     }
 
     /// <summary>
@@ -77,7 +76,6 @@ public class ConsumerMood : MonoBehaviour
             currentAmount = MAX_MOOD;
         }
         CheckMoodStateChanged();
-        Debug.Log($"손님 기분 증가: {Mood}, {currentAmount}");
     }
 
     private void CheckMoodStateChanged()

@@ -66,7 +66,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
         else
         {
             paidIngredients = new List<IngredientScriptableObject>(ingredientList);
-            Debug.Log($"레시피 손님이 고른 재료 : {string.Join(", ", ingredientList)}");
         }
 
         // 필요한 재료들을 머리 위에 아이콘으로 표시합니다.
@@ -134,15 +133,12 @@ public class ConsumerIngredientHandler : MonoBehaviour
         // 중복된 재료일 경우
         if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
         {
-            Debug.Log("중복된 재료입니다!");
-
             isNoDuplicate = false;
 
             return;
         }
 
         AttemptIngredients.Add(info); 
-        Debug.Log($"{ingredient.Name} 재료가 attemptedIngredients 리스트에 추가되었습니다. 몇 번째? {info.Index}, 맞는 재료? {isCorrect}");
         isNoDuplicate = true;
 
         AddOwnIngredient(info);
@@ -152,7 +148,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
     {
         // 얻은재료 리스트에 새로 가져온 재료를 추가합니다.
         OwnedIngredients.Add(info);
-        Debug.Log($"가지고 있는 재료: {string.Join(", ", OwnedIngredients.Select(x => x.Ingredient.Name))}");
     }
 
     public void RemoveFromAttemptIngredients(IngredientInfo info)
@@ -174,7 +169,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
             if(ownedIngredient.Index == index)
             {
                 ownedIngredient.IsCorrect = true;
-                Debug.Log($"[{ownedIngredient.Ingredient.Name}] 클릭 완료. 이제 최종가격에 포함됩니다.");
             }
         }
     }
@@ -188,14 +182,12 @@ public class ConsumerIngredientHandler : MonoBehaviour
         {
             ingredient = paidIngredients[index];
             isCorrect = true;
-            Debug.Log($"올바른 재료! : {ingredient.Name}");
         }
         else
         {
             int randomIndex = GetRandomIndex(unpaidIngredients);
             ingredient = unpaidIngredients[randomIndex];
             isCorrect = false;
-            Debug.Log($"틀린 재료! : {ingredient.Name}");
         }
     }
 
