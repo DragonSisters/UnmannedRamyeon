@@ -69,6 +69,8 @@ public class IngredientManager : Singleton<IngredientManager>
 
         OnIngredientSelectMode += HandleIngredientSelectMode;
         OnIngredientDeselectMode += HandleIngredientDeselectMode;
+
+        potUIController.Initialize();
     }
 
     public void ActivateIngredientObjOnPosition(bool IsActive)
