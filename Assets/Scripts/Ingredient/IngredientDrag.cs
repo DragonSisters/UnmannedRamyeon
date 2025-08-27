@@ -211,7 +211,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         if (potCollider == null) return false;
 
-        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(screenPoint);
+        Vector2 worldPoint = InputUtility.ScreenToWorldPoint(screenPoint);
 
         return potCollider.OverlapPoint(worldPoint);
     }
@@ -219,7 +219,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     private int GetPickedIngredientIndex(Vector2 screenPoint)
     {
-        Vector2 worldPoint = Camera.main.ScreenToWorldPoint(screenPoint);
+        Vector2 worldPoint = InputUtility.ScreenToWorldPoint(screenPoint);
         int index = -1;
         for(int i = 0; i < ingredientsInPotCollider.Count; i++)
         {

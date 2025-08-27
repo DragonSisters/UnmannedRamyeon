@@ -95,7 +95,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
 
         // 마우스가 움직이고 있다면 알파값을 조절한다
         // 이전 마우스 값과 비교해서 얼만큼 움직였는지 계산하여 distance가 일정이상일 때 움직였다고 판단한다
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = InputUtility.ScreenToWorldPoint(Input.mousePosition);
         float distance = Vector2.Distance(mousePrePosition, mousePos);
         if (distance > mousePositionThredhold)
         {

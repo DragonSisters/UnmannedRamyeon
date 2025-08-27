@@ -36,7 +36,7 @@ public class SpriteDragHandler : Singleton<SpriteDragHandler>
     private bool TryGetCurrentDraggedSprite(out IDraggableSprite selectedSprite)
     {
         selectedSprite = null;
-        var mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        var mousePos = InputUtility.ScreenToWorldPoint(Input.mousePosition);
         var mousePos2D = new Vector2(mousePos.x, mousePos.y);
 
         RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2D, Vector2.zero);
