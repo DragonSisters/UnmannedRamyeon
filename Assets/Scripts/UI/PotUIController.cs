@@ -11,6 +11,8 @@ public class PotUIController : MonoBehaviour
 
     private Vector2 pot_originalPos = new Vector2(0, 0);
     [SerializeField] private Animation potAnim;
+    private string slideIn = "pot_slideIn";
+    private string slideOut = "pot_slideOut";
     private float potAnimTime = 0.5f;
     [SerializeField] private int nameTagSortingOrder = 17;
 
@@ -45,15 +47,15 @@ public class PotUIController : MonoBehaviour
         pot.transform.position = pot_originalPos;
         pot.SetActive(true);
         SetRecipeName(IngredientManager.Instance.CurrentRecipeConsumer.MyRecipe.Name);
-        potAnim.Play("pot_slideIn");
+        potAnim.Play(slideIn);
 
         yield return new WaitForSeconds(potAnimTime);
     }
 
     public IEnumerator RemovePot()
     {
-        potAnim.Play("pot_slideOut");
-        yield return new WaitForSeconds(potAnimTime);
+        potAnim.Play(slideOut);
+        yield return new WaitUntil(() => !potAnim.IsPlaying(slideOut));
 
         foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
         {
