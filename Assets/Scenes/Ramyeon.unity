@@ -146,12 +146,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 17607819}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 843265049}
+  m_Father: {fileID: 1448063663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &17607821
 MonoBehaviour:
@@ -796,7 +796,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ed9f43e376a3d9419397b5b99608fdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pot: {fileID: 1448063662}
   stencil: {fileID: 1220299519}
   potCollider: {fileID: 947344251}
   ingredientsInPot:
@@ -804,6 +803,7 @@ MonoBehaviour:
   - {fileID: 17607822}
   - {fileID: 1159030908}
   - {fileID: 678272916}
+  potUIController: {fileID: 843265050}
   IngredientScriptableObject:
   - {fileID: 11400000, guid: 536d44cff8a6bc041aac488cd36efcd0, type: 2}
   - {fileID: 11400000, guid: c92d789b1ab239f4cad50c3d2f2c0583, type: 2}
@@ -1666,12 +1666,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 678272915}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 843265049}
+  m_Father: {fileID: 1448063663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!60 &678272919
 PolygonCollider2D:
@@ -2135,6 +2135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 843265049}
+  - component: {fileID: 843265050}
   m_Layer: 0
   m_Name: Pot
   m_TagString: Untagged
@@ -2156,12 +2157,27 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1448063663}
-  - {fileID: 2082654826}
-  - {fileID: 17607820}
-  - {fileID: 1159030906}
-  - {fileID: 678272918}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &843265050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843265048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f038c9a406c482c4bb37e4cfaaa7ab7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pot: {fileID: 1448063662}
+  ingredientsInPot:
+  - {fileID: 2082654828}
+  - {fileID: 17607822}
+  - {fileID: 1159030908}
+  - {fileID: 678272916}
+  potAnim: {fileID: 1448063666}
 --- !u!1 &845674785
 GameObject:
   m_ObjectHideFlags: 0
@@ -2718,12 +2734,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1159030905}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 843265049}
+  m_Father: {fileID: 1448063663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1159030907
 MonoBehaviour:
@@ -3169,6 +3185,7 @@ GameObject:
   - component: {fileID: 1448063663}
   - component: {fileID: 1448063664}
   - component: {fileID: 1448063665}
+  - component: {fileID: 1448063666}
   m_Layer: 0
   m_Name: Pot_sprite
   m_TagString: Untagged
@@ -3190,6 +3207,10 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 947344250}
+  - {fileID: 2082654826}
+  - {fileID: 17607820}
+  - {fileID: 1159030906}
+  - {fileID: 678272918}
   m_Father: {fileID: 843265049}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1448063664
@@ -3461,6 +3482,24 @@ PolygonCollider2D:
       - {x: -4.425, y: 0}
       - {x: -4.4, y: 0.025}
   m_UseDelaunayMesh: 0
+--- !u!111 &1448063666
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448063662}
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Animation: {fileID: 7400000, guid: 08bcfe26d9a43534c8c761b33c7a49fd, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: 08bcfe26d9a43534c8c761b33c7a49fd, type: 2}
+  - {fileID: 7400000, guid: f9dcf2ad305c56d4a8d83322463789b3, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_UpdateMode: 0
+  m_CullingType: 0
 --- !u!1 &1502370958
 GameObject:
   m_ObjectHideFlags: 0
@@ -4027,12 +4066,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082654825}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 843265049}
+  m_Father: {fileID: 1448063663}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2082654827
 MonoBehaviour:
@@ -4291,6 +4330,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 179047458733784328, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 427120831550323606, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
