@@ -876,14 +876,14 @@ Canvas:
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
-  m_OverrideSorting: 0
+  m_OverrideSorting: 1
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 1364069199
-  m_SortingOrder: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 14
   m_TargetDisplay: 0
 --- !u!114 &8183307709943396222
 MonoBehaviour:
@@ -1154,7 +1154,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3818206473037085212
 RectTransform:
   m_ObjectHideFlags: 0
