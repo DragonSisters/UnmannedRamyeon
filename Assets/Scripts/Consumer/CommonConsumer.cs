@@ -7,7 +7,7 @@ public class CommonConsumer : Consumer
 {
     internal override void HandleChildEnter()
     {
-        appearanceScript.SetClickable(GameManager.Instance.ShowIngredientCommonConsumer);
+        appearanceScript.SetClickable(GameManager.Instance.CommonConsumerWrongPickFeature);
         SetState(ConsumerState.Order);
     }
 

@@ -28,7 +28,7 @@ public class ConsumerUI : MonoBehaviour
 
     public void ActivateIngredientUI(bool isActive)
     {
-        if (!GameManager.Instance.ShowIngredientCommonConsumer)
+        if (!GameManager.Instance.CommonConsumerWrongPickFeature)
         {
             return;
         }

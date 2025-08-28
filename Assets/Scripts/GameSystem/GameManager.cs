@@ -33,13 +33,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject img_Fail;
     [SerializeField] private TMP_Text txt_MoneyFail;
 
-#region 방향성 변경에 따른 제어 변수
+    #region 방향성 변경에 따른 제어 변수
     // 참고: https://github.com/DragonSisters/UnmannedRamyeonObsidian/blob/main/00_공지/방향성에%20대한%20논의%20회의록.md
-    // * 재료 말풍선을 보이도록 할지 여부
-    public readonly bool ShowIngredientCommonConsumer = false;
-    // * 재료를 잘못가져올 확률이 있을지 여부
-    public readonly bool WrongIngredientPickChance = false;
-#endregion
+    // * 일반 손님이 재료를 잘못가져오는 기능을 넣을지 여부
+    public readonly bool CommonConsumerWrongPickFeature = false;
+    #endregion
 
     private void Start()
     {
