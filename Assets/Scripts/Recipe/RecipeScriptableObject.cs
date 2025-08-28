@@ -6,9 +6,7 @@ public class RecipeScriptableObject : ScriptableObject
 {
     [SerializeField] private string recipeName;
     [SerializeField] private List<IngredientScriptableObject> ingredients;
-    [SerializeField] private int price;
 
     public string Name => recipeName;
     public List<IngredientScriptableObject> Ingredients => ingredients;
-    public int Price => price;
 }
