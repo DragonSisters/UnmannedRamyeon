@@ -12,10 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
   m_Name: Recipe_Exotic
   m_EditorClassIdentifier: 
-  recipeName: "\uB0A8\uAD6D\uC758\uB77C\uBA74"
+  recipeName: "\uB3D9\uB0A8\uC544\uD48D\uB77C\uBA74"
   ingredients:
   - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
   - {fileID: 11400000, guid: 3aef26de493908f44b1d28c213d8739f, type: 2}
   - {fileID: 11400000, guid: 8633cfcdbc10b8e41bbca322825dbc98, type: 2}
-  - {fileID: 11400000, guid: 56068a4b9c30cbc419c309b4afc808e2, type: 2}
-  price: 6800

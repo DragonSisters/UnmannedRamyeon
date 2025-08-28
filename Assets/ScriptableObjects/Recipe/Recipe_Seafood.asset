@@ -14,8 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recipeName: "\uD574\uBB3C\uB77C\uBA74"
   ingredients:
-  - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}
-  - {fileID: 11400000, guid: 9b58fdb61e28ff9429cbd8b7cd12ee5a, type: 2}
   - {fileID: 11400000, guid: 56068a4b9c30cbc419c309b4afc808e2, type: 2}
-  - {fileID: 11400000, guid: 8b056db4f74f6374185768919999717d, type: 2}
-  price: 6500
