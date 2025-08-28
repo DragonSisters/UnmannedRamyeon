@@ -7,6 +7,7 @@ using UnityEngine;
 public class PotUIController : MonoBehaviour
 {
     [SerializeField] private GameObject pot;
+    [SerializeField] private GameObject pointer;
     [SerializeField] private TMP_Text recipeNameTagText;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
@@ -14,7 +15,12 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private Animation potAnim;
     private string slideIn = "pot_slideIn";
     private string slideOut = "pot_slideOut";
-    private float potAnimTime = 0.5f;
+    [SerializeField] private Animation pointerAnim;
+    private string pointerIn = "pointer_in";
+    private string pointerOut = "pointer_out";
+    [SerializeField] Vector2 pointerOriginalPos = new Vector2(2, 2.5f);
+    [SerializeField] Vector2 pointerInPotPos = new Vector2(0.7f, 0.05f);
+    private Coroutine pointerCoroutine;
     [SerializeField] private int nameTagSortingOrder = 17;
 
     private Queue<IEnumerator> potQueue = new Queue<IEnumerator>();
@@ -32,7 +38,7 @@ public class PotUIController : MonoBehaviour
 
             if(isFirstTimeIn)
             {
-                PlayHint?.Invoke(true);
+                OnPlayHint?.Invoke(true);
             }
         }
     }
@@ -48,19 +54,21 @@ public class PotUIController : MonoBehaviour
 
             if(isFirstTimeWrong)
             {
-                PlayHint?.Invoke(false);
+                OnPlayHint?.Invoke(false);
             }
         }
     }
 
-    public event Action<bool> PlayHint;
+    public event Action<bool> OnPlayHint;
 
     public void Initialize()
     {
         MeshRenderer nameTagTextMeshRenderer = recipeNameTagText.GetComponent<MeshRenderer>();
         nameTagTextMeshRenderer.sortingOrder = nameTagSortingOrder;
 
-        PlayHint += ShowPotHint;
+        OnPlayHint += ShowPotHint;
+        IngredientManager.Instance.OnBringFirstIngredient += StopPointerAnim;
+        IngredientManager.Instance.OnTakeOutFirstWrongIngredient += StopPointerAnim;
     }
 
     public void EnqueuePotRoutine(IEnumerator routine)
@@ -87,7 +95,9 @@ public class PotUIController : MonoBehaviour
         SetRecipeName(IngredientManager.Instance.CurrentRecipeConsumer.MyRecipe.Name);
         potAnim.Play(slideIn);
 
-        yield return new WaitForSeconds(potAnimTime);
+        yield return new WaitUntil(() => !potAnim.IsPlaying(slideIn));
+
+        if (!IsFirstTimeIn) IsFirstTimeIn = true;
     }
 
     public IEnumerator RemovePot()
@@ -100,7 +110,29 @@ public class PotUIController : MonoBehaviour
             spriteRenderer.gameObject.SetActive(false);
         }
 
+        if (pointerCoroutine != null) StopCoroutine(pointerCoroutine);
+        pointer.SetActive(false);
         pot.SetActive(false);
+    }
+
+    public void AddIngredientToPot(int index, IngredientScriptableObject ingredientScriptableObject)
+    {
+        ingredientsInPot[index].sprite = ingredientScriptableObject.Icon;
+        ingredientsInPot[index].gameObject.SetActive(true);
+        // 콜라이더 추가
+        var collider = ingredientsInPot[index].gameObject.GetComponent<PolygonCollider2D>();
+        if (collider == null)
+        {
+            collider = ingredientsInPot[index].gameObject.AddComponent<PolygonCollider2D>();
+            collider.autoTiling = true;
+            collider.isTrigger = true; // 충돌되지 않도록 trigger on
+        }
+    }
+
+    public void SetIngredientInPotInactive(int index)
+    {
+        // 냄비 속 재료 안 보이게 없애기
+        ingredientsInPot[index].gameObject.SetActive(false);
     }
 
     private void SetRecipeName(string name)
@@ -112,12 +144,29 @@ public class PotUIController : MonoBehaviour
     {
         if(isToPot)
         {
-            Debug.LogError("냄비에 넣어!");
+            if(pointerCoroutine != null) StopCoroutine(pointerCoroutine);
+            pointer.transform.position = pointerOriginalPos;
+            pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerIn));
         }
         else
         {
-            Debug.LogError("냄비에서 빼!");
+            if (pointerCoroutine != null) StopCoroutine(pointerCoroutine);
+            pointer.transform.position = pointerInPotPos;
+            pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerOut));
         }
+    }
+
+    private IEnumerator PlayPointerAnim(string name)
+    {
+        pointer.SetActive(true);
+        pointerAnim.Play(name);
+        yield return new WaitUntil(() => !pointerAnim.IsPlaying(name));
+        pointer.SetActive(false);
+    }
+
+    public void StopPointerAnim()
+    {
+        pointerAnim.Stop();
     }
 
     public void OnGameEnd()

@@ -24,6 +24,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     [SerializeField] private CapsuleCollider2D potCollider;
     private List<SpriteRenderer> spritesInPot = new List<SpriteRenderer>();
     private List<PolygonCollider2D> ingredientsInPotCollider = new List<PolygonCollider2D>();
+
     private int currPickNumIdx
     {
         get
@@ -161,33 +162,26 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         if (index < 0 || index >= spritesInPot.Count) return;
 
+        if (!IngredientManager.Instance.IsFirstIngredientIn) IngredientManager.Instance.IsFirstIngredientIn = true;
+
         IngredientManager.Instance.CurrentRecipeConsumer.AddIngredientsInPot(index, ingredientScriptableObject);
 
-        spritesInPot[index].sprite = ingredientScriptableObject.Icon;
-        spritesInPot[index].gameObject.SetActive(true);
-        // 콜라이더 추가
-        var collider = spritesInPot[index].gameObject.GetComponent<PolygonCollider2D>();
-        if (collider == null)
-        {
-            collider = spritesInPot[index].gameObject.AddComponent<PolygonCollider2D>();
-            collider.autoTiling = true;
-            collider.isTrigger = true; // 충돌되지 않도록 trigger on
-        }
+        uiController.AddIngredientToPot(index, ingredientScriptableObject);
     }
 
     private void RemoveIngredientFromPot(int index)
     {
         if (index < 0 || index >= spritesInPot.Count) return;
 
-        // 냄비 속 재료 안 보이게 없애기
-        spritesInPot[index].gameObject.SetActive(false);
+        if (!IngredientManager.Instance.IsFirstWrongIngredientOut) IngredientManager.Instance.IsFirstWrongIngredientOut = true;
 
         // 냄비 속에 더 이상 이 재료가 없다
         RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
-        if(recipeConsumer != null) recipeConsumer.RemoveIngredientsInPot(index);
-
+        if(recipeConsumer != null) recipeConsumer.RemoveIngredientsFromPot(index);
         // 가지고 올 재료 리스트와 가지고 있는 재료 리스트에서 제거
         IngredientManager.Instance.RemoveIngredientFromCorrectCunsumer(ingredientScriptableObject);
+
+        uiController.SetIngredientInPotInactive(index);
     }
 
     private int GetNextAvailableSlotIndex()

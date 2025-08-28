@@ -169,7 +169,7 @@ public class RecipeConsumer : Consumer
         ingredientsInPot[index] = ingredient;
     }
 
-    public void RemoveIngredientsInPot(int index)
+    public void RemoveIngredientsFromPot(int index)
     {
         ingredientsInPot[index] = null;
         CurrPickCount--;
