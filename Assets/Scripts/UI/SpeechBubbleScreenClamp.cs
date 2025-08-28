@@ -2,14 +2,12 @@
 
 public class SpeechBubbleScreenClamp : MonoBehaviour
 {
-    private Camera cam;
     private Vector2 padding = new Vector2(80f, 50f); // 화면 경계 여백
     private Vector3 initialLocalPosition; // 초기 localPosition 저장
     private float lerpSpeed = 10f; // 위치 보간 속도
 
     void Start()
     {
-        cam = Camera.main;
         initialLocalPosition = transform.localPosition; // 초기 위치 저장
     }
 
@@ -19,7 +17,7 @@ public class SpeechBubbleScreenClamp : MonoBehaviour
         Vector3 targetWorldPos = transform.parent.TransformPoint(initialLocalPosition);
 
         // 월드 → 스크린 변환
-        Vector3 screenPos = cam.WorldToScreenPoint(targetWorldPos);
+        Vector2 screenPos = InputUtility.WorldToScreenPoint(targetWorldPos);
 
         // 경계에 닿았는지 확인
         bool clamped =
@@ -37,7 +35,7 @@ public class SpeechBubbleScreenClamp : MonoBehaviour
             screenPos.y = Mathf.Clamp(screenPos.y, padding.y, Screen.height - padding.y);
 
             // 다시 스크린 → 월드 변환
-            var clampedWorldPos = cam.ScreenToWorldPoint(screenPos);
+            var clampedWorldPos = InputUtility.ScreenToWorldPoint(screenPos);
 
             // 부모 기준 localPosition으로 변환해서 적용
             targetLocalPos = transform.parent.InverseTransformPoint(clampedWorldPos);

@@ -26,10 +26,14 @@ public class CommonConsumer : Consumer
     {
         spawnedTime = Time.time;
         IsIssueSolved = false;
+        appearanceScript.SetClickable(true);
         SetState(ConsumerState.Order);
     }
 
-    internal override void HandleChildExit() { }
+    internal override void HandleChildExit()
+    {
+        appearanceScript.SetClickable(false);
+    }
 
     internal override IEnumerator HandleChildIssue()
     {
