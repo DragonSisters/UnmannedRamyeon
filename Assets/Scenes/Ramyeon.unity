@@ -2286,8 +2286,8 @@ MonoBehaviour:
   maxHardActiveLimit: 15
   maxActiveLimit: 10
   minRecipeActiveLimit: 1
-  maxEasyRecipeActiveLimit: 3
-  maxHardRecipeActiveLimit: 5
+  maxEasyRecipeActiveLimit: 1
+  maxHardRecipeActiveLimit: 1
   maxRecipeActiveLimit: 5
 --- !u!4 &862743925
 Transform:
