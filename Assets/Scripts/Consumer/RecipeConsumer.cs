@@ -122,7 +122,7 @@ public class RecipeConsumer : Consumer
 
     private IEnumerator EnterCoroutine()
     {
-        var shoutPoint = MoveManager.Instance.RandomShoutPoint;
+        Vector2 shoutPoint = MoveManager.Instance.ShoutPoint;
         moveScript.MoveToNearesetPoint(shoutPoint, out var nearestPoint);
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());

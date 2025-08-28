@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class IngredientManager : Singleton<IngredientManager>
 {
-    public const int MAX_INGREDIENT_NUMBER = 4;
+    public const int MAX_COMMON_CONSUMER_INGREDIENT_NUMBER = 4;
     public const float INGREDIENT_PICKUP_TIME = 2f;
     public const float UI_DURATION_ON_COLLECT = 1f;
     public const float UI_DURATION_PREVIEW = 2f;
@@ -281,7 +281,7 @@ public class IngredientManager : Singleton<IngredientManager>
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
-        if (currentRecipeConsumer.CurrPickCount >= MAX_INGREDIENT_NUMBER)
+        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count)
         {
             currentRecipeConsumer.IsAllIngredientSelected = true;
         }

@@ -39,7 +39,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
     public List<IngredientInfo> OwnedIngredients = new();
 
     public bool IsIngredientSelectDone => 
-        OwnedIngredients.Count >= IngredientManager.MAX_INGREDIENT_NUMBER
+        OwnedIngredients.Count >= IngredientManager.MAX_COMMON_CONSUMER_INGREDIENT_NUMBER
         && AttemptIngredients.Count == 0;
 
     public void Initialize()
@@ -61,7 +61,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         // 재료를 고르고 필요한 재료의 리스트와 필요한 재료의 총 갯수를 구합니다.
         if (ingredientList == null)
         {
-            paidIngredients = IngredientManager.Instance.GetPaidIngredients(IngredientManager.MAX_INGREDIENT_NUMBER);
+            paidIngredients = IngredientManager.Instance.GetPaidIngredients(IngredientManager.MAX_COMMON_CONSUMER_INGREDIENT_NUMBER);
         }
         else
         {
@@ -102,7 +102,7 @@ public class ConsumerIngredientHandler : MonoBehaviour
         orderList = IngredientManager.Instance.ShufflePartOfList(orderList, orderList.Count);
 
         // 먼저 재료를 모두 골라놓습니다.
-        for (int i = 0; i < IngredientManager.MAX_INGREDIENT_NUMBER; i++)
+        for (int i = 0; i < IngredientManager.MAX_COMMON_CONSUMER_INGREDIENT_NUMBER; i++)
         {
             var currentIndex = orderList[i];
             GetAttemptIngredient(currentIndex, out var ingredient, out var isCorrect);

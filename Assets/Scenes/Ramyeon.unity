@@ -486,7 +486,7 @@ GameObject:
   m_Component:
   - component: {fileID: 216669399}
   m_Layer: 0
-  m_Name: ShoutMinPoint
+  m_Name: ShoutPoint
   m_TagString: Untagged
   m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -501,7 +501,7 @@ Transform:
   m_GameObject: {fileID: 216669398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.5, y: -2.5, z: 0}
+  m_LocalPosition: {x: 6.9, y: -2.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2286,9 +2286,8 @@ MonoBehaviour:
   maxHardActiveLimit: 15
   maxActiveLimit: 10
   minRecipeActiveLimit: 1
-  maxEasyRecipeActiveLimit: 3
-  maxHardRecipeActiveLimit: 5
-  maxRecipeActiveLimit: 5
+  maxEasyRecipeActiveLimit: 1
+  maxHardRecipeActiveLimit: 1
 --- !u!4 &862743925
 Transform:
   m_ObjectHideFlags: 0
@@ -2525,7 +2524,6 @@ Transform:
   - {fileID: 1614331479}
   - {fileID: 2086347238}
   - {fileID: 216669399}
-  - {fileID: 1870706618}
   - {fileID: 1161070239}
   - {fileID: 1817767190}
   - {fileID: 1313283388}
@@ -3701,8 +3699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enterPoint: {fileID: 1763879980}
   exitPoint: {fileID: 1614331479}
-  shoutPointMinRange: {fileID: 216669399}
-  shoutPointMaxRange: {fileID: 1870706618}
+  shoutPoint: {fileID: 216669399}
   leavePoint: {fileID: 1161070239}
   lineCount: 4
   lineSpacingFactor: 1
@@ -4157,37 +4154,6 @@ MonoBehaviour:
   txt_MoneySuccess: {fileID: 2505570628711449440}
   img_Fail: {fileID: 8768234516779634761}
   txt_MoneyFail: {fileID: 2596857803076582460}
---- !u!1 &1870706617
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1870706618}
-  m_Layer: 0
-  m_Name: ShoutMaxPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1870706618
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1870706617}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8, y: 2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 969421795}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1894710029
 GameObject:
   m_ObjectHideFlags: 0

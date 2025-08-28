@@ -33,9 +33,9 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [SerializeField] private int maxHardActiveLimit = 15;
     [SerializeField] private int maxActiveLimit;
     [SerializeField] private int minRecipeActiveLimit = 1;
-    [SerializeField] private int maxEasyRecipeActiveLimit = 3;
-    [SerializeField] private int maxHardRecipeActiveLimit = 5; // @anditsoon TODO: 인스펙터에서의 난이도 조절을 위해 일단 SerializeField, 추후 지울 것
-    [SerializeField] private int maxRecipeActiveLimit;
+    [SerializeField] private int maxEasyRecipeActiveLimit = 1;
+    [SerializeField] private int maxHardRecipeActiveLimit = 1;
+    private int maxRecipeActiveLimit;
     private int currentActiveLimit;
     private int currentRecipeActiveLimit;
 
