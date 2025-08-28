@@ -108,11 +108,11 @@ public class RecipeConsumer : Consumer
         ingredientHandler.AttemptIngredients.Clear();
         ingredientHandler.OwnedIngredients.Clear();
 
-        //ingredients 들 클릭 활성화
-        IngredientManager.Instance.IsIngredientSelectMode = true;
-
         // IngredientManager 에 내 정보 보냄
         IngredientManager.Instance.ReceiveRecipeConsumer(this);
+        
+        //ingredients 들 클릭 활성화
+        IngredientManager.Instance.IsIngredientSelectMode = true;
     }
 
     internal override void HandleChildUnclick()

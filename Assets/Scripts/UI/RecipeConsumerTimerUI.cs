@@ -54,6 +54,7 @@ public class RecipeConsumerTimerUI : MonoBehaviour
 
     public void DeactivateTimer()
     {
+        shakeAnimation.Stop();
         consumerTimerBackground.gameObject.SetActive(false);
         consumerTimerFill.gameObject.SetActive(false);
     }

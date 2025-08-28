@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,11 +11,11 @@ public class IngredientManager : Singleton<IngredientManager>
     public const float UI_DURATION_ON_COLLECT = 1f;
     public const float UI_DURATION_PREVIEW = 2f;
     public const float CORRECT_INGREDIENT_PROBAILITY = 8f;
-
-    [SerializeField] private GameObject pot;
+    
     [SerializeField] private GameObject stencil;
     [SerializeField] private CapsuleCollider2D potCollider;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
+    [SerializeField] private PotUIController potUIController;
 
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
@@ -68,6 +69,8 @@ public class IngredientManager : Singleton<IngredientManager>
 
         OnIngredientSelectMode += HandleIngredientSelectMode;
         OnIngredientDeselectMode += HandleIngredientDeselectMode;
+
+        potUIController.Initialize();
     }
 
     public void ActivateIngredientObjOnPosition(bool IsActive)
@@ -169,7 +172,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
-        pot.SetActive(true);
+        potUIController.EnqueuePotRoutine(potUIController.BringPot());
         stencil.SetActive(true);
 
         // ingredient 클릭 활성화
@@ -306,15 +309,10 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if(currentRecipeConsumer == consumer)
         {
+            potUIController.EnqueuePotRoutine(potUIController.RemovePot());
             currentRecipeConsumer.ClearIngredientsInPot();
             RemoveRecipeConsumer(consumer);
 
-            foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
-            {
-                spriteRenderer.gameObject.SetActive(false);
-            }
-
-            pot.SetActive(false);
             stencil.SetActive(false);
             IsIngredientSelectMode = false;
         }
