@@ -33,6 +33,14 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject img_Fail;
     [SerializeField] private TMP_Text txt_MoneyFail;
 
+    #region 방향성 변경에 따른 제어 변수
+    // 참고: https://github.com/DragonSisters/UnmannedRamyeonObsidian/blob/main/00_공지/방향성에%20대한%20논의%20회의록.md
+    // * 일반 손님이 재료를 잘못가져오는 기능을 넣을지 여부
+    public readonly bool CommonConsumerWrongPickFeature = false;
+    // * 쓰레기를 치우는 기능을 넣을지 여부
+    public readonly bool UseTrashFeature = false;
+    #endregion
+
     private void Start()
     {
         SetCursor(cursorIcon);

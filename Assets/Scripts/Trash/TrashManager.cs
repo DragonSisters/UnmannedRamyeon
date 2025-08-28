@@ -34,6 +34,11 @@ public class TrashManager : Singleton<TrashManager>
 
     public void Initialize()
     {
+        if(!GameManager.Instance.UseTrashFeature)
+        {
+            return;
+        }
+
         // 모든 오브젝트 정리
         if (trashPool != null)
         {
@@ -49,6 +54,11 @@ public class TrashManager : Singleton<TrashManager>
 
     public void StartSpawn()
     {
+        if (!GameManager.Instance.UseTrashFeature)
+        {
+            return;
+        }
+
         if (!IsAvailableSpawn())
         {
             return;
@@ -71,6 +81,11 @@ public class TrashManager : Singleton<TrashManager>
 
     public void StopSpawn()
     {
+        if (!GameManager.Instance.UseTrashFeature)
+        {
+            return;
+        }
+
         CheckAndDespawnTrash(true);
 
         // 모든 코루틴을 멈춥니다.
