@@ -28,6 +28,11 @@ public class ConsumerUI : MonoBehaviour
 
     public void ActivateIngredientUI(bool isActive)
     {
+        if (!GameManager.Instance.ShowIngredientCommonConsumer)
+        {
+            return;
+        }
+
         TargetIngredientUI.SetActive(isActive);
     }
 

@@ -175,6 +175,14 @@ public class ConsumerIngredientHandler : MonoBehaviour
 
     private void GetAttemptIngredient(int index, out IngredientScriptableObject ingredient, out bool isCorrect)
     {
+        // 확률사용하지 않고 가져올 경우 그대로 주문한 것을 넘겨받습니다.
+        if(!GameManager.Instance.WrongIngredientPickChance)
+        {
+            ingredient = paidIngredients[index];
+            isCorrect = true;
+            return;
+        }
+
         // 확률에 따라 가져오는 재료가 다릅니다.
         int probability = Random.Range(0, 10);
 
