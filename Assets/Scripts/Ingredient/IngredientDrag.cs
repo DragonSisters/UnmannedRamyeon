@@ -13,6 +13,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     private IngredientScriptableObject ingredientScriptableObject;
     private SpriteRenderer spriteRenderer;
+    private PotUIController uiController;
 
     [SerializeField] private Material material;
     private readonly Color clickableColor = Color.white;
@@ -42,6 +43,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     public void Initialize(IngredientScriptableObject ingredient, CapsuleCollider2D potRectTransform, List<SpriteRenderer> ingredients)
     {
+        uiController = IngredientManager.Instance.PotUIController;
         ingredientScriptableObject = ingredient;
         potCollider = potRectTransform;
         spritesInPot.Clear();
@@ -136,6 +138,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
                 }
                 else
                 {
+                    if (!uiController.IsFirstTimeWrong) uiController.IsFirstTimeWrong = true;
                     ShaderEffectHelper.SetOutlineColor(material, wrongColor);
                     ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
                 }

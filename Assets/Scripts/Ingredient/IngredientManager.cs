@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +15,7 @@ public class IngredientManager : Singleton<IngredientManager>
     [SerializeField] private CapsuleCollider2D potCollider;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
     [SerializeField] private PotUIController potUIController;
+    public PotUIController PotUIController => potUIController;
 
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
@@ -91,6 +91,7 @@ public class IngredientManager : Singleton<IngredientManager>
         
         ActivateIngredientObjOnPosition(false);
         HandleIngredientDeselectMode();
+        potUIController.OnGameEnd();
     }
 
     public void CreateIngredientObjOnPosition()
@@ -172,6 +173,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
+        if (!potUIController.IsFirstTimeIn) potUIController.IsFirstTimeIn = true;
         potUIController.EnqueuePotRoutine(potUIController.BringPot());
         stencil.SetActive(true);
 
