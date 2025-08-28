@@ -70,8 +70,8 @@ public class IngredientManager : Singleton<IngredientManager>
             }
         }
     }
-    public event System.Action OnIngredientSelectMode;
-    public event System.Action OnIngredientDeselectMode;
+    public event Action OnIngredientSelectMode;
+    public event Action OnIngredientDeselectMode;
     public event Action OnBringFirstIngredient;
     public event Action OnTakeOutFirstWrongIngredient;
 
@@ -342,7 +342,6 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == consumer)
         {
             potUIController.EnqueuePotRoutine(potUIController.RemovePot());
-            currentRecipeConsumer.ClearIngredientsInPot();
             RemoveRecipeConsumer(consumer);
 
             stencil.SetActive(false);

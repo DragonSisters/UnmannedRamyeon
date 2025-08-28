@@ -128,21 +128,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
                     return;
                 }
 
-                int index = GetNextAvailableSlotIndex();
-                spritesInPot[index].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
-                AddIngredientToPot(index);
-
-                if (IsCorrectIngredient())
-                {
-                    ShaderEffectHelper.SetOutlineColor(material, answerColor);
-                    ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, answerColor);
-                }
-                else
-                {
-                    if (!uiController.IsFirstTimeWrong) uiController.IsFirstTimeWrong = true;
-                    ShaderEffectHelper.SetOutlineColor(material, wrongColor);
-                    ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
-                }
+                AddIngredientToPot();
             }
         }
         else if (currentMode == DragMode.Remove)
@@ -158,15 +144,28 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         currentMode = DragMode.None;
     }
 
-    private void AddIngredientToPot(int index)
+    private void AddIngredientToPot()
     {
+        int index = GetNextAvailableSlotIndex();
         if (index < 0 || index >= spritesInPot.Count) return;
+        
+        spritesInPot[index].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
 
         if (!IngredientManager.Instance.IsFirstIngredientIn) IngredientManager.Instance.IsFirstIngredientIn = true;
 
-        IngredientManager.Instance.CurrentRecipeConsumer.AddIngredientsInPot(index, ingredientScriptableObject);
+        uiController.ShowIngredientInPot(index, ingredientScriptableObject);
 
-        uiController.AddIngredientToPot(index, ingredientScriptableObject);
+        if (IsCorrectIngredient())
+        {
+            ShaderEffectHelper.SetOutlineColor(material, answerColor);
+            ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, answerColor);
+        }
+        else
+        {
+            if (!uiController.IsFirstTimeWrong) uiController.IsFirstTimeWrong = true;
+            ShaderEffectHelper.SetOutlineColor(material, wrongColor);
+            ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
+        }
     }
 
     private void RemoveIngredientFromPot(int index)
@@ -177,7 +176,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
         // 냄비 속에 더 이상 이 재료가 없다
         RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
-        if(recipeConsumer != null) recipeConsumer.RemoveIngredientsFromPot(index);
+        if (recipeConsumer != null) recipeConsumer.ReducePickCount();
         // 가지고 올 재료 리스트와 가지고 있는 재료 리스트에서 제거
         IngredientManager.Instance.RemoveIngredientFromCorrectCunsumer(ingredientScriptableObject);
 

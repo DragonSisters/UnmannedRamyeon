@@ -115,7 +115,7 @@ public class PotUIController : MonoBehaviour
         pot.SetActive(false);
     }
 
-    public void AddIngredientToPot(int index, IngredientScriptableObject ingredientScriptableObject)
+    public void ShowIngredientInPot(int index, IngredientScriptableObject ingredientScriptableObject)
     {
         ingredientsInPot[index].sprite = ingredientScriptableObject.Icon;
         ingredientsInPot[index].gameObject.SetActive(true);
