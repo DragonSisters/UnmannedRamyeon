@@ -148,8 +148,9 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         int index = GetNextAvailableSlotIndex();
         if (index < 0 || index >= spritesInPot.Count) return;
-        
-        spritesInPot[index].gameObject.GetComponent<IngredientDrag>().SetIngredientScriptableObject(ingredientScriptableObject);
+
+        IngredientDrag ingredientDragInPot = spritesInPot[index].gameObject.GetComponent<IngredientDrag>();
+        if(ingredientDragInPot != null) ingredientDragInPot.SetIngredientScriptableObject(ingredientScriptableObject);
 
         if (!IngredientManager.Instance.IsFirstIngredientIn) IngredientManager.Instance.IsFirstIngredientIn = true;
 

@@ -18,8 +18,6 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private Animation pointerAnim;
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
-    [SerializeField] Vector2 pointerOriginalPos = new Vector2(2, 2.5f);
-    [SerializeField] Vector2 pointerInPotPos = new Vector2(0.7f, 0.05f);
     private Coroutine pointerCoroutine;
     [SerializeField] private int nameTagSortingOrder = 17;
 
@@ -117,6 +115,8 @@ public class PotUIController : MonoBehaviour
 
     public void ShowIngredientInPot(int index, IngredientScriptableObject ingredientScriptableObject)
     {
+        if (index < 0 || index >= ingredientsInPot.Count) return;
+
         ingredientsInPot[index].sprite = ingredientScriptableObject.Icon;
         ingredientsInPot[index].gameObject.SetActive(true);
         // 콜라이더 추가
@@ -145,13 +145,11 @@ public class PotUIController : MonoBehaviour
         if(isToPot)
         {
             if(pointerCoroutine != null) StopCoroutine(pointerCoroutine);
-            pointer.transform.position = pointerOriginalPos;
             pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerIn));
         }
         else
         {
             if (pointerCoroutine != null) StopCoroutine(pointerCoroutine);
-            pointer.transform.position = pointerInPotPos;
             pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerOut));
         }
     }
