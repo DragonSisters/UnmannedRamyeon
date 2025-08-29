@@ -47,6 +47,9 @@ public class ConsumerManager : Singleton<ConsumerManager>
         get 
         {
             int count = 0;
+
+            // 만약 5명까지 소환가능하다면, 그 중 3명이 주문중이라면 2명을 더 소환할 수 있습니다.
+            // 그 3명중 1명이라도 주문을 완료하면 그만큼 다시 소환할 수 있습니다.
             foreach (var consumer in GetAllActiveConsumerToList())
             {
                 if (consumer is RecipeConsumer recipeConsumer)
@@ -58,9 +61,17 @@ public class ConsumerManager : Singleton<ConsumerManager>
                     }
                 }
             }
-            // 만약 5명까지 소환가능하다면, 그 중 3명이 주문중이라면 2명을 더 소환할 수 있습니다.
-            // 그 3명중 1명이라도 퇴장하거나 주문을 완료하면 그만큼 다시 소환할 수 있습니다.
-            return currentRecipeActiveLimit - count;
+
+            // 주문하고 있는 사람이 아무도 없으면 무조건 Limit까지 소환 가능합니다.
+            if (count == 0)
+            {
+                return pools[RecipeConsumerPrefab].ActiveCount + maxRecipeActiveLimit;
+            }
+            // 주문하고 있는 사람이 한 명이라도 있다면 남은 수만큼 소환 가능합니다.
+            else
+            {
+                return maxRecipeActiveLimit - count;
+            }
         }
     }
 
