@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
   m_Name: Recipe_Kalgucksu
   m_EditorClassIdentifier: 
-  recipeName: "\uBC14\uC9C0\uB77D\uCE7C\uAD6D\uC218\uD48D\uB77C\uBA74"
+  recipeName: "\uBC14\uC9C0\uB77D\uCE7C\uAD6D\uC218"
   ingredients:
   - {fileID: 11400000, guid: 56068a4b9c30cbc419c309b4afc808e2, type: 2}
   - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}

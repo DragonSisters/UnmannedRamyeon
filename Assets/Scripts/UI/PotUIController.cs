@@ -9,6 +9,7 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private GameObject pot;
     [SerializeField] private GameObject pointer;
     [SerializeField] private TMP_Text recipeNameTagText;
+    [SerializeField] private TMP_Text submitText;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
     private Vector2 pot_originalPos = new Vector2(0, 0);
@@ -19,7 +20,7 @@ public class PotUIController : MonoBehaviour
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
     private Coroutine pointerCoroutine;
-    [SerializeField] private int nameTagSortingOrder = 17;
+    [SerializeField] private int textSortingOrder = 17;
 
     private Queue<IEnumerator> potQueue = new Queue<IEnumerator>();
     private bool isPotQueueRunning = false;
@@ -62,7 +63,9 @@ public class PotUIController : MonoBehaviour
     public void Initialize()
     {
         MeshRenderer nameTagTextMeshRenderer = recipeNameTagText.GetComponent<MeshRenderer>();
-        nameTagTextMeshRenderer.sortingOrder = nameTagSortingOrder;
+        if(nameTagTextMeshRenderer != null) nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
+        MeshRenderer submitMeshRenderer = submitText.GetComponent<MeshRenderer>();
+        if (submitMeshRenderer != null) submitMeshRenderer.sortingOrder = textSortingOrder;
 
         OnPlayHint += ShowPotHint;
         IngredientManager.Instance.OnBringFirstIngredient += StopPointerAnim;

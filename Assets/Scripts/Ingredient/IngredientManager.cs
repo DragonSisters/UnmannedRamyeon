@@ -313,7 +313,7 @@ public class IngredientManager : Singleton<IngredientManager>
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
-        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count)
+        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count && GameManager.Instance.UseRecipeConsumerTimer)
         {
             currentRecipeConsumer.IsAllIngredientSelected = true;
         }

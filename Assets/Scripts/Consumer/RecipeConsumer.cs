@@ -75,13 +75,20 @@ public class RecipeConsumer : Consumer
 
         // 재료를 다 선택했으면, 이제 재료를 다 맞게 골랐는지 확인
         bool isAllIngredientCorrect = true;
-        foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
+        if(MyRecipe.Ingredients.Count != ingredientHandler.AttemptIngredients.Count)
         {
-            if (ingredient.Index < 0)
-            {
-                isAllIngredientCorrect = false;
-            }
+            isAllIngredientCorrect = false;
         }
+        else
+        {
+            foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
+            {
+                if (ingredient.Index < 0)
+                {
+                    isAllIngredientCorrect = false;
+                }
+            }
+        } 
 
         // 시간 안에 재료를 다 골랐고, 그 재료가 다 맞다
         if (isAllIngredientCorrect)
