@@ -152,7 +152,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         IngredientDrag ingredientDragInPot = spritesInPot[index].gameObject.GetComponent<IngredientDrag>();
         if(ingredientDragInPot != null) ingredientDragInPot.SetIngredientScriptableObject(ingredientScriptableObject);
 
-        if (!IngredientManager.Instance.IsFirstIngredientIn) IngredientManager.Instance.IsFirstIngredientIn = true;
+        IngredientManager.Instance.IsFirstIngredientIn = true;
 
         uiController.ShowIngredientInPot(index, ingredientScriptableObject);
 
@@ -163,7 +163,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         }
         else
         {
-            if (!uiController.IsFirstTimeWrong) uiController.IsFirstTimeWrong = true;
+            uiController.IsFirstTimeWrong = true;
             ShaderEffectHelper.SetOutlineColor(material, wrongColor);
             ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
         }
@@ -173,7 +173,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         if (index < 0 || index >= spritesInPot.Count) return;
 
-        if (!IngredientManager.Instance.IsFirstWrongIngredientOut) IngredientManager.Instance.IsFirstWrongIngredientOut = true;
+        IngredientManager.Instance.IsFirstWrongIngredientOut = true;
 
         // 냄비 속에 더 이상 이 재료가 없다
         RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
