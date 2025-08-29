@@ -21,7 +21,6 @@ public class RecipeConsumer : Consumer
 
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
-    private IngredientScriptableObject[] ingredientsInPot = new IngredientScriptableObject[4];
 
     internal override void HandleChildEnter()
     {
@@ -42,32 +41,39 @@ public class RecipeConsumer : Consumer
     {
         yield return new WaitUntil(() => !moveScript.IsMoving);
 
-        float elapsedTime = 0f;
-        timerUI.ActivateTimer();
-        StartCoroutine(timerUI.FillTimerRoutine(stayTime));
-
-        while(!IsAllIngredientSelected && elapsedTime < stayTime)
+        if (GameManager.Instance.UseRecipeConsumerTimer)
         {
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            float elapsedTime = 0f;
+            timerUI.ActivateTimer();
+            StartCoroutine(timerUI.FillTimerRoutine(stayTime));
+
+            while (!IsAllIngredientSelected && elapsedTime < stayTime)
+            {
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // 시간 안에 재료를 다 고르지 못했다.
+            if (!IsAllIngredientSelected)
+            {
+                SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
+                ResetPickCount();
+                ingredientHandler.ResetAllIngredientLists();
+                appearanceScript.SetClickable(false);
+
+                IngredientManager.Instance.OnRecipeConsumerFinished(this);
+
+                SetState(ConsumerState.Leave);
+                yield break;
+            }
         }
 
-        // 시간 안에 재료를 다 고르지 못했다.
-        if(!IsAllIngredientSelected)
-        {
-            SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
-            ResetPickCount();
-            ingredientHandler.ResetAllIngredientLists();
-            appearanceScript.SetClickable(false);
+        // 타이머 (stayTime) 무시하고 재료 다 선택할 때까지 기다림
+        yield return new WaitUntil(() => IsAllIngredientSelected);
 
-            IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        if (GameManager.Instance.UseRecipeConsumerTimer) timerUI.DeactivateTimer();
 
-            SetState(ConsumerState.Leave);
-            yield break;
-        }
-
-        timerUI.DeactivateTimer();
-
+        // 재료를 다 선택했으면, 이제 재료를 다 맞게 골랐는지 확인
         bool isAllIngredientCorrect = true;
         foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
         {

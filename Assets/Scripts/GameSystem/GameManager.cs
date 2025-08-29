@@ -39,6 +39,8 @@ public class GameManager : Singleton<GameManager>
     public readonly bool CommonConsumerWrongPickFeature = false;
     // * 쓰레기를 치우는 기능을 넣을지 여부
     public readonly bool UseTrashFeature = false;
+    // * RecipeConsumer 가 타이머를 사용하는 기능을 넣을지 여부
+    public readonly bool UseRecipeConsumerTimer = false;
     #endregion
 
     private void Start()
