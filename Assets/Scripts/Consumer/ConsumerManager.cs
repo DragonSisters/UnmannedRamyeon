@@ -10,7 +10,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [Header("Consumer 프리팹들이 생성될 부모 오브젝트")]
     [SerializeField] private Transform spawnParent;
     [Header("Consumer 프리팹들을 직접 드래그하세요")]
-    [SerializeField] private List<GameObject> consumerPrefabs = new List<GameObject>();
+    [SerializeField] private GameObject CommonConsumerPrefab;
+    [SerializeField] private GameObject RecipeConsumerPrefab;
     [Header("Pool 사이즈")]
     [SerializeField] private int poolSize = 20;
 
@@ -32,16 +33,52 @@ public class ConsumerManager : Singleton<ConsumerManager>
     [SerializeField] private int maxEasyActiveLimit = 8;
     [SerializeField] private int maxHardActiveLimit = 15;
     [SerializeField] private int maxActiveLimit;
-    [SerializeField] private int minRecipeActiveLimit = 1;
     [SerializeField] private int maxEasyRecipeActiveLimit = 1;
+    [SerializeField] private int minRecipeActiveLimit = 1;
     [SerializeField] private int maxHardRecipeActiveLimit = 1;
     private int maxRecipeActiveLimit;
     private int currentActiveLimit;
     private int currentRecipeActiveLimit;
+    /// <summary>
+    /// 현재 주문 가능한 손님 수를 반환합니다.
+    /// </summary>
+    private int recipeOrderableCount
+    {
+        get 
+        {
+            int count = 0;
+
+            // 만약 5명까지 소환가능하다면, 그 중 3명이 주문중이라면 2명을 더 소환할 수 있습니다.
+            // 그 3명중 1명이라도 주문을 완료하면 그만큼 다시 소환할 수 있습니다.
+            foreach (var consumer in GetAllActiveConsumerToList())
+            {
+                if (consumer is RecipeConsumer recipeConsumer)
+                {
+                    if (consumer.State == ConsumerState.Issue ||
+                        consumer.State == ConsumerState.Enter)
+                    {
+                        count++;
+                    }
+                }
+            }
+
+            // 주문하고 있는 사람이 아무도 없으면 무조건 Limit까지 소환 가능합니다.
+            if (count == 0)
+            {
+                return pools[RecipeConsumerPrefab].ActiveCount + maxRecipeActiveLimit;
+            }
+            // 주문하고 있는 사람이 한 명이라도 있다면 남은 수만큼 소환 가능합니다.
+            else
+            {
+                return maxRecipeActiveLimit - count;
+            }
+        }
+    }
 
     private Dictionary<GameObject, ObjectPool<Consumer>> pools;
 
-    private Coroutine spawnCoroutine;
+    private Coroutine spawnCommonCoroutine;
+    private Coroutine spawnRecipeCoroutine;
     private Coroutine despawnCoroutine;
 
     private float startTime;
@@ -59,12 +96,10 @@ public class ConsumerManager : Singleton<ConsumerManager>
         }
 
         pools = new Dictionary<GameObject, ObjectPool<Consumer>>();
-
-        foreach (GameObject prefab in consumerPrefabs)
-        {
-            pools[prefab] = new ObjectPool<Consumer>(
-                prefab, poolSize, spawnParent);
-        }
+        pools[CommonConsumerPrefab] = new ObjectPool<Consumer>(
+                CommonConsumerPrefab, poolSize, spawnParent);
+        pools[RecipeConsumerPrefab] = new ObjectPool<Consumer>(
+            RecipeConsumerPrefab, poolSize, spawnParent);
     }
 
     public void StartSpawn(bool isHardMode)
@@ -85,9 +120,13 @@ public class ConsumerManager : Singleton<ConsumerManager>
 
         if (IsAvailableSpawn())
         {
-            if (spawnCoroutine != null)
+            if (spawnCommonCoroutine != null)
             {
-                StopCoroutine(spawnCoroutine);
+                StopCoroutine(spawnCommonCoroutine);
+            }
+            if (spawnRecipeCoroutine != null)
+            {
+                StopCoroutine(spawnRecipeCoroutine);
             }
             if (despawnCoroutine != null)
             {
@@ -97,7 +136,8 @@ public class ConsumerManager : Singleton<ConsumerManager>
             startTime = GameManager.Instance.GameStartTime;
             gameDuration = GameManager.Instance.GameDuration;
 
-            spawnCoroutine = StartCoroutine(SpawnRoutine());
+            spawnCommonCoroutine = StartCoroutine(SpawnCommonConsumerRoutine());
+            spawnRecipeCoroutine = StartCoroutine(SpawnRecipeConsumerRoutine());
             despawnCoroutine = StartCoroutine(DespawnRoutine());
         }
     }
@@ -107,9 +147,13 @@ public class ConsumerManager : Singleton<ConsumerManager>
         // 모든 손님을 없앱니다.
         CheckAndDespawnCustomers(true);
         // 모든 코루틴을 멈춥니다.
-        if (spawnCoroutine != null)
+        if (spawnCommonCoroutine != null)
         {
-            StopCoroutine(spawnCoroutine);
+            StopCoroutine(spawnCommonCoroutine);
+        }
+        if (spawnRecipeCoroutine != null)
+        {
+            StopCoroutine(spawnRecipeCoroutine);
         }
         if (despawnCoroutine != null)
         {
@@ -147,7 +191,7 @@ public class ConsumerManager : Singleton<ConsumerManager>
         return list;
     }
 
-    private IEnumerator SpawnRoutine()
+    private IEnumerator SpawnCommonConsumerRoutine()
     {
         while (IsAvailableSpawn())
         {
@@ -158,11 +202,23 @@ public class ConsumerManager : Singleton<ConsumerManager>
             float speedMultiplier = spawnSpeedCurve.Evaluate(t);
             float waitTime = Random.Range(minSpawnInterval, maxSpawnInterval) * speedMultiplier;
             currentActiveLimit = Mathf.RoundToInt(activeCountCurve.Evaluate(t));
-            currentRecipeActiveLimit = Mathf.RoundToInt(recipeActiveCountCurve.Evaluate(t));
 
             yield return new WaitForSeconds(waitTime);
 
-            SpawnRandomObject();
+            SpawnCommonConsumer();
+        }
+    }
+
+    private IEnumerator SpawnRecipeConsumerRoutine()
+    {
+        while (IsAvailableSpawn())
+        {
+            float elapsedTime = Time.time - startTime;
+            float t = Mathf.Clamp01(elapsedTime / gameDuration);
+            currentRecipeActiveLimit = Mathf.RoundToInt(recipeActiveCountCurve.Evaluate(t));
+
+            SpawnRecipeConsumer();
+            yield return null;
         }
     }
 
@@ -179,44 +235,27 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         // @charotiti9 TODO: 나중에 여러가지 조건이 생기면 여기서 검사합니다.
         // ex. 게임이 시작하지 않았다거나... 끝났다거나...
-        foreach (var prefab in consumerPrefabs)
-        {
-            if (prefab == null)
-            {
-                Debug.LogError("손님 프리팹이 null입니다. ConsumerManager 인스펙터를 확인해주세요.");
-                return false;
-            }
-        }
-
         return true;
     }
 
-    private void SpawnRandomObject()
+    private void SpawnCommonConsumer()
     {
-        if (consumerPrefabs.Count == 0)
+        if (!pools[CommonConsumerPrefab].CanActiveMore(currentActiveLimit))
         {
             return;
         }
+        Consumer obj = pools[CommonConsumerPrefab].GetOrCreate();
+        obj.OnSpawn();
+    }
 
-        GameObject prefab = consumerPrefabs[Random.Range(0, consumerPrefabs.Count)];
-        bool isRecipe = prefab.GetComponent<RecipeConsumer>() != null;
-
-        if(isRecipe)
+    private void SpawnRecipeConsumer()
+    {
+        // 레시피 손님은 주문 가능한 손님 수가 남아있을 때 Limit보다 더 소환할 수 있습니다.
+        if (!pools[RecipeConsumerPrefab].CanActiveMore(currentRecipeActiveLimit + recipeOrderableCount))
         {
-            if (!pools[prefab].CanActiveMore(currentRecipeActiveLimit))
-            {
-                return;
-            }
+            return;
         }
-        else
-        {
-            if (!pools[prefab].CanActiveMore(currentActiveLimit))
-            {
-                return;
-            }
-        }
-
-        Consumer obj = pools[prefab].GetOrCreate();
+        Consumer obj = pools[RecipeConsumerPrefab].GetOrCreate();
         obj.OnSpawn();
     }
 
