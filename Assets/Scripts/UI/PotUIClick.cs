@@ -11,7 +11,8 @@ public class PotUIClick : MonoBehaviour, IClickableSprite
         RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
         if (recipeConsumer != null)
         {
-            recipeConsumer.IsAllIngredientSelected = true;
+            recipeConsumer.IsSubmit = true;
+            IngredientManager.Instance.PotUIController.StopSubmitAnim();
         }
     }
 
@@ -20,7 +21,7 @@ public class PotUIClick : MonoBehaviour, IClickableSprite
         RecipeConsumer recipeConsumer = IngredientManager.Instance.CurrentRecipeConsumer;
         if (recipeConsumer != null)
         {
-            recipeConsumer.IsAllIngredientSelected = false;
+            recipeConsumer.IsSubmit = false;
         }
     }
 }

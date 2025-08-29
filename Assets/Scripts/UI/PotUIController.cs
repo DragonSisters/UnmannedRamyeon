@@ -8,6 +8,7 @@ public class PotUIController : MonoBehaviour
 {
     [SerializeField] private GameObject pot;
     [SerializeField] private GameObject pointer;
+    [SerializeField] private SpriteRenderer submitBtn;
     [SerializeField] private TMP_Text recipeNameTagText;
     [SerializeField] private TMP_Text submitText;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
@@ -19,6 +20,7 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private Animation pointerAnim;
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
+    [SerializeField] private Animation submitBtnAnim;
     private Coroutine pointerCoroutine;
     [SerializeField] private int textSortingOrder = 17;
 
@@ -168,6 +170,17 @@ public class PotUIController : MonoBehaviour
     public void StopPointerAnim()
     {
         pointerAnim.Stop();
+    }
+
+    public void PlaySubmitAnim()
+    {
+        submitBtnAnim.Play();
+    }
+
+    public void StopSubmitAnim()
+    {
+        submitBtnAnim.Stop();
+        submitBtn.color = new Color(submitBtn.color.r, submitBtn.color.g, submitBtn.color.b, 1f);
     }
 
     public void OnGameEnd()

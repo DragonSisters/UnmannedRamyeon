@@ -16,7 +16,8 @@ public class RecipeConsumer : Consumer
     private RecipeScriptableObject myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
 
-    public bool IsAllIngredientSelected = false;
+    public bool IsSubmit = false;
+    public bool IsAllIngredientCorrect = false;
     public int CurrPickCount { get; private set; } = 0;
 
     private float recipeOrderDuration = 2f;
@@ -47,14 +48,14 @@ public class RecipeConsumer : Consumer
             timerUI.ActivateTimer();
             StartCoroutine(timerUI.FillTimerRoutine(stayTime));
 
-            while (!IsAllIngredientSelected && elapsedTime < stayTime)
+            while (!IsSubmit && elapsedTime < stayTime)
             {
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
 
             // 시간 안에 재료를 다 고르지 못했다.
-            if (!IsAllIngredientSelected)
+            if (!IsSubmit)
             {
                 SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
                 ResetPickCount();
@@ -64,39 +65,21 @@ public class RecipeConsumer : Consumer
                 IngredientManager.Instance.OnRecipeConsumerFinished(this);
 
                 SetState(ConsumerState.Leave);
+                timerUI.DeactivateTimer();
                 yield break;
             }
         }
 
-        // 타이머 (stayTime) 무시하고 재료 다 선택할 때까지 기다림
-        yield return new WaitUntil(() => IsAllIngredientSelected);
+        // 제출 버튼을 누를 때까지 기다린다
+        yield return new WaitUntil(() => IsSubmit);
 
-        if (GameManager.Instance.UseRecipeConsumerTimer) timerUI.DeactivateTimer();
-
-        // 재료를 다 선택했으면, 이제 재료를 다 맞게 골랐는지 확인
-        bool isAllIngredientCorrect = true;
-        if(MyRecipe.Ingredients.Count != ingredientHandler.AttemptIngredients.Count)
-        {
-            isAllIngredientCorrect = false;
-        }
-        else
-        {
-            foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
-            {
-                if (ingredient.Index < 0)
-                {
-                    isAllIngredientCorrect = false;
-                }
-            }
-        } 
-
-        // 시간 안에 재료를 다 골랐고, 그 재료가 다 맞다
-        if (isAllIngredientCorrect)
+        // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
+        if (IsAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
             SetState(ConsumerState.LineUp);
         }
-        else // 시간 안에 재료를 다 골랐지만, 그 재료 중에 단 하나라도 틀린 재료가 있다.
+        else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
@@ -107,7 +90,7 @@ public class RecipeConsumer : Consumer
         IngredientManager.Instance.OnRecipeConsumerFinished(this);
 
         appearanceScript.SetClickable(false);
-        IsAllIngredientSelected = false;
+        IsSubmit = false;
     }
 
     internal override IEnumerator HandleChildUpdate()
