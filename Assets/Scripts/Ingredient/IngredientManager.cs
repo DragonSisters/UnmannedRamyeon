@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,6 +15,33 @@ public class IngredientManager : Singleton<IngredientManager>
     [SerializeField] private CapsuleCollider2D potCollider;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
     [SerializeField] private PotUIController potUIController;
+    public PotUIController PotUIController => potUIController;
+    private bool isFirstIngredientIn = false;
+    public bool IsFirstIngredientIn
+    {
+        get => isFirstIngredientIn;
+        set
+        {
+            if(isFirstIngredientIn == value) return;
+
+            isFirstIngredientIn = value;
+
+            if (isFirstIngredientIn) OnBringFirstIngredient?.Invoke();
+        }
+    }
+    private bool isFirstWrongIngredientOut = false;
+    public bool IsFirstWrongIngredientOut
+    {
+        get => isFirstWrongIngredientOut;
+        set
+        {
+            if(isFirstWrongIngredientOut == value) return;
+
+            isFirstWrongIngredientOut = value;
+
+            if (isFirstWrongIngredientOut) OnTakeOutFirstWrongIngredient?.Invoke();
+        }
+    }
 
     public List<IngredientScriptableObject> IngredientScriptableObject = new();
     [SerializeField] private Transform ingredientsParent;
@@ -44,8 +70,10 @@ public class IngredientManager : Singleton<IngredientManager>
             }
         }
     }
-    public event System.Action OnIngredientSelectMode;
-    public event System.Action OnIngredientDeselectMode;
+    public event Action OnIngredientSelectMode;
+    public event Action OnIngredientDeselectMode;
+    public event Action OnBringFirstIngredient;
+    public event Action OnTakeOutFirstWrongIngredient;
 
     // 현재 처리하고 있는 레시피 손님
     private RecipeConsumer currentRecipeConsumer = null;
@@ -88,9 +116,13 @@ public class IngredientManager : Singleton<IngredientManager>
             OnRecipeConsumerFinished(currentRecipeConsumer);
             currentRecipeConsumer = null;
         }
-        
+
+        isFirstIngredientIn = false;
+        isFirstWrongIngredientOut = false;
+
         ActivateIngredientObjOnPosition(false);
         HandleIngredientDeselectMode();
+        potUIController.OnGameEnd();
     }
 
     public void CreateIngredientObjOnPosition()
@@ -310,7 +342,6 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == consumer)
         {
             potUIController.EnqueuePotRoutine(potUIController.RemovePot());
-            currentRecipeConsumer.ClearIngredientsInPot();
             RemoveRecipeConsumer(consumer);
 
             stencil.SetActive(false);

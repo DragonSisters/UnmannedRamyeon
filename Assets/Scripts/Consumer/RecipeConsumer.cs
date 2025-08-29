@@ -159,33 +159,13 @@ public class RecipeConsumer : Consumer
         CurrPickCount++;
     }
 
-    public void ResetPickCount()
+    public void ReducePickCount()
     {
-        CurrPickCount = 0;
-    }
-
-    public void AddIngredientsInPot(int index, IngredientScriptableObject ingredient)
-    {
-        ingredientsInPot[index] = ingredient;
-    }
-
-    public void RemoveIngredientsInPot(int index)
-    {
-        ingredientsInPot[index] = null;
         CurrPickCount--;
     }
 
-    public void ClearIngredientsInPot()
+    public void ResetPickCount()
     {
-        Array.Clear(ingredientsInPot, 0, ingredientsInPot.Length);
-    }
-
-    public bool IsIngredientsInPot(IngredientScriptableObject ingredient)
-    {
-        foreach(IngredientScriptableObject scriptableObject in ingredientsInPot)
-        {
-            if (scriptableObject == ingredient) return true;
-        }
-        return false;
+        CurrPickCount = 0;
     }
 }
