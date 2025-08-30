@@ -21,6 +21,8 @@ public class PotUIController : MonoBehaviour
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
     [SerializeField] private Animation submitBtnAnim;
+    private Vector2 btn_originalSize = new Vector3(1, 1, 1);
+    private Color btn_originalColor;
     private Coroutine pointerCoroutine;
     [SerializeField] private int textSortingOrder = 17;
 
@@ -68,6 +70,8 @@ public class PotUIController : MonoBehaviour
         if(nameTagTextMeshRenderer != null) nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
         MeshRenderer submitMeshRenderer = submitText.GetComponent<MeshRenderer>();
         if (submitMeshRenderer != null) submitMeshRenderer.sortingOrder = textSortingOrder;
+
+        btn_originalColor = submitBtn.color;
 
         OnPlayHint += ShowPotHint;
         IngredientManager.Instance.OnBringFirstIngredient += StopPointerAnim;
@@ -180,7 +184,8 @@ public class PotUIController : MonoBehaviour
     public void StopSubmitAnim()
     {
         submitBtnAnim.Stop();
-        submitBtn.color = new Color(submitBtn.color.r, submitBtn.color.g, submitBtn.color.b, 1f);
+        submitBtn.transform.localScale = btn_originalSize;
+        submitBtn.color = btn_originalColor;
     }
 
     public void OnGameEnd()
