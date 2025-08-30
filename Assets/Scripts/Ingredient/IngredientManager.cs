@@ -269,6 +269,10 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
+        if (CurrentRecipeConsumer != null && CurrentRecipeConsumer != consumer)
+        {
+            CurrentRecipeConsumer.StopIssueCoroutine();
+        }
         currentRecipeConsumer = consumer;
     }
 

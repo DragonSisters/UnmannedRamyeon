@@ -10,7 +10,6 @@ public abstract class Consumer : MonoBehaviour, IPoolable
 {
     [SerializeField] internal List<ConsumerScriptableObject> consumerScriptableObjectList = new();
     internal ConsumerScriptableObject currentConsumerScriptableObject;
-    [SerializeField] internal ConsumerUI consumerUI;
 
     internal GameObject appearanceGameObject;
     internal ConsumerAppearance appearanceScript;
@@ -19,6 +18,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     internal ConsumerSpeech speechScript;
     internal ConsumerPriceCalculator priceCalculator;
     internal ConsumerIngredientHandler ingredientHandler;
+    [SerializeField] internal ConsumerUI consumerUI;
 
     private const float ORDER_WAITING_TIME = 1f;
     private const float COOKING_WAITING_TIME = 5f;
@@ -29,6 +29,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     public ConsumerState State { get; private set; }
 
     private bool exitCompleted;
+    internal Coroutine issueCoroutine;
     /// <summary>
     /// 이슈상태 전에 진행중이던 상태를 저장해놓습니다. 이슈가 지나가면 다시 cached상태로 돌아가야합니다.
     /// </summary>
@@ -192,7 +193,8 @@ public abstract class Consumer : MonoBehaviour, IPoolable
                     break;
                 // 이하로는 외부조정중. 이슈는 모든 상태에서 올 수 있으므로 주의가 필요합니다.
                 case ConsumerState.Issue:
-                    yield return HandleChildIssue();
+                    issueCoroutine = StartCoroutine(HandleChildIssue());
+                    yield return issueCoroutine;
                     break;
                 case ConsumerState.IssueUnsolved:
                     OnIssueUnsolved();
@@ -403,5 +405,14 @@ public abstract class Consumer : MonoBehaviour, IPoolable
     {
         // MoodState를 int로 변환해서 전달
         consumerUI.SetMoodFeedbackUI(newMood);
+    }
+
+    public void StopIssueCoroutine()
+    {
+        if (issueCoroutine != null)
+        {
+            StopCoroutine(issueCoroutine);
+            issueCoroutine = null;
+        }
     }
 }
