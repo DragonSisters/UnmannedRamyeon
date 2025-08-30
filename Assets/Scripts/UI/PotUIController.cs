@@ -8,9 +8,11 @@ public class PotUIController : MonoBehaviour
 {
     [SerializeField] private GameObject pot;
     [SerializeField] private GameObject pointer;
+    [SerializeField] private GameObject instruction;
     [SerializeField] private SpriteRenderer submitBtn;
     [SerializeField] private TMP_Text recipeNameTagText;
     [SerializeField] private TMP_Text submitText;
+    [SerializeField] private TMP_Text instructionText;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
     private Vector2 pot_originalPos = new Vector2(0, 0);
@@ -25,6 +27,8 @@ public class PotUIController : MonoBehaviour
     private Color btn_originalColor;
     private Coroutine pointerCoroutine;
     [SerializeField] private int textSortingOrder = 17;
+    private string dragInInstruction = "재료를\n드래그해서\n라면을\n완성해요!\n";
+    private string dragOutInstruction = "틀린 재료는\n뺄 수\n있어요!";
 
     private Queue<IEnumerator> potQueue = new Queue<IEnumerator>();
     private bool isPotQueueRunning = false;
@@ -70,7 +74,10 @@ public class PotUIController : MonoBehaviour
         if(nameTagTextMeshRenderer != null) nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
         MeshRenderer submitMeshRenderer = submitText.GetComponent<MeshRenderer>();
         if (submitMeshRenderer != null) submitMeshRenderer.sortingOrder = textSortingOrder;
+        MeshRenderer instructionMeshRenderer = instructionText.GetComponent<MeshRenderer>();
+        if (instructionMeshRenderer != null) instructionMeshRenderer.sortingOrder = textSortingOrder;
 
+        instruction.SetActive(false);
         btn_originalColor = submitBtn.color;
 
         OnPlayHint += ShowPotHint;
@@ -155,12 +162,16 @@ public class PotUIController : MonoBehaviour
         {
             if(pointerCoroutine != null) StopCoroutine(pointerCoroutine);
             pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerIn));
+            instructionText.text = dragInInstruction;
         }
         else
         {
             if (pointerCoroutine != null) StopCoroutine(pointerCoroutine);
             pointerCoroutine = StartCoroutine(PlayPointerAnim(pointerOut));
+            instructionText.text = dragOutInstruction;
         }
+
+        instruction.SetActive(true);
     }
 
     private IEnumerator PlayPointerAnim(string name)
@@ -181,11 +192,12 @@ public class PotUIController : MonoBehaviour
         submitBtnAnim.Play();
     }
 
-    public void StopSubmitAnim()
+    public void StopPotHint()
     {
         submitBtnAnim.Stop();
         submitBtn.transform.localScale = btn_originalSize;
         submitBtn.color = btn_originalColor;
+        instruction.SetActive(false);
     }
 
     public void OnGameEnd()
