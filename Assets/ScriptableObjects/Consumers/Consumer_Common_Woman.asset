@@ -16,9 +16,8 @@ MonoBehaviour:
   stateDialogues:
   - state: 0
     line:
-    - "\uBC30\uACE0\uD30C \uBC30\uACE0\uD30C"
-    - "\uC774\uB7F0 \uB370\uAC00 \uC788\uC5C8\uB124"
-    - "\uC774\uB7F0 \uB370\uAC00 \uC788\uC5C8\uB098?"
+    - "\uACC4\uB780\uACFC \uB9C8\uC694\uB124\uC988\uB294 \uCD5C\uACE0\uC758 \uC870\uD569\uC774\uC9C0"
+    - "\uB9C8\uC694\uB124\uC988\uC5D4 \uACC4\uB780\uC774\uC9C0"
     - "\uC6B0\uC640 \uB9DB\uC788\uACA0\uB2E4"
   - state: 1
     line:
@@ -28,7 +27,6 @@ MonoBehaviour:
   - state: 3
     line:
     - "\uBB50 \uBA39\uC9C0?"
-    - "\uACC4\uB780\uACFC \uB9C8\uC694\uB124\uC988\uB294 \uCD5C\uACE0\uC758 \uC870\uD569\uC774\uC9C0"
     - "\uC640 \uBB50 \uBA39\uC744\uAE4C?"
   - state: 5
     line:
