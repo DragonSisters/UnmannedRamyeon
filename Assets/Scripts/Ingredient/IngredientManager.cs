@@ -287,7 +287,6 @@ public class IngredientManager : Singleton<IngredientManager>
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
         isNoDuplicate = false;
-        bool isAllIngredientCorrect = false;
 
         if (currentRecipeConsumer == null)
         {
@@ -301,7 +300,7 @@ public class IngredientManager : Singleton<IngredientManager>
             return;
         }
 
-        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate, out isAllIngredientCorrect);
+        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate);
         if (isNoDuplicate)
         {
             currentRecipeConsumer.AddPickCount();
@@ -318,12 +317,18 @@ public class IngredientManager : Singleton<IngredientManager>
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
-        if(isAllIngredientCorrect)
+        if(ingredientHandler.IsAllIngredientCorrect())
         {
             currentRecipeConsumer.IsAllIngredientCorrect = true;
             potUIController.PlaySubmitAnim();
         }
+        else
+        {
+            currentRecipeConsumer.IsAllIngredientCorrect = false;
+            potUIController.StopSubmitAnim();
+        }
 
+        // 타이머 쓰는 경우는 조리완료 버튼을 쓰지 않고 바로 서빙
         if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count && GameManager.Instance.UseRecipeConsumerTimer)
         {
             currentRecipeConsumer.IsSubmit = true;
@@ -346,6 +351,17 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         currentRecipeConsumer.GetComponent<ConsumerIngredientHandler>().RemoveWrongIngredient(ingredient);
+
+        if (ingredientHandler.IsAllIngredientCorrect())
+        {
+            currentRecipeConsumer.IsAllIngredientCorrect = true;
+            potUIController.PlaySubmitAnim();
+        }
+        else
+        {
+            currentRecipeConsumer.IsAllIngredientCorrect = false;
+            potUIController.StopSubmitAnim();
+        }
     }
 
     public void OnRecipeConsumerFinished(RecipeConsumer consumer)
@@ -353,6 +369,7 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == consumer)
         {
             potUIController.EnqueuePotRoutine(potUIController.RemovePot());
+            consumer.IsAllIngredientCorrect = false;
             RemoveRecipeConsumer(consumer);
 
             stencil.SetActive(false);

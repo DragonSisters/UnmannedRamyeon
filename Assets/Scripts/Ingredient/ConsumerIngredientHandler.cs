@@ -118,10 +118,27 @@ public class ConsumerIngredientHandler : MonoBehaviour
         return ingredientInfo;
     }
 
-    public void AddAttemptIngredients(IngredientScriptableObject ingredient, out bool isNoDuplicate, out bool isAllIngredientCorrect)
+    public bool IsAllIngredientCorrect()
+    {
+        // 재료 가짓수가 다르면 False
+        if (paidIngredients.Count != OwnedIngredients.Count)
+        {
+            return false;
+        }
+
+        foreach (var ownedIngredient in OwnedIngredients)
+        {
+            if (!ownedIngredient.IsCorrect)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void AddAttemptIngredients(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
         bool isCorrect = paidIngredients.Contains(ingredient);
-        isAllIngredientCorrect = true;
         IngredientInfo info = new IngredientInfo(ingredient, -1, isCorrect);
         for (int i = 0; i < paidIngredients.Count; i++)
         {
@@ -135,7 +152,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
         if (AttemptIngredients.Any(info => info.Ingredient == ingredient))
         {
             isNoDuplicate = false;
-            isAllIngredientCorrect = false;
 
             return;
         }
@@ -144,24 +160,6 @@ public class ConsumerIngredientHandler : MonoBehaviour
         isNoDuplicate = true;
 
         AddOwnIngredient(info);
-
-        // 여태까지 재료를 다 맞게 골랐는지 확인
-        // 재료 가짓수가 다르면 False
-        if (IngredientManager.Instance.CurrentRecipeConsumer.MyRecipe.Ingredients.Count != AttemptIngredients.Count)
-        {
-            isAllIngredientCorrect = false;
-        }
-        // 잘못된 재료를 골라도 False
-        else
-        {
-            foreach (IngredientInfo attemptIngredient in AttemptIngredients)
-            {
-                if (attemptIngredient.Index < 0)
-                {
-                    isAllIngredientCorrect = false;
-                }
-            }
-        }
     }
 
     public void AddOwnIngredient(IngredientInfo info)
