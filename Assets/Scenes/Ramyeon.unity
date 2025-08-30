@@ -3421,8 +3421,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f36b3372b2aa10845bb7e5774c5f2e11, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  easyModeGoalMoney: 50000
-  hardModeGoalMoney: 100000
+  easyModeGoalMoney: 150000
+  hardModeGoalMoney: 200000
   goalMoneyUi: {fileID: 8841245354502379933}
   totalMoneyUi: {fileID: 3715662388115491120}
   priceUiPrefab: {fileID: 4681973138784411824, guid: 8282752b469927c409237ca0ef21d027, type: 3}
