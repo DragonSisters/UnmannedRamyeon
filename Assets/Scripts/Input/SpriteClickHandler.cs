@@ -109,12 +109,6 @@ public class SpriteClickHandler : Singleton<SpriteClickHandler>
         // 클릭 가능한 스프라이트가 있다면 처리
         if (selectedClickable != null)
         {
-            // 이전 클릭된 스프라이트가 있다면 선택 해제
-            if (currentClickedSprite != null && currentClickedSprite != selectedClickable && currentClickedSprite.IsClickable)
-            {
-                currentClickedSprite.OnSpriteDeselected();
-            }
-
             // 새로운 스프라이트 선택
             currentClickedSprite = selectedClickable;
             currentClickedSprite.OnSpriteClicked();

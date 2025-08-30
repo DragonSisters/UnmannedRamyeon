@@ -16,12 +16,12 @@ public class RecipeConsumer : Consumer
     private RecipeScriptableObject myRecipe;
     List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
 
-    public bool IsAllIngredientSelected = false;
+    public bool IsSubmit = false;
+    public bool IsAllIngredientCorrect = false;
     public int CurrPickCount { get; private set; } = 0;
 
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
-    private IngredientScriptableObject[] ingredientsInPot = new IngredientScriptableObject[4];
 
     internal override void HandleChildEnter()
     {
@@ -42,48 +42,44 @@ public class RecipeConsumer : Consumer
     {
         yield return new WaitUntil(() => !moveScript.IsMoving);
 
-        float elapsedTime = 0f;
-        timerUI.ActivateTimer();
-        StartCoroutine(timerUI.FillTimerRoutine(stayTime));
-
-        while(!IsAllIngredientSelected && elapsedTime < stayTime)
+        if (GameManager.Instance.UseRecipeConsumerTimer)
         {
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
+            float elapsedTime = 0f;
+            timerUI.ActivateTimer();
+            StartCoroutine(timerUI.FillTimerRoutine(stayTime));
 
-        // 시간 안에 재료를 다 고르지 못했다.
-        if(!IsAllIngredientSelected)
-        {
-            SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
-            ResetPickCount();
-            ingredientHandler.ResetAllIngredientLists();
-            appearanceScript.SetClickable(false);
-
-            IngredientManager.Instance.OnRecipeConsumerFinished(this);
-
-            SetState(ConsumerState.Leave);
-            yield break;
-        }
-
-        timerUI.DeactivateTimer();
-
-        bool isAllIngredientCorrect = true;
-        foreach (IngredientInfo ingredient in ingredientHandler.AttemptIngredients)
-        {
-            if (ingredient.Index < 0)
+            while (!IsSubmit && elapsedTime < stayTime)
             {
-                isAllIngredientCorrect = false;
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+
+            // 시간 안에 재료를 다 고르지 못했다.
+            if (!IsSubmit)
+            {
+                SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
+                ResetPickCount();
+                ingredientHandler.ResetAllIngredientLists();
+                appearanceScript.SetClickable(false);
+
+                IngredientManager.Instance.OnRecipeConsumerFinished(this);
+
+                SetState(ConsumerState.Leave);
+                timerUI.DeactivateTimer();
+                yield break;
             }
         }
 
-        // 시간 안에 재료를 다 골랐고, 그 재료가 다 맞다
-        if (isAllIngredientCorrect)
+        // 제출 버튼을 누를 때까지 기다린다
+        yield return new WaitUntil(() => IsSubmit);
+
+        // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
+        if (IsAllIngredientCorrect)
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
             SetState(ConsumerState.LineUp);
         }
-        else // 시간 안에 재료를 다 골랐지만, 그 재료 중에 단 하나라도 틀린 재료가 있다.
+        else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
         {
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
@@ -94,7 +90,7 @@ public class RecipeConsumer : Consumer
         IngredientManager.Instance.OnRecipeConsumerFinished(this);
 
         appearanceScript.SetClickable(false);
-        IsAllIngredientSelected = false;
+        IsSubmit = false;
     }
 
     internal override IEnumerator HandleChildUpdate()

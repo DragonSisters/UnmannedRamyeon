@@ -8,7 +8,9 @@ public class PotUIController : MonoBehaviour
 {
     [SerializeField] private GameObject pot;
     [SerializeField] private GameObject pointer;
+    [SerializeField] private SpriteRenderer submitBtn;
     [SerializeField] private TMP_Text recipeNameTagText;
+    [SerializeField] private TMP_Text submitText;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
 
     private Vector2 pot_originalPos = new Vector2(0, 0);
@@ -18,8 +20,9 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private Animation pointerAnim;
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
+    [SerializeField] private Animation submitBtnAnim;
     private Coroutine pointerCoroutine;
-    [SerializeField] private int nameTagSortingOrder = 17;
+    [SerializeField] private int textSortingOrder = 17;
 
     private Queue<IEnumerator> potQueue = new Queue<IEnumerator>();
     private bool isPotQueueRunning = false;
@@ -62,7 +65,9 @@ public class PotUIController : MonoBehaviour
     public void Initialize()
     {
         MeshRenderer nameTagTextMeshRenderer = recipeNameTagText.GetComponent<MeshRenderer>();
-        nameTagTextMeshRenderer.sortingOrder = nameTagSortingOrder;
+        if(nameTagTextMeshRenderer != null) nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
+        MeshRenderer submitMeshRenderer = submitText.GetComponent<MeshRenderer>();
+        if (submitMeshRenderer != null) submitMeshRenderer.sortingOrder = textSortingOrder;
 
         OnPlayHint += ShowPotHint;
         IngredientManager.Instance.OnBringFirstIngredient += StopPointerAnim;
@@ -165,6 +170,17 @@ public class PotUIController : MonoBehaviour
     public void StopPointerAnim()
     {
         pointerAnim.Stop();
+    }
+
+    public void PlaySubmitAnim()
+    {
+        submitBtnAnim.Play();
+    }
+
+    public void StopSubmitAnim()
+    {
+        submitBtnAnim.Stop();
+        submitBtn.color = new Color(submitBtn.color.r, submitBtn.color.g, submitBtn.color.b, 1f);
     }
 
     public void OnGameEnd()

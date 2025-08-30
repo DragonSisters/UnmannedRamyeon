@@ -269,6 +269,10 @@ public class IngredientManager : Singleton<IngredientManager>
 
     public void ReceiveRecipeConsumer(RecipeConsumer consumer)
     {
+        if (CurrentRecipeConsumer != null && CurrentRecipeConsumer != consumer)
+        {
+            CurrentRecipeConsumer.StopIssueCoroutine();
+        }
         currentRecipeConsumer = consumer;
     }
 
@@ -283,6 +287,7 @@ public class IngredientManager : Singleton<IngredientManager>
     public void SendIngredientToCorrectConsumer(IngredientScriptableObject ingredient, out bool isNoDuplicate)
     {
         isNoDuplicate = false;
+        bool isAllIngredientCorrect = false;
 
         if (currentRecipeConsumer == null)
         {
@@ -296,7 +301,7 @@ public class IngredientManager : Singleton<IngredientManager>
             return;
         }
 
-        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate);
+        ingredientHandler.AddAttemptIngredients(ingredient, out isNoDuplicate, out isAllIngredientCorrect);
         if (isNoDuplicate)
         {
             currentRecipeConsumer.AddPickCount();
@@ -313,9 +318,15 @@ public class IngredientManager : Singleton<IngredientManager>
             StartCoroutine(consumerSpeech.StartSpeechFromSituation(currentRecipeConsumer.currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, true, true, true, true, -1, $"{currentRecipeConsumer.MyRecipe.Name}"));
         }
 
-        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count)
+        if(isAllIngredientCorrect)
         {
-            currentRecipeConsumer.IsAllIngredientSelected = true;
+            currentRecipeConsumer.IsAllIngredientCorrect = true;
+            potUIController.PlaySubmitAnim();
+        }
+
+        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count && GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            currentRecipeConsumer.IsSubmit = true;
         }
     }
 
