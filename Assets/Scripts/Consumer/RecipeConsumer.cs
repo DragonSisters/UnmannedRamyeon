@@ -11,10 +11,13 @@ public class RecipeConsumer : Consumer
     [SerializeField] private RecipeConsumerTimerUI timerUI;
 
     // 레시피 선택 관련 변수
+    [Header("all Recipes 기준 쉬운 레시피의 경계 인덱스")]
+    [SerializeField] private int easyRecipeThresholdIndex = 4;
+    [Header("쉬운 레시피 순으로 정렬")]
     [SerializeField] private List<RecipeScriptableObject> allRecipes;
     public RecipeScriptableObject MyRecipe => myRecipe;
     private RecipeScriptableObject myRecipe;
-    List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
+    private List<IngredientScriptableObject> recipeIngredients = new List<IngredientScriptableObject>();
 
     public bool IsSubmit = false;
     public bool IsAllIngredientCorrect = false;
@@ -139,7 +142,9 @@ public class RecipeConsumer : Consumer
         {
             throw new ArgumentException("리스트가 비어 있습니다.");
         }
-        int index = UnityEngine.Random.Range(0, allRecipes.Count);
+
+        int index = (Time.time - GameManager.Instance.GameStartTime > GameManager.Instance.EarlyStageTime) ?
+            UnityEngine.Random.Range(0, allRecipes.Count) : UnityEngine.Random.Range(0, easyRecipeThresholdIndex);
 
         return allRecipes[index];
     }

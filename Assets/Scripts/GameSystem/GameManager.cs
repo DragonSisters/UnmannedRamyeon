@@ -18,6 +18,10 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Button btn_hardMode;
     [SerializeField] private float gameDuration = 180;
     public float GameDuration => gameDuration;
+    [SerializeField] private float earlyStageTime;
+    public float EarlyStageTime => earlyStageTime;
+    private float easyEarlyStageTime = 60;
+    private float hardEarlyStageTime = 0;
     public float GameStartTime => gameStartTime;
     private float gameStartTime;
 
@@ -67,7 +71,7 @@ public class GameManager : Singleton<GameManager>
         btn_hardMode.onClick.AddListener(() => isHardMode = true);  
     }
 
-    // Start 버튼에 연결된 함수입니다
+    // 이지 모드, 하드 모드 버튼에 연결된 함수입니다
     public void OnStartButtonClick()
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.GameStart);
@@ -94,6 +98,8 @@ public class GameManager : Singleton<GameManager>
         startCanvas.SetActive(false);
         inGameCanvas.SetActive(true);
         StartCoroutine(UpdateGame());
+
+        earlyStageTime = isHardMode ? hardEarlyStageTime : easyEarlyStageTime;
 
         FinanceManager.Instance.OnGameEnter();
         ConsumerManager.Instance.StartSpawn(isHardMode);

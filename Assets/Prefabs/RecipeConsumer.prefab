@@ -264,26 +264,28 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 45750e8252d150b4a8a3ba9a9c83cd5e, type: 2}
   consumerUI: {fileID: 1264228265461581360}
   timerUI: {fileID: 1837718294714103859}
+  easyRecipeThresholdIndex: 4
   allRecipes:
-  - {fileID: 11400000, guid: c8bef0ec011157d42b4a1c8b02cbbfa7, type: 2}
   - {fileID: 11400000, guid: f51e79376d5662f42954cc48f795c867, type: 2}
-  - {fileID: 11400000, guid: 4781c3a698fd59f41bd88298f0f410fe, type: 2}
-  - {fileID: 11400000, guid: 2754b2dc5ba0dc242b4d3d24f0771e8a, type: 2}
-  - {fileID: 11400000, guid: aef44a56af247fa41b77f7742d1dd834, type: 2}
-  - {fileID: 11400000, guid: 5efc4f0b105545f49adb5d7ead523f6e, type: 2}
-  - {fileID: 11400000, guid: 5beb8b5cf90c92d4384eb2f75a66e3da, type: 2}
-  - {fileID: 11400000, guid: fd7914807dbcd694d837607ac43e3d3c, type: 2}
-  - {fileID: 11400000, guid: 614fbed755aafa040bb123c019fb420f, type: 2}
-  - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
-  - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
-  - {fileID: 11400000, guid: 285bb78b37be39543bd39a60a4207605, type: 2}
-  - {fileID: 11400000, guid: 83c758c27485f0d47879dd54cacedd88, type: 2}
-  - {fileID: 11400000, guid: b08c70bd6f7469e42af0ebeda8e3b311, type: 2}
-  - {fileID: 11400000, guid: 93d3a82be5cba214a9c5f240ec3d2d22, type: 2}
-  - {fileID: 11400000, guid: 1dc6ce9e5287a474a911b2072bcb2c51, type: 2}
   - {fileID: 11400000, guid: ed87c4a671ce7c040b4d4f9a8a76af58, type: 2}
+  - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
-  IsAllIngredientSelected: 0
+  - {fileID: 11400000, guid: 93d3a82be5cba214a9c5f240ec3d2d22, type: 2}
+  - {fileID: 11400000, guid: b08c70bd6f7469e42af0ebeda8e3b311, type: 2}
+  - {fileID: 11400000, guid: 934ea38db2404444c9d9fa3cb7ebd8ac, type: 2}
+  - {fileID: 11400000, guid: 83c758c27485f0d47879dd54cacedd88, type: 2}
+  - {fileID: 11400000, guid: aef44a56af247fa41b77f7742d1dd834, type: 2}
+  - {fileID: 11400000, guid: 285bb78b37be39543bd39a60a4207605, type: 2}
+  - {fileID: 11400000, guid: 614fbed755aafa040bb123c019fb420f, type: 2}
+  - {fileID: 11400000, guid: 4781c3a698fd59f41bd88298f0f410fe, type: 2}
+  - {fileID: 11400000, guid: 1dc6ce9e5287a474a911b2072bcb2c51, type: 2}
+  - {fileID: 11400000, guid: fd7914807dbcd694d837607ac43e3d3c, type: 2}
+  - {fileID: 11400000, guid: c8bef0ec011157d42b4a1c8b02cbbfa7, type: 2}
+  - {fileID: 11400000, guid: 5beb8b5cf90c92d4384eb2f75a66e3da, type: 2}
+  - {fileID: 11400000, guid: 5efc4f0b105545f49adb5d7ead523f6e, type: 2}
+  - {fileID: 11400000, guid: 2754b2dc5ba0dc242b4d3d24f0771e8a, type: 2}
+  IsSubmit: 0
+  IsAllIngredientCorrect: 0
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
