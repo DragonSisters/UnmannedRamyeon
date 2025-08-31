@@ -6,7 +6,7 @@ public class GrandmaTalkUI : MonoBehaviour
 {
     [SerializeField] private GameObject grandmaSpeechBubble;
     [SerializeField] private TMP_Text txt_grandmaSpeech;
-    private float grandmaSpeechTime = 3f;
+    private float grandmaSpeechTime = 15f;
 
     [TextArea]
     [SerializeField]
