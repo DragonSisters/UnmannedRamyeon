@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -10,8 +11,8 @@ public class FinanceManager : Singleton<FinanceManager>
     /// 목표 매출액
     /// </summary>
     [Header("목표 매출액")]
-    [SerializeField] private int easyModeGoalMoney = 20000;
-    [SerializeField] private int hardModeGoalMoney = 50000;
+    [SerializeField] private int easyModeGoalMoney = 80000;
+    [SerializeField] private int hardModeGoalMoney = 150000;
     private const float COMBO_MULTIPLIER = 0.25f;
     private const int COMBO_STEP = 5;
     
@@ -19,8 +20,10 @@ public class FinanceManager : Singleton<FinanceManager>
     {
         get { return GameManager.Instance.IsHardMode ? hardModeGoalMoney : easyModeGoalMoney; }
     }
+    public int GoalMoney => goalMoney;
 
     [Header("UI관련")]
+    [SerializeField] private GrandmaTalkUI grandmaTalk;
     [SerializeField] private TMP_Text goalMoneyUi;
     [SerializeField] private TMP_Text totalMoneyUi;
     [SerializeField] private GameObject priceUiPrefab;
@@ -37,6 +40,9 @@ public class FinanceManager : Singleton<FinanceManager>
     public int CurrentMoney => currentMoney;
     private int currentMoney;
 
+    public Action OnFinancialManagerStart;
+    public Action OnCurrentMoneyUpdate;
+
     public void OnGameEnter()
     {
         // 모든 오브젝트 정리
@@ -51,6 +57,10 @@ public class FinanceManager : Singleton<FinanceManager>
         // currentMoney 초기화
         currentMoney = 0;
         UpdatePrices();
+        // grandmaTalk 초기화 후 실행
+        grandmaTalk.Initialize();
+        OnFinancialManagerStart?.Invoke();
+        OnCurrentMoneyUpdate?.Invoke();
     }
 
     public void OnGameEnd()
@@ -71,6 +81,7 @@ public class FinanceManager : Singleton<FinanceManager>
 
         currentMoney += finalMoney;
         UpdatePrices();
+        OnCurrentMoneyUpdate?.Invoke();
         StartCoroutine(ActivateCoinUI(finalMoney, comboMultiplier));
         SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinGain);
     }
@@ -90,6 +101,7 @@ public class FinanceManager : Singleton<FinanceManager>
 
         currentMoney -= money;
         UpdatePrices();
+        OnCurrentMoneyUpdate?.Invoke();
         StartCoroutine(ActivateCoinUI(-money));
         SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinLoss);
     }

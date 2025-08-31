@@ -15,7 +15,7 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private GameObject storyCanvas;
     [SerializeField] private GameObject[] storyCutscenes;
     [SerializeField] private GameObject btn_start;
-    private const float START_DELAY_TIME = 1f;
+
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
     [SerializeField] private Timer timer;
