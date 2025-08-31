@@ -6,7 +6,11 @@ public class GrandmaTalkUI : MonoBehaviour
 {
     [SerializeField] private GameObject grandmaSpeechBubble;
     [SerializeField] private TMP_Text txt_grandmaSpeech;
-    private float grandmaSpeechTime = 15f;
+    private float grandmaSpeechTime = 1f;
+    private float typingTime = 0.05f;
+    private int lastStep = -1;
+    private Coroutine typingCoroutine;
+    private bool isTyping = false;
 
     [TextArea]
     [SerializeField]
@@ -14,12 +18,10 @@ public class GrandmaTalkUI : MonoBehaviour
     {
         "아이고~ 나 디스크 터졌을 때 다 키오스크로 바꿨어! 뭘 알바를 한다고 그랴~",
         "흠... 그래 저런 손님들은 너가 챙겨줘야 할지도?",
-        "이제 제법 하는데?",
-        "그래그래 이렇게만 해다오",
+        "이제 제법 하는데? 이렇게만 해다오",
+        "손님들이 너 칭찬이 자자하다! 우리 손녀 최고~",
         "아이고 너한테 가게 맡겨놓고 난 여행가야겠다~"
     };
-
-    private int lastStep = -1;
 
     // 외부에서 매출이 변경될 때 호출
     public IEnumerator UpdateGrandmaTalk(int currentMoney, int goalMoney)
@@ -33,28 +35,35 @@ public class GrandmaTalkUI : MonoBehaviour
         if (step == lastStep) yield break;
 
         lastStep = step;
-        ShowGrandmaTalk(grandmaDialogues[step]);
+        yield return StartCoroutine(ShowGrandmaTalk(grandmaDialogues[step]));
 
+        // 다 쓴 후 잠깐 유지
         yield return new WaitForSeconds(grandmaSpeechTime);
 
         HideGrandmaTalk();
     }
 
-    private void ShowGrandmaTalk(string message)
+    private IEnumerator ShowGrandmaTalk(string message)
     {
         if(grandmaSpeechBubble == null)
         {
             Debug.LogError($"{nameof(grandmaSpeechBubble)}을 찾을 수 없습니다");
-            return;
+            yield break;
         }
         grandmaSpeechBubble.SetActive(true);
 
         if (txt_grandmaSpeech == null)
         {
             Debug.LogError($"{nameof(txt_grandmaSpeech)}을 찾을 수 없습니다");
-            return;
+            yield break;
         }
-        txt_grandmaSpeech.text = message;
+        // 코루틴 중복 실행 방지
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+        }
+        typingCoroutine = StartCoroutine(TypeText(message));
+        yield return typingCoroutine;
     }
 
     public void HideGrandmaTalk()
@@ -71,5 +80,16 @@ public class GrandmaTalkUI : MonoBehaviour
     {
         lastStep = -1;
         grandmaSpeechBubble.SetActive(false);
+    }
+
+    private IEnumerator TypeText(string message)
+    {
+        txt_grandmaSpeech.text = "";
+
+        foreach (char c in message)
+        {
+            txt_grandmaSpeech.text += c;
+            yield return new WaitForSeconds(typingTime); // 글자 하나 나오는 간격
+        }
     }
 }

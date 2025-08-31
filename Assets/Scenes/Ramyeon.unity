@@ -7077,6 +7077,28 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: 'grandmaDialogues.Array.data[2]'
+      value: "\uC774\uC81C \uC81C\uBC95 \uD558\uB294\uB370? \uC774\uB807\uAC8C\uB9CC
+        \uD574 \uB2E4\uC624"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: 'grandmaDialogues.Array.data[3]'
+      value: "\uC190\uB2D8\uB4E4\uC774 \uB108 \uCE6D\uCC2C\uC774 \uC790\uC790\uD558\uB2E4!
+        \uC6B0\uB9AC \uC190\uB140 \uCD5C\uACE0~"
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852633427189290487, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852633427189290487, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7852633427189290487, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8852603540770834376, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
