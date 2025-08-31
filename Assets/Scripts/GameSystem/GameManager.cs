@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,11 @@ public class GameManager : Singleton<GameManager>
     [SerializeField] private Animation startGameAnimation;
     [SerializeField] private Texture2D cursorIcon;
     public Texture2D CursorIcon => cursorIcon;
-
+    [Header("컷신 관련 변수들")]
+    [SerializeField] private GameObject storyCanvas;
+    [SerializeField] private GameObject[] storyCutscenes;
+    [SerializeField] private GameObject btn_start;
+    private const float START_DELAY_TIME = 1f;
     [Header("인게임 화면 관련 변수들")]
     [SerializeField] private GameObject inGameCanvas;
     [SerializeField] private Timer timer;
@@ -53,6 +58,7 @@ public class GameManager : Singleton<GameManager>
     {
         SetCursor(cursorIcon);
         SetModeButtons();
+        HideCutsceneCanvas();
         ConsumerManager.Instance.InitializeConsumerManagerSetting();
         TrashManager.Instance.Initialize();
     }
@@ -74,13 +80,31 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 이지 모드, 하드 모드 버튼에 연결된 함수입니다
-    public void OnStartButtonClick()
+    public void OnDifficultyButtonClick()
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.GameStart);
-        StartCoroutine(nameof(StartGameEffect));
+        StartCoroutine(nameof(ShowStoryCoroutine));
     }
 
-    private IEnumerator StartGameEffect()
+    // 이지 모드, 하드 모드 버튼 후에 나오는 스토리 컷씬에서 시작하기 버튼에 연결된 함수입니다
+    public void OnStartButtonClick()
+    {
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
+        storyCanvas.SetActive(false);
+        StartGame();
+    }
+
+    private void HideCutsceneCanvas()
+    {
+        storyCanvas.SetActive(false);
+        for (int i = 0; i < storyCutscenes.Length; i++)
+        {
+            storyCutscenes[i].SetActive(false);
+        }
+        btn_start.SetActive(false);
+    }
+
+    private IEnumerator ShowStoryCoroutine()
     {
         if (!startGameAnimation.isPlaying)
         {
@@ -89,7 +113,19 @@ public class GameManager : Singleton<GameManager>
 
         yield return new WaitUntil(() => !startGameAnimation.isPlaying);
 
-        StartGame();
+        startCanvas.SetActive(false);
+        storyCanvas.SetActive(true);
+
+        for (int i = 0; i < storyCutscenes.Length; i++)
+        {
+            storyCutscenes[i].SetActive(true);
+
+            // 마우스 클릭을 기다립니다
+            yield return new WaitUntil(() => Input.GetMouseButtonUp(0));
+            yield return null;
+        }
+
+        btn_start.SetActive(true);
     }
 
     // inGameUI 를 활성화합니다
@@ -97,7 +133,7 @@ public class GameManager : Singleton<GameManager>
     {
         isGameStarted = true;
         gameStartTime = Time.time;
-        startCanvas.SetActive(false);
+        HideCutsceneCanvas();
         inGameCanvas.SetActive(true);
         StartCoroutine(UpdateGame());
 
