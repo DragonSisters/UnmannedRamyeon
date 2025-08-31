@@ -93,8 +93,8 @@ public class PotUIController : MonoBehaviour
         btn_originalColor = submitBtn.color;
 
         OnPlayHint += ShowPotHint;
-        IngredientManager.Instance.OnBringFirstIngredient += StopPointerAnim;
-        IngredientManager.Instance.OnTakeOutFirstWrongIngredient += StopPointerAnim;
+        IngredientManager.Instance.OnBringFirstIngredient += StopHint;
+        IngredientManager.Instance.OnTakeOutFirstWrongIngredient += StopHint;
     }
 
     public void EnqueuePotRoutine(IEnumerator routine)
@@ -194,9 +194,10 @@ public class PotUIController : MonoBehaviour
         pointer.SetActive(false);
     }
 
-    public void StopPointerAnim()
+    public void StopHint()
     {
         pointerAnim.Stop();
+        instruction.SetActive(false);
     }
 
     public void PlaySubmitAnim()
@@ -204,12 +205,11 @@ public class PotUIController : MonoBehaviour
         submitBtnAnim.Play();
     }
 
-    public void StopPotHint()
+    public void StopSubmitAnim()
     {
         submitBtnAnim.Stop();
         submitBtn.transform.localScale = btn_originalSize;
         submitBtn.color = btn_originalColor;
-        instruction.SetActive(false);
     }
 
     public void OnGameEnd()

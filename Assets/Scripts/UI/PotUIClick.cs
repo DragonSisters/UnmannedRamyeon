@@ -12,7 +12,7 @@ public class PotUIClick : MonoBehaviour, IClickableSprite
         if (recipeConsumer != null)
         {
             recipeConsumer.IsSubmit = true;
-            IngredientManager.Instance.PotUIController.StopPotHint();
+            IngredientManager.Instance.PotUIController.StopSubmitAnim();
         }
     }
 

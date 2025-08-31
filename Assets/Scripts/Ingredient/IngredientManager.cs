@@ -325,7 +325,7 @@ public class IngredientManager : Singleton<IngredientManager>
         else
         {
             currentRecipeConsumer.IsAllIngredientCorrect = false;
-            potUIController.StopPotHint();
+            potUIController.StopSubmitAnim();
         }
 
         // 타이머 쓰는 경우는 조리완료 버튼을 쓰지 않고 바로 서빙
@@ -360,7 +360,7 @@ public class IngredientManager : Singleton<IngredientManager>
         else
         {
             currentRecipeConsumer.IsAllIngredientCorrect = false;
-            potUIController.StopPotHint();
+            potUIController.StopSubmitAnim();
         }
     }
 

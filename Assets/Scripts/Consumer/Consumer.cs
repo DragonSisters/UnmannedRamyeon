@@ -80,7 +80,7 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         StopCoroutine(HandleChildUpdate());
 
         //외형 삭제
-        Destroy(appearanceGameObject);
+        DestroyImmediate(appearanceGameObject);
     }
 
     public bool ShouldDespawn()
