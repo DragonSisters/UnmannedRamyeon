@@ -13,28 +13,7 @@ MonoBehaviour:
   m_Name: Consumer_Common_Grandpa
   m_EditorClassIdentifier: 
   appearancePrefab: {fileID: 6773422887930069721, guid: 464bfb4f7ec2a56489a5b6a8a3e0afef, type: 3}
-  stateDialogues:
-  - state: 0
-    line:
-    - "\uBC30\uACE0\uD504\uAD6C\uBA3C..."
-    - "\uC5EC\uAE30 \uC774\uB7F0\uB370\uAC00 \uC788\uC5C8\uB098?"
-  - state: 1
-    line:
-    - "\uB098\uC911\uC5D0 \uC190\uB140 \uB370\uB824\uC640\uC57C\uACA0\uC5B4..."
-    - "\uB098\uC911\uC5D0 \uC190\uC8FC \uB370\uB824\uC640\uC57C\uACA0\uC5B4.."
-    - "\uC790\uC8FC \uC640\uC57C\uACA0\uAD6C\uBA3C"
-  - state: 3
-    line:
-    - "\uC8FC\uBB38\uC740 \uC5EC\uAE30\uC11C \uD558\uB294\uAC70\uB77C\uACE0?"
-    - "\uC2E0\uAE30\uD558\uB124..."
-  - state: 5
-    line:
-    - "\uAE30\uACC4\uAC00 \uB053\uC5EC\uC900\uB2E4\uACE0?"
-    - "\uB053\uC774\uB7EC \uAC00\uC57C\uACA0\uAD6C\uBA3C..."
-  - state: 6
-    line:
-    - "\uACE0\uB188 \uCC38 \uC2E0\uAE30\uD5C8\uB124"
-    - "\uB0C4\uC0C8\uAC00 \uC88B\uAD6C\uBA3C"
+  stateDialogues: []
   situationDialogues:
   - situation: 0
     line:

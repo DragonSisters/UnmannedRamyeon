@@ -14,28 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appearancePrefab: {fileID: 3463868029112425272, guid: 1167883bba0ca4249af858b0339ce79b, type: 3}
   stateDialogues:
-  - state: 0
-    line:
-    - "\uBB50 \uBA39\uC9C0?"
-    - "\uC640 \uBB50 \uBA39\uC744\uAE4C?"
-    - "\uC2E0\uAE30\uD558\uB2E4"
-  - state: 1
-    line:
-    - "\uBA39\uC73C\uB7EC \uAC00\uC57C\uC9C0"
-    - "\uAC00\uC790\uAC00\uC790"
-    - "\uBC30\uACE0\uD30C"
   - state: 3
     line:
     - "\uB300\uD30C \uB9C8\uB298\uC740 \uC544\uBB34\uB370\uB098 \uB123\uC5B4\uB3C4
       \uB9DB\uC788\uC5B4"
-    - "\uC5ED\uC2DC \uBB54\uAC00 \uBD80\uC871\uD560\uB588 \uB300\uD30C \uB9C8\uB298\uC774\uC57C"
-  - state: 5
-    line:
-    - "\uB053\uC774\uB7EC \uAC00\uC57C\uC9C0"
-    - "\uC774\uC815\uB3C4\uBA74 \uB410\uB2E4"
   - state: 6
     line:
-    - "\uBC30\uACE0\uD504\uB124"
+    - "\uC5ED\uC2DC \uBB54\uAC00 \uBD80\uC871\uD560\uB588 \uB300\uD30C \uB9C8\uB298\uC774\uC57C"
   situationDialogues:
   - situation: 0
     line:

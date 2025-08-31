@@ -14,35 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appearancePrefab: {fileID: 1091607056502014350, guid: 33434787fba9ed94f896287af5909be5, type: 3}
   stateDialogues:
-  - state: 0
-    line:
-    - "\uBC30\uACE0\uD30C\uC6A7"
-    - "\uC0C8\uB85C \uC0DD\uAE34 \uB374\uAC00?"
-    - "\uC5EC\uAE34 \uC5B4\uB514 \uB098\uB294 \uB204\uAD6C"
-  - state: 1
-    line:
-    - "\uB2E4\uB053\uC600\uB2E4~~"
-    - "\uC5B4\uC6B0 \uBC30\uACE0\uD30C"
-    - "\uC5B4\uC6B0 \uB9DB\uC788\uACA0\uB2E4"
   - state: 2
     line:
     - "\uBB50\uC57C... \uC548\uBA39\uC744\uB798"
     - "\uBB50\uC57C \uC5EC\uAE30..."
     - "\uAE30\uBD84\uB9CC \uC7A1\uCCE4\uB124"
-  - state: 3
-    line:
-    - "\uBB50 \uBA39\uC9C0?"
-    - "\uC640 \uBB50 \uBA39\uC744\uAE4C?"
-    - "\uC640 \uC8FC\uBB38\uD574\uC57C\uC9C0~~"
-  - state: 5
-    line:
-    - "\uB053\uC774\uB7EC \uAC00\uC57C\uC9C0"
-    - "\uC9C4\uC9DC \uB9DB\uC788\uACA0\uB2E4"
-  - state: 6
-    line:
-    - "\uBC30\uACE0\uD30C\uC544\uC544"
-    - "\uBC30\uACE0\uD508\uB370 \uBE68\uB9AC \uC548\uB418\uB098"
-    - "\uC9C4\uC9DC \uB9DB\uC788\uACA0\uB2E4 \uD5E4\uD5E4"
   - state: 7
     line:
     - "\uB3C4\uC640\uC8FC\uC138\uC694"
