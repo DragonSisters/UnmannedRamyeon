@@ -6,7 +6,8 @@ public enum BgmSoundType
 {
     Start,
     InGame,
-    End
+    Fail,
+    Success
 }
 
 public enum EffectSoundType
