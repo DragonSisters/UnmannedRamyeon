@@ -71,11 +71,23 @@ public class PotUIController : MonoBehaviour
     public void Initialize()
     {
         MeshRenderer nameTagTextMeshRenderer = recipeNameTagText.GetComponent<MeshRenderer>();
-        if(nameTagTextMeshRenderer != null) nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
+        if(nameTagTextMeshRenderer == null)
+        {
+            Debug.LogError($"{nameof(nameTagTextMeshRenderer)} 를 찾을 수 없습니다.");
+        }
+        nameTagTextMeshRenderer.sortingOrder = textSortingOrder;
         MeshRenderer submitMeshRenderer = submitText.GetComponent<MeshRenderer>();
-        if (submitMeshRenderer != null) submitMeshRenderer.sortingOrder = textSortingOrder;
+        if (submitMeshRenderer == null)
+        {
+            Debug.LogError($"{nameof(submitMeshRenderer)} 를 찾을 수 없습니다.");
+        }
+        submitMeshRenderer.sortingOrder = textSortingOrder;
         MeshRenderer instructionMeshRenderer = instructionText.GetComponent<MeshRenderer>();
-        if (instructionMeshRenderer != null) instructionMeshRenderer.sortingOrder = textSortingOrder;
+        if (instructionMeshRenderer == null)
+        {
+            Debug.LogError($"{nameof(instructionMeshRenderer)} 를 찾을 수 없습니다.");
+        }
+        instructionMeshRenderer.sortingOrder = textSortingOrder;
 
         instruction.SetActive(false);
         btn_originalColor = submitBtn.color;
