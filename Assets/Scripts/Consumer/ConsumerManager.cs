@@ -29,13 +29,13 @@ public class ConsumerManager : Singleton<ConsumerManager>
     private AnimationCurve recipeActiveCountCurve = new AnimationCurve();
 
     [Header("최대 소환 갯수")]
-    [SerializeField] private int minActiveLimit = 1;
-    [SerializeField] private int maxEasyActiveLimit = 8;
-    [SerializeField] private int maxHardActiveLimit = 15;
-    [SerializeField] private int maxActiveLimit;
-    [SerializeField] private int maxEasyRecipeActiveLimit = 1;
+    [SerializeField] private int minCommonActiveLimit = 1;
+    [SerializeField] private int maxEasyCommonActiveLimit = 8;
+    [SerializeField] private int maxHardCommonActiveLimit = 15;
     [SerializeField] private int minRecipeActiveLimit = 1;
+    [SerializeField] private int maxEasyRecipeActiveLimit = 1;
     [SerializeField] private int maxHardRecipeActiveLimit = 1;
+    private int maxCommonActiveLimit;
     private int maxRecipeActiveLimit;
     private int currentActiveLimit;
     private int currentRecipeActiveLimit;
@@ -106,16 +106,16 @@ public class ConsumerManager : Singleton<ConsumerManager>
     {
         if(isHardMode)
         {
-            maxActiveLimit = maxHardActiveLimit;
+            maxCommonActiveLimit = maxHardCommonActiveLimit;
             maxRecipeActiveLimit = maxHardRecipeActiveLimit;
         }
         else
         {
-            maxActiveLimit = maxEasyActiveLimit;
+            maxCommonActiveLimit = maxEasyCommonActiveLimit;
             maxRecipeActiveLimit = maxEasyRecipeActiveLimit;
         }
 
-        activeCountCurve = AnimationCurve.Linear(0, minActiveLimit, 1, maxActiveLimit);
+        activeCountCurve = AnimationCurve.Linear(0, minCommonActiveLimit, 1, maxCommonActiveLimit);
         recipeActiveCountCurve = AnimationCurve.Linear(0, minRecipeActiveLimit, 1, maxRecipeActiveLimit);
 
         if (IsAvailableSpawn())

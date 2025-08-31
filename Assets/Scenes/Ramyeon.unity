@@ -2703,12 +2703,11 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   spawnIntervalLimit: 0.5
-  minActiveLimit: 1
-  maxEasyActiveLimit: 8
-  maxHardActiveLimit: 15
-  maxActiveLimit: 10
-  maxEasyRecipeActiveLimit: 1
+  minCommonActiveLimit: 1
+  maxEasyCommonActiveLimit: 3
+  maxHardCommonActiveLimit: 4
   minRecipeActiveLimit: 1
+  maxEasyRecipeActiveLimit: 1
   maxHardRecipeActiveLimit: 1
 --- !u!4 &862743925
 Transform:
