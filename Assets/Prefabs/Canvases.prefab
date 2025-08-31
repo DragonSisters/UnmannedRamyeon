@@ -304,7 +304,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1019061034264797471
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1398,7 +1398,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1127988597698562244
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2278,7 +2278,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD0A4\uC624\uC2A4\uD06C\uB97C \uC4F0\uACA0\uB2E4\uAD6C...?"
+  m_text: "\uB124\uAC00 \uC190\uB2D8 \uC548\uB0B4\uB97C \uD558\uACA0\uB2E4\uAD6C...?"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
   m_sharedMaterial: {fileID: -4546131040518597370, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
@@ -2414,7 +2414,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC778\uAC74\uBE44 \uC544\uB07C\uB824\uB2E4\n\uC190\uB2D8\uB3C4 \uC783\uC5C8\uB2E4..."
+  m_text: "\uC124\uAC70\uC9C0\uB098 \uD558\uB834..."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
   m_sharedMaterial: {fileID: -4546131040518597370, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
@@ -5109,8 +5109,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC190\uB2D8\uC5D0\uAC8C \uB354\n\uC9D1\uC911\uD560 \uC218 \uC788\uAC8C
-    \uB410\uC5B4!"
+  m_text: "\uC190\uB2D8 \uB9CC\uC871\uC2DC\uD0A4\uAE30 \uC131\uACF5!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
   m_sharedMaterial: {fileID: -4546131040518597370, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
@@ -6121,7 +6120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC800\uB9CC \uBBFF\uC73C\uC2DC\uB77C\uB2C8\uAE4C\uC694!"
+  m_text: "\uADF8\uB9CC\uD07C \uC6A9\uB3C8 \uC8FC\uC138\uC694!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
   m_sharedMaterial: {fileID: -4546131040518597370, guid: b1bc03110095b554aa0bc243b572f404, type: 2}
@@ -6148,7 +6147,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 13.6
+  m_fontSize: 14.75
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
