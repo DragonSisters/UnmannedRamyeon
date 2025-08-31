@@ -4507,6 +4507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   easyModeGoalMoney: 80000
   hardModeGoalMoney: 150000
+  grandmaTalk: {fileID: 881958815197674031}
   goalMoneyUi: {fileID: 8841245354502379933}
   totalMoneyUi: {fileID: 3715662388115491120}
   priceUiPrefab: {fileID: 4681973138784411824, guid: 8282752b469927c409237ca0ef21d027, type: 3}
@@ -4856,6 +4857,33 @@ Animation:
   m_AnimatePhysics: 0
   m_UpdateMode: 0
   m_CullingType: 0
+--- !u!1 &1462993218 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2838673318431904057, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 881958815197674029}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1462993222
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1462993218}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8da92b61b5d02984aa26f7fc9fe4b94e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1468385361
 GameObject:
   m_ObjectHideFlags: 0
@@ -6997,6 +7025,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: 'grandmaDialogues.Array.data[2]'
+      value: "\uC774\uC81C \uC81C\uBC95 \uD558\uB294\uB370? \uC774\uB807\uAC8C\uB9CC
+        \uD574 \uB2E4\uC624"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: 'grandmaDialogues.Array.data[3]'
+      value: "\uC190\uB2D8\uB4E4\uC774 \uB108 \uCE6D\uCC2C\uC774 \uC790\uC790\uD558\uB2E4!
+        \uC6B0\uB9AC \uC190\uB140 \uCD5C\uACE0~"
+      objectReference: {fileID: 0}
     - target: {fileID: 7098614510104975263, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_SizeDelta.y
       value: -13.2
@@ -7077,16 +7115,6 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
-      propertyPath: 'grandmaDialogues.Array.data[2]'
-      value: "\uC774\uC81C \uC81C\uBC95 \uD558\uB294\uB370? \uC774\uB807\uAC8C\uB9CC
-        \uD574 \uB2E4\uC624"
-      objectReference: {fileID: 0}
-    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
-      propertyPath: 'grandmaDialogues.Array.data[3]'
-      value: "\uC190\uB2D8\uB4E4\uC774 \uB108 \uCE6D\uCC2C\uC774 \uC790\uC790\uD558\uB2E4!
-        \uC6B0\uB9AC \uC190\uB140 \uCD5C\uACE0~"
-      objectReference: {fileID: 0}
     - target: {fileID: 7852633427189290487, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_fontSize
       value: 16
@@ -7111,19 +7139,49 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnDifficultyButtonClick
       objectReference: {fileID: 0}
+    - target: {fileID: 9222003350185228627, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 4278069759860992878, guid: cfc1cfc63022afb419d64b73c5ca68a9, type: 3}
+    - target: {fileID: 9222003350185228627, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222003350185228627, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9222003350185228627, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 3802924951202545791, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       insertIndex: 1
       addedObject: {fileID: 1981750890}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2838673318431904057, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1462993222}
   m_SourcePrefab: {fileID: 100100000, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
 --- !u!4 &881958815197674030 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3802924951202545791, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
   m_PrefabInstance: {fileID: 881958815197674029}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &881958815197674031 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+  m_PrefabInstance: {fileID: 881958815197674029}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7389440005461991852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cef6d5b960784bf499a8408abe4d243a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1465069597429796766 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3586613831474995436, guid: 5ebd0ab53f668f74489242253023de68, type: 3}

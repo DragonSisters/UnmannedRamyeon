@@ -32,7 +32,7 @@ public class GrandmaTalkUI : MonoBehaviour
         int step = Mathf.Clamp((currentMoney * 5) / goalMoney, 0, 5);
 
         // 같은 단계면 말풍선 갱신 안 함
-        if (step == lastStep) yield break;
+        if (step == lastStep || step >= grandmaDialogues.Length) yield break;
 
         lastStep = step;
         yield return StartCoroutine(ShowGrandmaTalk(grandmaDialogues[step]));
