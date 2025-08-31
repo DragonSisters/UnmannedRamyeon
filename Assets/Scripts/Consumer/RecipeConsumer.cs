@@ -60,6 +60,7 @@ public class RecipeConsumer : Consumer
             // 시간 안에 재료를 다 고르지 못했다.
             if (!IsSubmit)
             {
+                ComboManager.Instance.ResetCombo();
                 SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
                 ResetPickCount();
                 ingredientHandler.ResetAllIngredientLists();
@@ -79,12 +80,14 @@ public class RecipeConsumer : Consumer
         // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
         if (IsAllIngredientCorrect)
         {
+            ComboManager.Instance.IncreaseCombo();
             // 레시피 손님은 성공 시 바로 돈을 줍니다. (성공했다는 느낌을 더 잘 주기 위해)
             FinanceManager.Instance.IncreaseCurrentMoney(GetRecipePrice());
             SetState(ConsumerState.LineUp);
         }
         else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
         {
+            ComboManager.Instance.ResetCombo();
             SoundManager.Instance.PlayEffectSound(EffectSoundType.Fail);
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
