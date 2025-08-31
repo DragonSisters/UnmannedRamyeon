@@ -134,6 +134,9 @@ public class GameManager : Singleton<GameManager>
         // 생성했던 재료들을 모두 비활성화합니다.
         IngredientManager.Instance.OnGameEnd();
 
+        // 콤보 초기화
+        ComboManager.Instance.ResetCombo();
+
         // 게임 결과에 따라 성공/실패 화면을 불러옵니다.
         endCanvas.SetActive(true);
         if (FinanceManager.Instance.IsSuccess)
