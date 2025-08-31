@@ -12,6 +12,9 @@ public class FinanceManager : Singleton<FinanceManager>
     [Header("목표 매출액")]
     [SerializeField] private int easyModeGoalMoney = 20000;
     [SerializeField] private int hardModeGoalMoney = 50000;
+    private const float COMBO_MULTIPLIER = 0.25f;
+    private const int COMBO_STEP = 5;
+    
     private int goalMoney
     {
         get { return GameManager.Instance.IsHardMode ? hardModeGoalMoney : easyModeGoalMoney; }
@@ -57,9 +60,19 @@ public class FinanceManager : Singleton<FinanceManager>
 
     public void IncreaseCurrentMoney(int money)
     {
-        currentMoney += money;
+        var finalMoney = money;
+        var combo = ComboManager.Instance.ComboCount;
+        var comboMultiplier = 1f;
+        if (combo > 0)
+        {
+            comboMultiplier = 1 + (combo / COMBO_STEP) * COMBO_MULTIPLIER;
+            finalMoney = Mathf.RoundToInt(money * comboMultiplier);
+        }
+
+        currentMoney += finalMoney;
         UpdatePrices();
-        StartCoroutine(ActivateCoinUI(money));
+        StartCoroutine(ActivateCoinUI(finalMoney, comboMultiplier));
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinGain);
     }
 
     public void DecreaseCurrentMoney(int money)
@@ -78,6 +91,7 @@ public class FinanceManager : Singleton<FinanceManager>
         currentMoney -= money;
         UpdatePrices();
         StartCoroutine(ActivateCoinUI(-money));
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinLoss);
     }
 
     private void UpdatePrices()
@@ -111,10 +125,10 @@ public class FinanceManager : Singleton<FinanceManager>
         }
     }
 
-    private IEnumerator ActivateCoinUI(int money)
+    private IEnumerator ActivateCoinUI(int money, float comboMultiplier = 1f)
     {
         var coinUI = SpawnPriceUI();
-        coinUI.SetValues(money);
+        coinUI.SetValues(money, comboMultiplier);
         coinUI.PlayAnimation();
 
         yield return new WaitForSeconds(PRICE_UI_SHOW_DURATION);

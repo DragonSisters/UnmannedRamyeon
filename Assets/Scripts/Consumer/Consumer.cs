@@ -228,19 +228,20 @@ public abstract class Consumer : MonoBehaviour, IPoolable
         moveScript.MoveToNearesetPoint(exitPoint, out var nearestPoint);
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
 
-        priceCalculator.GetFinalPrice(out var gain, out var loss);
-
-        if (loss > 0)
+        if (GameManager.Instance.UseCommonConsumerCoin)
         {
-            // 잘못된 재료가 포함된 경우엔 코인을 잃는 소리를 내고, UI에 표기합니다.
-            FinanceManager.Instance.DecreaseCurrentMoney(loss);
-            SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinLoss);
+            priceCalculator.GetFinalPrice(out var gain, out var loss);
 
-            yield return new WaitForSeconds(FinanceManager.LOSING_MONEY_DURATION);
+            if (loss > 0)
+            {
+                // 잘못된 재료가 포함된 경우엔 코인을 잃는 소리를 내고, UI에 표기합니다.
+                FinanceManager.Instance.DecreaseCurrentMoney(loss);
+
+                yield return new WaitForSeconds(FinanceManager.LOSING_MONEY_DURATION);
+            }
+
+            FinanceManager.Instance.IncreaseCurrentMoney(gain);
         }
-
-        FinanceManager.Instance.IncreaseCurrentMoney(gain);
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinGain);
 
         HandleChildExit();
         exitCompleted = true;
