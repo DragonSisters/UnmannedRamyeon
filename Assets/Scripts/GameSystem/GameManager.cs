@@ -138,14 +138,14 @@ public class GameManager : Singleton<GameManager>
         {
             img_Success.SetActive(true);
             txt_MoneySuccess.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
+            SoundManager.Instance.PlayBgmSound(BgmSoundType.Success);
         }
         else
         {
             img_Fail.SetActive(true);
             txt_MoneyFail.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
+            SoundManager.Instance.PlayBgmSound(BgmSoundType.Fail);
         }
-
-        SoundManager.Instance.PlayBgmSound(BgmSoundType.End);
     }
 
     public void OnRestartButtonClick()
