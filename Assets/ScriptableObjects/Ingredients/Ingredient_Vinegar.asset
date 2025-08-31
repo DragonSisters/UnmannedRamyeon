@@ -19,4 +19,4 @@ MonoBehaviour:
   isOutsideBox: 1
   price: 500
   ingredientCreatePosition: {x: 0, y: 4.4}
-  point: {x: 0, y: -2.5}
+  point: {x: 0, y: -3}
