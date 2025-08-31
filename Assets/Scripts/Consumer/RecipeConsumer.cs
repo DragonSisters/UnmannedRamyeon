@@ -79,7 +79,8 @@ public class RecipeConsumer : Consumer
         // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
         if (IsAllIngredientCorrect)
         {
-            SoundManager.Instance.PlayEffectSound(EffectSoundType.Success);
+            // 레시피 손님은 성공 시 바로 돈을 줍니다. (성공했다는 느낌을 더 잘 주기 위해)
+            FinanceManager.Instance.IncreaseCurrentMoney(GetRecipePrice());
             SetState(ConsumerState.LineUp);
         }
         else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
@@ -147,6 +148,16 @@ public class RecipeConsumer : Consumer
             UnityEngine.Random.Range(0, allRecipes.Count) : UnityEngine.Random.Range(0, easyRecipeThresholdIndex);
 
         return allRecipes[index];
+    }
+
+    private int GetRecipePrice()
+    {
+        int totalPrice = 0;
+        foreach (var ingredient in recipeIngredients)
+        {
+            totalPrice += ingredient.Price;
+        }
+        return totalPrice;
     }
 
     public override IEnumerator HandleOrderOnUI()

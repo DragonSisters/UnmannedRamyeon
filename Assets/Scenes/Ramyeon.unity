@@ -5286,10 +5286,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 179047458733784328, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 427120831550323606, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1855267297}
+    - target: {fileID: 2567520639127427012, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3586613831474995436, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 732
+      objectReference: {fileID: 0}
+    - target: {fileID: 3586613831474995436, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -114
+      objectReference: {fileID: 0}
     - target: {fileID: 3802924951202545791, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

@@ -45,6 +45,8 @@ public class GameManager : Singleton<GameManager>
     public readonly bool UseTrashFeature = false;
     // * RecipeConsumer 가 타이머를 사용하는 기능을 넣을지 여부
     public readonly bool UseRecipeConsumerTimer = false;
+    // * CommonConsumer 가 나갈 때 코인에 영향을 미치는지에 대한 여부
+    public readonly bool UseCommonConsumerCoin = false;
     #endregion
 
     private void Start()

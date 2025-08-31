@@ -60,6 +60,7 @@ public class FinanceManager : Singleton<FinanceManager>
         currentMoney += money;
         UpdatePrices();
         StartCoroutine(ActivateCoinUI(money));
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinGain);
     }
 
     public void DecreaseCurrentMoney(int money)
@@ -78,6 +79,7 @@ public class FinanceManager : Singleton<FinanceManager>
         currentMoney -= money;
         UpdatePrices();
         StartCoroutine(ActivateCoinUI(-money));
+        SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinLoss);
     }
 
     private void UpdatePrices()
