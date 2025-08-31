@@ -10,7 +10,6 @@ public class GrandmaTalkUI : MonoBehaviour
     private float typingTime = 0.05f;
     private int lastStep = -1;
     private Coroutine typingCoroutine;
-    private bool isTyping = false;
 
     [TextArea]
     [SerializeField]
@@ -23,9 +22,18 @@ public class GrandmaTalkUI : MonoBehaviour
         "아이고 너한테 가게 맡겨놓고 난 여행가야겠다~"
     };
 
-    // 외부에서 매출이 변경될 때 호출
-    public IEnumerator UpdateGrandmaTalk(int currentMoney, int goalMoney)
+    public void Initialize()
     {
+        FinanceManager.Instance.OnFinancialManagerStart += ResetGrandmaTalk;
+        FinanceManager.Instance.OnCurrentMoneyUpdate += (() => StartCoroutine(UpdateGrandmaTalk()));
+    }
+
+    // 외부에서 매출이 변경될 때 호출
+    public IEnumerator UpdateGrandmaTalk()
+    {
+        int currentMoney = (int) FinanceManager.Instance.CurrentMoney;
+        int goalMoney = FinanceManager.Instance.GoalMoney;
+
         if (goalMoney <= 0) yield break;
 
         // 전체 매출 목표를 5등분해서 현재 단계 계산

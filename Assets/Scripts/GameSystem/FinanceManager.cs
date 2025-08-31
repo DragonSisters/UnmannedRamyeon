@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -19,6 +20,7 @@ public class FinanceManager : Singleton<FinanceManager>
     {
         get { return GameManager.Instance.IsHardMode ? hardModeGoalMoney : easyModeGoalMoney; }
     }
+    public int GoalMoney => goalMoney;
 
     [Header("UI관련")]
     [SerializeField] private GrandmaTalkUI grandmaTalk;
@@ -38,6 +40,9 @@ public class FinanceManager : Singleton<FinanceManager>
     public int CurrentMoney => currentMoney;
     private int currentMoney;
 
+    public Action OnFinancialManagerStart;
+    public Action OnCurrentMoneyUpdate;
+
     public void OnGameEnter()
     {
         // 모든 오브젝트 정리
@@ -53,8 +58,9 @@ public class FinanceManager : Singleton<FinanceManager>
         currentMoney = 0;
         UpdatePrices();
         // grandmaTalk 초기화 후 실행
-        grandmaTalk.ResetGrandmaTalk();
-        StartCoroutine(grandmaTalk.UpdateGrandmaTalk(currentMoney, goalMoney));
+        grandmaTalk.Initialize();
+        OnFinancialManagerStart?.Invoke();
+        OnCurrentMoneyUpdate?.Invoke();
     }
 
     public void OnGameEnd()
@@ -75,7 +81,7 @@ public class FinanceManager : Singleton<FinanceManager>
 
         currentMoney += finalMoney;
         UpdatePrices();
-        StartCoroutine(grandmaTalk.UpdateGrandmaTalk(currentMoney, goalMoney));
+        OnCurrentMoneyUpdate?.Invoke();
         StartCoroutine(ActivateCoinUI(finalMoney, comboMultiplier));
         SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinGain);
     }
@@ -95,7 +101,7 @@ public class FinanceManager : Singleton<FinanceManager>
 
         currentMoney -= money;
         UpdatePrices();
-        StartCoroutine(grandmaTalk.UpdateGrandmaTalk(currentMoney, goalMoney));
+        OnCurrentMoneyUpdate?.Invoke();
         StartCoroutine(ActivateCoinUI(-money));
         SoundManager.Instance.PlayEffectSound(EffectSoundType.CoinLoss);
     }
