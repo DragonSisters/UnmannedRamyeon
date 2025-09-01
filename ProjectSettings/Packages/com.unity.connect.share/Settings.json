@@ -19,7 +19,7 @@
             {
                 "type": "System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
                 "key": "buildOutputDirList",
-                "value": "{\"m_Value\":\"C:/Users/TheOne/Downloads/Build;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds/CursorTest2;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds/CursorTest;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds;;;;;;\"}"
+                "value": "{\"m_Value\":\"C:/Users/TheOne/Documents/Personal/프로젝트/UnmannedRamyeon/Build;C:/Users/TheOne/Downloads/Build;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds/CursorTest2;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds/CursorTest;C:/Users/TheOne/Documents/GitHub/UnmannedRamyeon/WebGL Builds;;;;;\"}"
             }
         ]
     }
