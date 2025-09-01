@@ -370,6 +370,7 @@ public class IngredientManager : Singleton<IngredientManager>
         {
             potUIController.EnqueuePotRoutine(potUIController.RemovePot());
             consumer.IsAllIngredientCorrect = false;
+            consumer.IsClicked = false;
             RemoveRecipeConsumer(consumer);
 
             stencil.SetActive(false);
