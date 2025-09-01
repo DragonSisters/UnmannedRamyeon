@@ -95,7 +95,7 @@ public class RecipeConsumer : Consumer
         }
 
         IngredientManager.Instance.OnRecipeConsumerFinished(this);
-
+        speechScript.StopSpeech();
         appearanceScript.SetClickable(false);
         IsSubmit = false;
     }
@@ -125,7 +125,7 @@ public class RecipeConsumer : Consumer
 
     private IEnumerator EnterCoroutine()
     {
-        Vector2 shoutPoint = MoveManager.Instance.ShoutPoint;
+        Vector2 shoutPoint = MoveManager.Instance.RandomShoutPoint;
         moveScript.MoveToNearesetPoint(shoutPoint, out var nearestPoint);
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());

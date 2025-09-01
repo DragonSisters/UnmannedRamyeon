@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
-  m_Name: Recipe_Pizza
+  m_Name: Recipe_VinegarGosu
   m_EditorClassIdentifier: 
-  recipeName: "\uD53C\uC790\uB9DB\uB77C\uBA74"
+  recipeName: "\uC2DD\uCD08\uACE0\uC218\uB77C\uBA74"
   ingredients:
-  - {fileID: 11400000, guid: 3aef26de493908f44b1d28c213d8739f, type: 2}
-  - {fileID: 11400000, guid: 2a3dc66b27a3e014ca2e7bdf10e83348, type: 2}
-  - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}
+  - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
+  - {fileID: 11400000, guid: 8633cfcdbc10b8e41bbca322825dbc98, type: 2}

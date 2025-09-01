@@ -7,7 +7,8 @@ public class MoveManager : Singleton<MoveManager>
     [Header("입퇴장")]
     [SerializeField] private Transform enterPoint;
     [SerializeField] private Transform exitPoint;
-    [SerializeField] private Transform shoutPoint;
+    [SerializeField] private Transform shoutMinPoint;
+    [SerializeField] private Transform shoutMaxPoint;
     [SerializeField] private Transform leavePoint;
 
     private const float MOVE_SPEED = 2;
@@ -38,7 +39,16 @@ public class MoveManager : Singleton<MoveManager>
         }
     }
 
-    public Vector2 ShoutPoint => shoutPoint.position;
+    public Vector2 RandomShoutPoint
+    {
+        get
+        {
+            var randomX = Random.Range(shoutMinPoint.position.x, shoutMaxPoint.position.x);
+            var randomY = Random.Range(shoutMinPoint.position.y, shoutMaxPoint.position.y);
+
+            return new Vector2(randomX, randomY);
+        }
+    }
 
     public Vector2 RandomLeavePoint
     {

@@ -10,12 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
-  m_Name: Recipe_SweetOily
+  m_Name: Recipe_ChocoMayo
   m_EditorClassIdentifier: 
-  recipeName: "\uB2EC\uCF64\uB290\uB07C\uB77C\uBA74"
+  recipeName: "\uCD08\uCF54\uB9C8\uC694\uB77C\uBA74"
   ingredients:
   - {fileID: 11400000, guid: 536d44cff8a6bc041aac488cd36efcd0, type: 2}
-  - {fileID: 11400000, guid: 2a3dc66b27a3e014ca2e7bdf10e83348, type: 2}
   - {fileID: 11400000, guid: c64a017040e7f904db63a7f265add602, type: 2}
-  - {fileID: 11400000, guid: c92d789b1ab239f4cad50c3d2f2c0583, type: 2}
-  price: 6300
