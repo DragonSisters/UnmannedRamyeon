@@ -21,10 +21,14 @@ public class RecipeConsumer : Consumer
 
     public bool IsSubmit = false;
     public bool IsAllIngredientCorrect = false;
+    public bool IsClicked = false;
     public int CurrPickCount { get; private set; } = 0;
 
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
+    private float clickWaitTime = 3f;
+    private Coroutine waitCoroutine;
+    [SerializeField] private GameObject pointer;
 
     internal override void HandleChildEnter()
     {
@@ -107,6 +111,8 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildClick()
     { 
+        IsClicked = true;
+        DeactivatePointer();
         ResetPickCount();
         ingredientHandler.AttemptIngredients.Clear();
         ingredientHandler.OwnedIngredients.Clear();
@@ -120,6 +126,7 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildUnclick()
     {
+        IsClicked = false;
         IngredientManager.Instance.OnRecipeConsumerFinished(this);
     }
 
@@ -130,6 +137,8 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
+        yield return new WaitForSeconds(clickWaitTime);
+        if (!IsClicked) ActivatePointer();
     }
 
     public override void SetIngredientLists()
@@ -167,6 +176,16 @@ public class RecipeConsumer : Consumer
     {
         StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, false, true, true, true, -1, $"{myRecipe.Name}"));
         yield return new WaitForSeconds(recipeOrderDuration);
+    }
+
+    private void ActivatePointer()
+    {
+        pointer.SetActive(true);
+    }
+
+    private void DeactivatePointer()
+    {
+        pointer.SetActive(false);
     }
 
     public void AddPickCount()

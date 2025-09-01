@@ -293,6 +293,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
   IsSubmit: 0
   IsAllIngredientCorrect: 0
+  IsClicked: 0
+  pointer: {fileID: 9170169028031282125}
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,7 +466,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5688264301416732795
 RectTransform:
   m_ObjectHideFlags: 0
