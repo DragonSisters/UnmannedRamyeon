@@ -162,6 +162,7 @@ public class GameManager : Singleton<GameManager>
     {
         isGameStarted = false;
         inGameCanvas.SetActive(false);
+        ResetCursor();
 
         FinanceManager.Instance.OnGameEnd();
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
