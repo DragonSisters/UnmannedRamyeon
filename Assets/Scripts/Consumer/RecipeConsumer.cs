@@ -95,7 +95,7 @@ public class RecipeConsumer : Consumer
         }
 
         IngredientManager.Instance.OnRecipeConsumerFinished(this);
-
+        speechScript.StopSpeech();
         appearanceScript.SetClickable(false);
         IsSubmit = false;
     }
