@@ -8,6 +8,8 @@ public class ConsumerUI : MonoBehaviour
     public GameObject TargetIngredientUI;
     public GameObject SpeechBubbleUI;
     public GameObject MoodFeedbackUI;
+    [SerializeField] private GameObject pointer;
+    public RecipeConsumerTimerUI TimerUI;
 
     [SerializeField] private IngredientUI[] ingredientUis;
     [SerializeField] private TMP_Text speechBubbleText;
@@ -122,6 +124,16 @@ public class ConsumerUI : MonoBehaviour
     private void TransferIngredientClick(int index)
     {
         TransferClickEvent?.Invoke(index);
+    }
+
+    public void ActivatePointer()
+    {
+        pointer.SetActive(true);
+    }
+
+    public void DeactivatePointer()
+    {
+        pointer.SetActive(false);
     }
 }
 
