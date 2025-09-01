@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
-  m_Name: Recipe_Exotic
+  m_Name: Recipe_VinegaTomato
   m_EditorClassIdentifier: 
-  recipeName: "\uB3D9\uB0A8\uC544\uD48D\uB77C\uBA74"
+  recipeName: "\uC2DD\uCD08\uD1A0\uB9C8\uD1A0\uBA74"
   ingredients:
   - {fileID: 11400000, guid: 54bd8b51d008ed348be0dd07b54c28b1, type: 2}
   - {fileID: 11400000, guid: 3aef26de493908f44b1d28c213d8739f, type: 2}
-  - {fileID: 11400000, guid: 8633cfcdbc10b8e41bbca322825dbc98, type: 2}

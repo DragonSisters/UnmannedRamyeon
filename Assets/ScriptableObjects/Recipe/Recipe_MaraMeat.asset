@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0cdcd481be6dd49429a019b580f85f6a, type: 3}
-  m_Name: Recipe_EggSoup
+  m_Name: Recipe_MaraMeat
   m_EditorClassIdentifier: 
-  recipeName: "\uACC4\uB780\uD0D5\uB77C\uBA74"
+  recipeName: "\uACE0\uAE30\uB9C8\uB77C\uB77C\uBA74"
   ingredients:
-  - {fileID: 11400000, guid: 8b056db4f74f6374185768919999717d, type: 2}
-  - {fileID: 11400000, guid: 07dd5daa3ecb8f440af3661c9a1a89c9, type: 2}
-  - {fileID: 11400000, guid: 9b58fdb61e28ff9429cbd8b7cd12ee5a, type: 2}
+  - {fileID: 11400000, guid: 61aca6203f78a6d45b0710a6a5279897, type: 2}
+  - {fileID: 11400000, guid: c92d789b1ab239f4cad50c3d2f2c0583, type: 2}
