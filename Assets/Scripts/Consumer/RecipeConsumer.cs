@@ -27,7 +27,6 @@ public class RecipeConsumer : Consumer
 
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
-    private float clickWaitTime = 3f;
 
     internal override void HandleChildEnter()
     {
@@ -78,8 +77,13 @@ public class RecipeConsumer : Consumer
             }
         }
 
-        // 제출 버튼을 누를 때까지 기다린다
+        // 제출 버튼을 누를 때까지 기다린다 OR 정답을 다 맞출 때까지 기다린다.
         yield return new WaitUntil(() => IsSubmit);
+
+        if (GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            timerUI.DeactivateTimer();
+        }
 
         // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
         if (IsAllIngredientCorrect)
@@ -137,7 +141,6 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
-        yield return new WaitForSeconds(clickWaitTime);
         if (!IsClicked) ActivatePointer();
     }
 

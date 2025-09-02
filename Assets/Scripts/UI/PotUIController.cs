@@ -90,7 +90,17 @@ public class PotUIController : MonoBehaviour
         instructionMeshRenderer.sortingOrder = textSortingOrder;
 
         instruction.SetActive(false);
-        btn_originalColor = submitBtn.color;
+
+        // 타이머를 쓰는 경우엔 제출 버튼 애니메이션 비활성화
+        if (GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            submitBtn.gameObject.SetActive(false);
+        }
+        else
+        {
+            submitBtn.gameObject.SetActive(true);
+            btn_originalColor = submitBtn.color;
+        }
 
         OnPlayHint += ShowPotHint;
         IngredientManager.Instance.OnBringFirstIngredient += StopHint;
@@ -202,11 +212,20 @@ public class PotUIController : MonoBehaviour
 
     public void PlaySubmitAnim()
     {
+        if (GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            return;
+        }
         submitBtnAnim.Play();
     }
 
     public void StopSubmitAnim()
     {
+        if (GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            return;
+        }
+
         submitBtnAnim.Stop();
         submitBtn.transform.localScale = btn_originalSize;
         submitBtn.color = btn_originalColor;
