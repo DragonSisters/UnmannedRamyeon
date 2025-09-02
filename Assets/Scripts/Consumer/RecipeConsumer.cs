@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public class RecipeConsumer : Consumer
 {
+    [SerializeField] private GameObject pointer;
     [SerializeField] private RecipeConsumerTimerUI timerUI;
 
     // 레시피 선택 관련 변수
@@ -27,8 +28,6 @@ public class RecipeConsumer : Consumer
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
     private float clickWaitTime = 3f;
-    private Coroutine waitCoroutine;
-    [SerializeField] private GameObject pointer;
 
     internal override void HandleChildEnter()
     {
@@ -42,6 +41,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildExit()
     {
         ResetPickCount();
+        DeactivatePointer();
         ingredientHandler.ResetAllIngredientLists();
     }
 
