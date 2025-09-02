@@ -6,21 +6,6 @@ using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
-    [Header("시작 화면 관련 변수들")]
-    [SerializeField] private GameObject startCanvas;
-    [SerializeField] private Animation startGameAnimation;
-    [SerializeField] private Texture2D cursorIcon;
-    public Texture2D CursorIcon => cursorIcon;
-    [Header("컷신 관련 변수들")]
-    [SerializeField] private GameObject storyCanvas;
-    [SerializeField] private GameObject[] storyCutscenes;
-    [SerializeField] private GameObject btn_start;
-
-    [Header("인게임 화면 관련 변수들")]
-    [SerializeField] private GameObject inGameCanvas;
-    [SerializeField] private Timer timer;
-    [SerializeField] private Button btn_easyMode;
-    [SerializeField] private Button btn_hardMode;
     [SerializeField] private float gameDuration = 180;
     public float GameDuration => gameDuration;
     [SerializeField] private float earlyStageTime;
@@ -34,13 +19,6 @@ public class GameManager : Singleton<GameManager>
     private bool isGameStarted;
     public bool IsHardMode => isHardMode;
     private bool isHardMode = false;
-
-    [Header("EndCanvas 관련 변수들")]
-    [SerializeField] private GameObject endCanvas;
-    [SerializeField] private GameObject img_Success;
-    [SerializeField] private TMP_Text txt_MoneySuccess;
-    [SerializeField] private GameObject img_Fail;
-    [SerializeField] private TMP_Text txt_MoneyFail;
 
     #region 방향성 변경에 따른 제어 변수
     // 참고: https://github.com/DragonSisters/UnmannedRamyeonObsidian/blob/main/00_공지/방향성에%20대한%20논의%20회의록.md
@@ -56,85 +34,32 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        SetCursor(cursorIcon);
-        SetModeButtons();
-        HideCutsceneCanvas();
+        UIManager.Instance.SetCursor();
+        UIManager.Instance.SetModeButtons();
+        UIManager.Instance.HideCutsceneCanvas();
         ConsumerManager.Instance.InitializeConsumerManagerSetting();
         TrashManager.Instance.Initialize();
     }
 
-    public void SetCursor(Texture2D icon)
+    public void SetMode(bool isHardMode)
     {
-        Cursor.SetCursor(icon, Vector2.zero, CursorMode.Auto);
-    }
-
-    public void ResetCursor()
-    {
-        Cursor.SetCursor(cursorIcon, Vector2.zero, CursorMode.Auto);
-    }
-
-    private void SetModeButtons()
-    {
-        btn_easyMode.onClick.AddListener(() => isHardMode = false);
-        btn_hardMode.onClick.AddListener(() => isHardMode = true);  
-    }
-
-    // 이지 모드, 하드 모드 버튼에 연결된 함수입니다
-    public void OnDifficultyButtonClick()
-    {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.GameStart);
-        StartCoroutine(nameof(ShowStoryCoroutine));
-    }
-
-    // 이지 모드, 하드 모드 버튼 후에 나오는 스토리 컷씬에서 시작하기 버튼에 연결된 함수입니다
-    public void OnStartButtonClick()
-    {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
-        storyCanvas.SetActive(false);
-        StartGame();
-    }
-
-    private void HideCutsceneCanvas()
-    {
-        storyCanvas.SetActive(false);
-        for (int i = 0; i < storyCutscenes.Length; i++)
+        if(isHardMode)
         {
-            storyCutscenes[i].SetActive(false);
+            this.isHardMode = true;
         }
-        btn_start.SetActive(false);
-    }
-
-    private IEnumerator ShowStoryCoroutine()
-    {
-        if (!startGameAnimation.isPlaying)
+        else
         {
-            startGameAnimation.Play();
+            this.isHardMode = false;
         }
-
-        yield return new WaitUntil(() => !startGameAnimation.isPlaying);
-
-        startCanvas.SetActive(false);
-        storyCanvas.SetActive(true);
-
-        for (int i = 0; i < storyCutscenes.Length; i++)
-        {
-            storyCutscenes[i].SetActive(true);
-
-            // 마우스 클릭을 기다립니다
-            yield return new WaitUntil(() => Input.GetMouseButtonUp(0));
-            yield return null;
-        }
-
-        btn_start.SetActive(true);
     }
 
     // inGameUI 를 활성화합니다
-    private void StartGame()
+    public void StartGame()
     {
         isGameStarted = true;
         gameStartTime = Time.time;
-        HideCutsceneCanvas();
-        inGameCanvas.SetActive(true);
+        UIManager.Instance.HideCutsceneCanvas();
+        UIManager.Instance.ControlInGameCanvas(true);
         StartCoroutine(UpdateGame());
 
         earlyStageTime = isHardMode ? hardEarlyStageTime : easyEarlyStageTime;
@@ -144,7 +69,7 @@ public class GameManager : Singleton<GameManager>
         TrashManager.Instance.StartSpawn();
         IngredientManager.Instance.CreateIngredientObjOnPosition();
         MoveManager.Instance.OnGameEnter();
-        timer.ExecuteTimer();
+        UIManager.Instance.ExecuteTimer();
         SoundManager.Instance.PlayBgmSound(BgmSoundType.InGame);
     }
 
@@ -161,8 +86,8 @@ public class GameManager : Singleton<GameManager>
     public void EndGame()
     {
         isGameStarted = false;
-        inGameCanvas.SetActive(false);
-        ResetCursor();
+        UIManager.Instance.ControlInGameCanvas(false);
+        UIManager.Instance.ResetCursor();
 
         FinanceManager.Instance.OnGameEnd();
         // 씬에 나온 손님들 모두를 없애고, 스폰루틴을 중지합니다.
@@ -175,28 +100,6 @@ public class GameManager : Singleton<GameManager>
         ComboManager.Instance.ResetCombo();
 
         // 게임 결과에 따라 성공/실패 화면을 불러옵니다.
-        endCanvas.SetActive(true);
-        if (FinanceManager.Instance.IsSuccess)
-        {
-            img_Success.SetActive(true);
-            txt_MoneySuccess.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
-            SoundManager.Instance.PlayBgmSound(BgmSoundType.Success);
-        }
-        else
-        {
-            img_Fail.SetActive(true);
-            txt_MoneyFail.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
-            SoundManager.Instance.PlayBgmSound(BgmSoundType.Fail);
-        }
-    }
-
-    public void OnRestartButtonClick()
-    {
-        SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
-
-        endCanvas.SetActive(false);
-        startCanvas.SetActive(true);
-
-        SoundManager.Instance.PlayBgmSound(BgmSoundType.Start);
+        UIManager.Instance.ControlEndCanvas(true);
     }
 }

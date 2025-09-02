@@ -1062,7 +1062,6 @@ MonoBehaviour:
   - {fileID: 17607822}
   - {fileID: 1159030908}
   - {fileID: 678272916}
-  potUIController: {fileID: 843265050}
   IngredientScriptableObject:
   - {fileID: 11400000, guid: 536d44cff8a6bc041aac488cd36efcd0, type: 2}
   - {fileID: 11400000, guid: c92d789b1ab239f4cad50c3d2f2c0583, type: 2}
@@ -3622,8 +3621,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1855267297}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+      - m_Target: {fileID: 1336473958}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnStartButtonClick
         m_Mode: 1
         m_Arguments:
@@ -4506,7 +4505,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48c59b8d3ed338c488d7f5d80d75631e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startCanvas: {fileID: 5594185785156494205}
+  titleAnimation: {fileID: 293327415961738231}
+  cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
+  storyCanvas: {fileID: 1981750889}
+  storyCutscenes:
+  - {fileID: 789063086}
+  - {fileID: 1576315101}
+  - {fileID: 1726171942}
+  btn_start: {fileID: 1028634845}
+  inGameCanvas: {fileID: 7389440005461991852}
+  timer: {fileID: 2954680346548915198}
+  btn_easyMode: {fileID: 8172117860947607077}
+  btn_hardMode: {fileID: 8931694420272130886}
   PotUIController: {fileID: 843265050}
+  endCanvas: {fileID: 2205406728214189400}
+  img_Success: {fileID: 2439560281551244537}
+  txt_MoneySuccess: {fileID: 2505570628711449440}
+  img_Fail: {fileID: 8768234516779634761}
+  txt_MoneyFail: {fileID: 2596857803076582460}
 --- !u!4 &1336473959
 Transform:
   m_ObjectHideFlags: 0
@@ -6034,26 +6051,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7cc341259a92c574a90d4cb86491fe94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startCanvas: {fileID: 5594185785156494205}
-  startGameAnimation: {fileID: 293327415961738231}
-  cursorIcon: {fileID: 2800000, guid: 2af7583c221bd3b428d47b703fd1e00c, type: 3}
-  storyCanvas: {fileID: 1981750889}
-  storyCutscenes:
-  - {fileID: 789063086}
-  - {fileID: 1576315101}
-  - {fileID: 1726171942}
-  btn_start: {fileID: 1028634845}
-  inGameCanvas: {fileID: 7389440005461991852}
-  timer: {fileID: 2954680346548915198}
-  btn_easyMode: {fileID: 8172117860947607077}
-  btn_hardMode: {fileID: 8931694420272130886}
   gameDuration: 180
   earlyStageTime: 0
-  endCanvas: {fileID: 2205406728214189400}
-  img_Success: {fileID: 2439560281551244537}
-  txt_MoneySuccess: {fileID: 2505570628711449440}
-  img_Fail: {fileID: 8768234516779634761}
-  txt_MoneyFail: {fileID: 2596857803076582460}
 --- !u!1 &1894710029
 GameObject:
   m_ObjectHideFlags: 0
@@ -6884,10 +6883,14 @@ PrefabInstance:
     - target: {fileID: 427120831550323606, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1855267297}
+      objectReference: {fileID: 1336473958}
     - target: {fileID: 427120831550323606, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnDifficultyButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 427120831550323606, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 1204727244138679534, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_SizeDelta.y
@@ -7032,7 +7035,15 @@ PrefabInstance:
     - target: {fileID: 6247859449017939830, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1855267297}
+      objectReference: {fileID: 1336473958}
+    - target: {fileID: 6247859449017939830, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRestartButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247859449017939830, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 6266037115668028136, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_text
       value: "\uBAA9\uD45C: 1,000,000 \u20A9"
@@ -7218,14 +7229,26 @@ PrefabInstance:
     - target: {fileID: 8852603540770834376, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1855267297}
+      objectReference: {fileID: 1336473958}
+    - target: {fileID: 8852603540770834376, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnRestartButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852603540770834376, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8948234153019378602, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1855267297}
+      objectReference: {fileID: 1336473958}
     - target: {fileID: 8948234153019378602, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OnDifficultyButtonClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 8948234153019378602, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 9222003350185228627, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: m_Sprite

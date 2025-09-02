@@ -12,7 +12,7 @@ public class SubmitUI : MonoBehaviour, IClickableSprite
         if (recipeConsumer != null)
         {
             recipeConsumer.IsSubmit = true;
-            IngredientManager.Instance.PotUIController.StopSubmitAnim();
+            UIManager.Instance.PotUIController.StopSubmitAnim();
         }
     }
 
