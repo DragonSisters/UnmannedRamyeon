@@ -328,7 +328,9 @@ public class IngredientManager : Singleton<IngredientManager>
         }
 
         // 타이머 쓰는 경우는 조리완료 버튼을 쓰지 않고 바로 서빙
-        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count && GameManager.Instance.UseRecipeConsumerTimer)
+        if (currentRecipeConsumer.CurrPickCount >= currentRecipeConsumer.MyRecipe.Ingredients.Count 
+            && ingredientHandler.IsAllIngredientCorrect()
+            && GameManager.Instance.UseRecipeConsumerTimer)
         {
             currentRecipeConsumer.IsSubmit = true;
         }
