@@ -1,7 +1,7 @@
 ﻿
 using UnityEngine;
 
-public class PotUIClick : MonoBehaviour, IClickableSprite
+public class SubmitUI : MonoBehaviour, IClickableSprite
 {
     // SetActive 로 조절할 것이기 때문에 항상 true
     public bool IsClickable => true;

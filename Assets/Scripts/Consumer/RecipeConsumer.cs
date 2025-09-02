@@ -81,6 +81,11 @@ public class RecipeConsumer : Consumer
         // 제출 버튼을 누를 때까지 기다린다
         yield return new WaitUntil(() => IsSubmit);
 
+        if (GameManager.Instance.UseRecipeConsumerTimer)
+        {
+            timerUI.DeactivateTimer();
+        }
+
         // 제출 버튼을 누른 시점에서 그 재료가 다 맞다
         if (IsAllIngredientCorrect)
         {
