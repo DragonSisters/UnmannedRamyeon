@@ -68,7 +68,7 @@ public class RecipeConsumer : Consumer
                 ingredientHandler.ResetAllIngredientLists();
                 appearanceScript.SetClickable(false);
 
-                IngredientManager.Instance.OnRecipeConsumerFinished(this);
+                IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
 
                 SetState(ConsumerState.Leave);
                 timerUI.DeactivateTimer();
@@ -91,6 +91,7 @@ public class RecipeConsumer : Consumer
             // 레시피 손님은 성공 시 바로 돈을 줍니다. (성공했다는 느낌을 더 잘 주기 위해)
             FinanceManager.Instance.IncreaseCurrentMoney(GetRecipePrice());
             SetState(ConsumerState.LineUp);
+            IngredientManager.Instance.OnRecipeConsumerFinished(this, true);
         }
         else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
         {
@@ -99,9 +100,9 @@ public class RecipeConsumer : Consumer
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
             SetState(ConsumerState.Leave);
+            IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
         }
-
-        IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        
         speechScript.StopSpeech();
         appearanceScript.SetClickable(false);
         IsSubmit = false;
@@ -130,7 +131,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildUnclick()
     {
         IsClicked = false;
-        IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
     }
 
     private IEnumerator EnterCoroutine()

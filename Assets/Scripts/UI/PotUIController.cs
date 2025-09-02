@@ -19,6 +19,8 @@ public class PotUIController : MonoBehaviour
     [SerializeField] private Animation potAnim;
     private string slideIn = "pot_slideIn";
     private string slideOut = "pot_slideOut";
+    private string shake = "pot_shake";
+    private string drop = "pot_drop";
     [SerializeField] private Animation pointerAnim;
     private string pointerIn = "pointer_in";
     private string pointerOut = "pointer_out";
@@ -136,10 +138,18 @@ public class PotUIController : MonoBehaviour
         if (!IsFirstTimeIn) IsFirstTimeIn = true;
     }
 
-    public IEnumerator RemovePot()
+    public IEnumerator RemovePot(bool IsPlaySlideOutAnim)
     {
-        potAnim.Play(slideOut);
-        yield return new WaitUntil(() => !potAnim.IsPlaying(slideOut));
+        if (IsPlaySlideOutAnim)
+        {
+            potAnim.Play(slideOut);
+            yield return new WaitUntil(() => !potAnim.IsPlaying(slideOut));
+        }
+        else
+        {
+            potAnim.Play(drop);
+            yield return new WaitUntil(() => !potAnim.IsPlaying(drop));
+        }
 
         foreach (SpriteRenderer spriteRenderer in ingredientsInPot)
         {
@@ -147,6 +157,7 @@ public class PotUIController : MonoBehaviour
         }
 
         if (pointerCoroutine != null) StopCoroutine(pointerCoroutine);
+        instruction.SetActive(false);
         pointer.SetActive(false);
         pot.SetActive(false);
     }
@@ -229,6 +240,20 @@ public class PotUIController : MonoBehaviour
         submitBtnAnim.Stop();
         submitBtn.transform.localScale = btn_originalSize;
         submitBtn.color = btn_originalColor;
+    }
+
+    public void PlayShakeAnim()
+    {
+        potAnim.Play(shake);
+    }
+
+    public void StopShakeAnim()
+    {
+        if(potAnim.IsPlaying(shake))
+        {
+            potAnim.Stop();
+        }
+        pot.transform.rotation = Quaternion.identity;
     }
 
     public void OnGameEnd()

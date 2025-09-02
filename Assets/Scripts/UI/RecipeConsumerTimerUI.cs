@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -15,7 +16,7 @@ public class RecipeConsumerTimerUI : MonoBehaviour
     private float fillAmount = 0;
     private float closeToEnd = 0.35f;
     private bool isCloseToEnd = false;
-    private Coroutine timerCoroutine; // 코루틴 참조 저장
+    private Coroutine timerCoroutine;
 
     public IEnumerator FillTimerRoutine(float stayTime)
     {
@@ -30,10 +31,13 @@ public class RecipeConsumerTimerUI : MonoBehaviour
                 consumerTimerFill.color = closeToEndFillColor;
                 SoundManager.Instance.PlayLoopSound(LoopSoundType.TimeDue);
                 
+                // timer 바가 흔들리게 한다.
                 if(!shakeAnimation.isPlaying)
                 {
                     shakeAnimation.Play();
                 }
+                // Pot 이 흔들리게 한다.
+                UIManager.Instance.PotUIController.PlayShakeAnim();
             }
 
             consumerTimerFill.fillAmount = fillAmount;

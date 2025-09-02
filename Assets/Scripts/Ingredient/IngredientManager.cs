@@ -113,7 +113,7 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if(currentRecipeConsumer != null)
         {
-            OnRecipeConsumerFinished(currentRecipeConsumer);
+            OnRecipeConsumerFinished(currentRecipeConsumer, false);
             currentRecipeConsumer = null;
         }
 
@@ -364,15 +364,16 @@ public class IngredientManager : Singleton<IngredientManager>
         }
     }
 
-    public void OnRecipeConsumerFinished(RecipeConsumer consumer)
+    public void OnRecipeConsumerFinished(RecipeConsumer consumer, bool IsPlaySlideOutAnim)
     {
         if(currentRecipeConsumer == consumer)
         {
-            potUIController.EnqueuePotRoutine(potUIController.RemovePot());
+            potUIController.EnqueuePotRoutine(potUIController.RemovePot(IsPlaySlideOutAnim));
             consumer.IsAllIngredientCorrect = false;
             consumer.IsClicked = false;
             RemoveRecipeConsumer(consumer);
 
+            UIManager.Instance.PotUIController.StopShakeAnim();
             stencil.SetActive(false);
             IsIngredientSelectMode = false;
         }
