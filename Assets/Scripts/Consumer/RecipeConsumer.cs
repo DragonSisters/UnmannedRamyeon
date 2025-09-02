@@ -8,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public class RecipeConsumer : Consumer
 {
-    [SerializeField] private GameObject pointer;
     [SerializeField] private RecipeConsumerTimerUI timerUI;
 
     // 레시피 선택 관련 변수
@@ -25,7 +24,8 @@ public class RecipeConsumer : Consumer
     public bool IsClicked = false;
     public int CurrPickCount { get; private set; } = 0;
 
-    private float recipeOrderDuration = 2f;
+    private float recipeOrderSpeechDuration = 2f;
+    private float recipeOrderWaitDuration = 3f;
 
     internal override void HandleChildEnter()
     {
@@ -39,7 +39,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildExit()
     {
         ResetPickCount();
-        DeactivatePointer();
+        consumerUI.DeactivatePointer();
         ingredientHandler.ResetAllIngredientLists();
     }
 
@@ -115,7 +115,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildClick()
     { 
         IsClicked = true;
-        DeactivatePointer();
+        consumerUI.DeactivatePointer();
         ResetPickCount();
         ingredientHandler.AttemptIngredients.Clear();
         ingredientHandler.OwnedIngredients.Clear();
@@ -140,7 +140,8 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
-        if (!IsClicked) ActivatePointer();
+        yield return new WaitForSeconds(recipeOrderWaitDuration);
+        if (!IsClicked) consumerUI.ActivatePointer();
     }
 
     public override void SetIngredientLists()
@@ -177,17 +178,7 @@ public class RecipeConsumer : Consumer
     public override IEnumerator HandleOrderOnUI()
     {
         StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, false, true, true, true, -1, $"{myRecipe.Name}"));
-        yield return new WaitForSeconds(recipeOrderDuration);
-    }
-
-    private void ActivatePointer()
-    {
-        pointer.SetActive(true);
-    }
-
-    private void DeactivatePointer()
-    {
-        pointer.SetActive(false);
+        yield return new WaitForSeconds(recipeOrderSpeechDuration);
     }
 
     public void AddPickCount()
