@@ -9,6 +9,7 @@ public class GrandmaTalkUI : MonoBehaviour
     private float grandmaSpeechTime = 1f;
     private float typingTime = 0.05f;
     private int lastStep = -1;
+    private int divideCount = 5;
     private Coroutine typingCoroutine;
 
     [TextArea]
@@ -18,7 +19,7 @@ public class GrandmaTalkUI : MonoBehaviour
         "아이고~ 나 디스크 터졌을 때 다 키오스크로 바꿨어! 뭘 알바를 한다고 그랴~",
         "흠... 그래 저런 손님들은 너가 챙겨줘야 할지도?",
         "이제 제법 하는데? 이렇게만 해다오",
-        "손님들이 너 칭찬이 자자하다! 우리 손녀 최고~",
+        "손님들이 너 칭찬이 자자하다! 조금만 더하면 되겠어~",
         "아이고 너한테 가게 맡겨놓고 난 여행가야겠다~"
     };
 
@@ -34,10 +35,14 @@ public class GrandmaTalkUI : MonoBehaviour
         int currentMoney = (int) FinanceManager.Instance.CurrentMoney;
         int goalMoney = FinanceManager.Instance.GoalMoney;
 
-        if (goalMoney <= 0) yield break;
+        if (goalMoney <= 0)
+        {
+            Debug.LogError("목표 매출액이 0 이하입니다. 목표 매출액을 확인하세요.");
+            yield break;
+        }
 
         // 전체 매출 목표를 5등분해서 현재 단계 계산
-        int step = Mathf.Clamp((currentMoney * 5) / goalMoney, 0, 5);
+        int step = Mathf.Clamp((currentMoney * divideCount) / goalMoney, 0, divideCount);
 
         // 같은 단계면 말풍선 갱신 안 함
         if (step == lastStep || step >= grandmaDialogues.Length) yield break;
