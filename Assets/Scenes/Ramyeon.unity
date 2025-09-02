@@ -4507,7 +4507,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   easyModeGoalMoney: 80000
-  hardModeGoalMoney: 150000
+  hardModeGoalMoney: 120000
   grandmaTalk: {fileID: 881958815197674031}
   goalMoneyUi: {fileID: 8841245354502379933}
   totalMoneyUi: {fileID: 3715662388115491120}
