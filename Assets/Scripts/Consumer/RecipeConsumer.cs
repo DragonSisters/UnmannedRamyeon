@@ -27,6 +27,8 @@ public class RecipeConsumer : Consumer
     private float recipeOrderSpeechDuration = 2f;
     private float recipeOrderWaitDuration = 3f;
 
+    private Coroutine pointerCoroutine;
+
     internal override void HandleChildEnter()
     {
         StartCoroutine(EnterCoroutine());
@@ -38,9 +40,7 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildExit()
     {
-        ResetPickCount();
-        consumerUI.DeactivatePointer();
-        ingredientHandler.ResetAllIngredientLists();
+        OnConsumerHelpFinished();
     }
 
     internal override IEnumerator HandleChildIssue()
@@ -141,6 +141,11 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
+        pointerCoroutine = StartCoroutine(ShowPointerAfterDelay());
+    }
+
+    private IEnumerator ShowPointerAfterDelay()
+    {
         yield return new WaitForSeconds(recipeOrderWaitDuration);
         if (!IsClicked) consumerUI.ActivatePointer();
     }
@@ -195,5 +200,19 @@ public class RecipeConsumer : Consumer
     public void ResetPickCount()
     {
         CurrPickCount = 0;
+    }
+
+    public void OnConsumerHelpFinished()
+    {
+        IsAllIngredientCorrect = false;
+        IsClicked = false;
+        ResetPickCount();
+        if (pointerCoroutine != null)
+        {
+            StopCoroutine(pointerCoroutine);
+            pointerCoroutine = null;
+        }
+        consumerUI.DeactivatePointer();
+        ingredientHandler.ResetAllIngredientLists();
     }
 }

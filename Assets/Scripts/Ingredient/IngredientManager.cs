@@ -368,8 +368,7 @@ public class IngredientManager : Singleton<IngredientManager>
         if(currentRecipeConsumer == consumer)
         {
             UIManager.Instance.PotUIController.EnqueuePotRoutine(UIManager.Instance.PotUIController.RemovePot(IsPlaySlideOutAnim));
-            consumer.IsAllIngredientCorrect = false;
-            consumer.IsClicked = false;
+            consumer.OnConsumerHelpFinished();
             RemoveRecipeConsumer(consumer);
 
             UIManager.Instance.PotUIController.StopShakeAnim();
