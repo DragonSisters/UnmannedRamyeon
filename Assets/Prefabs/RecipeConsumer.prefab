@@ -263,6 +263,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eb54a1cf7e75d5c4891868a8f30dd5f8, type: 2}
   - {fileID: 11400000, guid: 45750e8252d150b4a8a3ba9a9c83cd5e, type: 2}
   consumerUI: {fileID: 1264228265461581360}
+  timerUI: {fileID: 1837718294714103859}
   easyRecipeThresholdIndex: 8
   allRecipes:
   - {fileID: 11400000, guid: 7434d7d2e9d27d44bacb1aaa97671fdd, type: 2}
@@ -293,6 +294,7 @@ MonoBehaviour:
   IsSubmit: 0
   IsAllIngredientCorrect: 0
   IsClicked: 0
+  pointer: {fileID: 9170169028031282125}
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
