@@ -27,7 +27,6 @@ public class RecipeConsumer : Consumer
 
     private float recipeOrderDuration = 2f;
     private float stayTime = 15f;
-    private float clickWaitTime = 3f;
 
     internal override void HandleChildEnter()
     {
@@ -142,7 +141,6 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
-        yield return new WaitForSeconds(clickWaitTime);
         if (!IsClicked) ActivatePointer();
     }
 
