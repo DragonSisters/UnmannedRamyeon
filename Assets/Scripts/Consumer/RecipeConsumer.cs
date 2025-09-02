@@ -78,7 +78,7 @@ public class RecipeConsumer : Consumer
             }
         }
 
-        // 제출 버튼을 누를 때까지 기다린다
+        // 제출 버튼을 누를 때까지 기다린다 OR 정답을 다 맞출 때까지 기다린다.
         yield return new WaitUntil(() => IsSubmit);
 
         if (GameManager.Instance.UseRecipeConsumerTimer)
