@@ -28,6 +28,12 @@ public enum ContinousSoundType
     TrashCleaning
 }
 
+public enum LoopSoundType
+{
+    Invalid,
+    TimeDue
+}
+
 [Serializable]
 public class BgmSoundEntry
 {
@@ -49,6 +55,13 @@ public class ContinousSoundEntry
     public AudioClip Clip;
 }
 
+[Serializable]
+public class LoopSoundEntry
+{
+    public LoopSoundType Type;
+    public AudioClip Clip;
+}
+
 
 public class SoundManager : Singleton<SoundManager>
 {
@@ -58,6 +71,7 @@ public class SoundManager : Singleton<SoundManager>
     public AudioSource EffectAudio;
     public AudioSource BgmAudio;
     public AudioSource ContinousAudio;
+    public AudioSource LoopAudio;
 
     /// <summary>
     /// Audio Volume
@@ -74,15 +88,18 @@ public class SoundManager : Singleton<SoundManager>
     public List<BgmSoundEntry> BgmSoundEntries = new();
     [Header("Continous Clips")]
     public List<ContinousSoundEntry> ContinousSoundEntries = new();
+    public List<LoopSoundEntry> LoopSoundEntries = new();
 
     private Dictionary<EffectSoundType, AudioClip> effectSoundDict = new();
     private Dictionary<BgmSoundType, AudioClip> bgmSoundDict = new();
     private Dictionary<ContinousSoundType, AudioClip> continousSoundDict = new();
+    private Dictionary<LoopSoundType, AudioClip> loopSoundDict = new();
 
     private ContinousSoundType curContinousSoundType = ContinousSoundType.Invalid;
 
     private void Awake()
     {
+        LoopAudio.loop = true;
         InitializeDictionary();
     }
 
@@ -106,6 +123,11 @@ public class SoundManager : Singleton<SoundManager>
         foreach (var entry in ContinousSoundEntries)
         {
             if (!continousSoundDict.ContainsKey(entry.Type)) continousSoundDict.Add(entry.Type, entry.Clip);
+        }
+
+        foreach(var entry in LoopSoundEntries)
+        {
+            if (!loopSoundDict.ContainsKey(entry.Type)) loopSoundDict.Add(entry.Type, entry.Clip);
         }
     }
 
@@ -162,6 +184,25 @@ public class SoundManager : Singleton<SoundManager>
             ContinousAudio.Stop();
             curContinousSoundType = ContinousSoundType.Invalid; // 현재 연속 사운드 타입 초기화
         }
+    }
+
+    public void PlayLoopSound(LoopSoundType type)
+    {
+        if (loopSoundDict.TryGetValue(type, out var clip))
+        {
+            LoopAudio.clip = clip;
+            LoopAudio.Play();
+        }
+        else
+        {
+            Debug.LogWarning($"LoopSoundType {type}에 해당하는 사운드가 없습니다.");
+        }
+    }
+
+    public void StopLoopSound()
+    {
+        LoopAudio.Stop();
+        LoopAudio.clip = null;
     }
 
     public void SetEffectVolume(float volume)

@@ -26,7 +26,6 @@ public class RecipeConsumer : Consumer
     public int CurrPickCount { get; private set; } = 0;
 
     private float recipeOrderDuration = 2f;
-    private float stayTime = 15f;
 
     internal override void HandleChildEnter()
     {
@@ -50,9 +49,9 @@ public class RecipeConsumer : Consumer
 
         if (GameManager.Instance.UseRecipeConsumerTimer)
         {
+            float stayTime = timerUI.StayTime;
             float elapsedTime = 0f;
             timerUI.ActivateTimer();
-            StartCoroutine(timerUI.FillTimerRoutine(stayTime));
 
             while (!IsSubmit && elapsedTime < stayTime)
             {
