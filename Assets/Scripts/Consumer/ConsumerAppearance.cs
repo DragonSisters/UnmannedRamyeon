@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class ConsumerAppearance : MonoBehaviour, IClickableSprite
@@ -13,11 +12,14 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public bool IsClicked => isClicked;
     private bool isClicked = false;
 
+    private bool isRecipeConsumer = false;
+
     private Animator animator;
     private NavMeshAgent agent;
     private Material material;
     private readonly float outlineWidth = 10;
-    private readonly Color outlineColor = Color.cyan;
+    private readonly Color clickedOutlineColor = Color.cyan;
+    private readonly Color unclickedOutlineColor = Color.white;
 
     private readonly int walkAnimId = Animator.StringToHash("Walk");
     
@@ -52,8 +54,11 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         }
         material = spriteRenderer.material;
         ShaderEffectHelper.SetOutlineWidth(material, outlineWidth);
-        ShaderEffectHelper.SetOutlineColor(material, outlineColor);
-        ShaderEffectHelper.SetOutlineEnable(material, false);
+        ShaderEffectHelper.SetOutlineColor(material, unclickedOutlineColor);
+
+        // 레시피 손님이라면 처음부터 Outline을 켜도록 합니다.
+        isRecipeConsumer = gameObject.GetComponentInParent<RecipeConsumer>() != null;
+        ShaderEffectHelper.SetOutlineEnable(material, isRecipeConsumer);
     }
 
     public void OnUpdate()
@@ -74,6 +79,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         // 모든 Consumer 검사하여 다른 손님은 Click해제
         ConsumerManager.Instance.DeselectOtherConsumers();
 
+        ShaderEffectHelper.SetOutlineColor(material, clickedOutlineColor);
         ShaderEffectHelper.SetOutlineEnable(material, true);
         StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
 
@@ -84,7 +90,8 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
 
     public void OnSpriteDeselected()
     {
-        ShaderEffectHelper.SetOutlineEnable(material, false);
+        ShaderEffectHelper.SetOutlineColor(material, unclickedOutlineColor);
+        ShaderEffectHelper.SetOutlineEnable(material, isRecipeConsumer);
 
         isClicked = false;
 
@@ -96,7 +103,7 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
         isClickable = clickable;
         if(!clickable)
         {
-            ShaderEffectHelper.SetOutlineEnable(material, false);
+            ShaderEffectHelper.SetOutlineEnable(material, isRecipeConsumer);
         }
     }
 }
