@@ -7125,6 +7125,11 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
+      propertyPath: 'grandmaDialogues.Array.data[1]'
+      value: "\uD760... \uC0DD\uAC01\uBCF4\uB2E4 \uD0A4\uC624\uC2A4\uD06C\uB97C \uC2EB\uC5B4\uD558\uB294
+        \uC190\uB2D8\uB4E4\uC774 \uB9CE\uB124"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836788372531717802, guid: 5ebd0ab53f668f74489242253023de68, type: 3}
       propertyPath: 'grandmaDialogues.Array.data[2]'
       value: "\uC774\uC81C \uC81C\uBC95 \uD558\uB294\uB370? \uC774\uB807\uAC8C\uB9CC
         \uD574 \uB2E4\uC624"
