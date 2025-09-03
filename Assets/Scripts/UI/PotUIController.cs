@@ -93,7 +93,6 @@ public class PotUIController : MonoBehaviour
 
         instruction.SetActive(false);
 
-        // 타이머를 쓰는 경우엔 제출 버튼 애니메이션 비활성화
         submitBtn.gameObject.SetActive(true);
         btn_originalColor = submitBtn.color;
 
