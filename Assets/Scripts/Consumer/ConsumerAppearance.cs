@@ -101,9 +101,6 @@ public class ConsumerAppearance : MonoBehaviour, IClickableSprite
     public void SetClickable(bool clickable)
     {
         isClickable = clickable;
-        if(!clickable)
-        {
-            ShaderEffectHelper.SetOutlineEnable(material, isRecipeConsumer);
-        }
+        ShaderEffectHelper.SetOutlineEnable(material, clickable);
     }
 }
