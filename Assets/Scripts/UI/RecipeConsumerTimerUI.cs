@@ -10,7 +10,9 @@ public class RecipeConsumerTimerUI : MonoBehaviour
     [SerializeField] private Color startFillColor;
     [SerializeField] private Color closeToEndFillColor;
     [SerializeField] private Animation shakeAnimation;
-    private float stayTime = 9f;
+    private float stayTime { get { return GameManager.Instance.IsHardMode ? hardModeStayTime : easyModeStayTime; } }
+    [SerializeField] private float easyModeStayTime = 8f;
+    [SerializeField] private float hardModeStayTime = 6f;
     public float StayTime => stayTime;
     private float elapsedTime = 0;
     private float fillAmount = 0;
