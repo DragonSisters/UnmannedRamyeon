@@ -10,7 +10,7 @@ public class RecipeConsumerTimerUI : MonoBehaviour
     [SerializeField] private Color startFillColor;
     [SerializeField] private Color closeToEndFillColor;
     [SerializeField] private Animation shakeAnimation;
-    private float stayTime = 10f;
+    private float stayTime = 9f;
     public float StayTime => stayTime;
     private float elapsedTime = 0;
     private float fillAmount = 0;

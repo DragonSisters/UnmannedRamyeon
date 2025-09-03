@@ -9,7 +9,7 @@ public class GrandmaTalkUI : MonoBehaviour
     private float grandmaSpeechTime = 1f;
     private float typingTime = 0.05f;
     private int lastStep = -1;
-    private int divideCount = 5;
+    private int divideCount = 4;
     private Coroutine typingCoroutine;
 
     [TextArea]

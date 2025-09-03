@@ -243,5 +243,6 @@ public class PotUIController : MonoBehaviour
     {
         isFirstTimeIn = false;
         isFirstTimeWrong = false;
+        SoundManager.Instance.StopLoopSound();
     }
 }
