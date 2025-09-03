@@ -124,12 +124,14 @@ public class UIManager : Singleton<UIManager>
             if (FinanceManager.Instance.IsSuccess)
             {
                 img_Success.SetActive(true);
+                img_Fail.SetActive(false);
                 txt_MoneySuccess.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
                 SoundManager.Instance.PlayBgmSound(BgmSoundType.Success);
             }
             else
             {
                 img_Fail.SetActive(true);
+                img_Success.SetActive(false);
                 txt_MoneyFail.text = $"{FinanceManager.Instance.CurrentMoney.ToString()}원";
                 SoundManager.Instance.PlayBgmSound(BgmSoundType.Fail);
             }
