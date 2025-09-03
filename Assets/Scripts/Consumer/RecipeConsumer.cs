@@ -8,7 +8,6 @@ using UnityEngine;
 /// </summary>
 public class RecipeConsumer : Consumer
 {
-    [SerializeField] private GameObject pointer;
     [SerializeField] private RecipeConsumerTimerUI timerUI;
 
     // 레시피 선택 관련 변수
@@ -25,8 +24,10 @@ public class RecipeConsumer : Consumer
     public bool IsClicked = false;
     public int CurrPickCount { get; private set; } = 0;
 
-    private float recipeOrderDuration = 2f;
-    private float stayTime = 15f;
+    private float recipeOrderSpeechDuration = 2f;
+    private float recipeOrderWaitDuration = 3f;
+
+    private Coroutine pointerCoroutine;
 
     internal override void HandleChildEnter()
     {
@@ -39,9 +40,7 @@ public class RecipeConsumer : Consumer
 
     internal override void HandleChildExit()
     {
-        ResetPickCount();
-        DeactivatePointer();
-        ingredientHandler.ResetAllIngredientLists();
+        OnConsumerHelpFinished();
     }
 
     internal override IEnumerator HandleChildIssue()
@@ -50,9 +49,9 @@ public class RecipeConsumer : Consumer
 
         if (GameManager.Instance.UseRecipeConsumerTimer)
         {
+            float stayTime = timerUI.StayTime;
             float elapsedTime = 0f;
             timerUI.ActivateTimer();
-            StartCoroutine(timerUI.FillTimerRoutine(stayTime));
 
             while (!IsSubmit && elapsedTime < stayTime)
             {
@@ -69,7 +68,7 @@ public class RecipeConsumer : Consumer
                 ingredientHandler.ResetAllIngredientLists();
                 appearanceScript.SetClickable(false);
 
-                IngredientManager.Instance.OnRecipeConsumerFinished(this);
+                IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
 
                 SetState(ConsumerState.Leave);
                 timerUI.DeactivateTimer();
@@ -92,6 +91,7 @@ public class RecipeConsumer : Consumer
             // 레시피 손님은 성공 시 바로 돈을 줍니다. (성공했다는 느낌을 더 잘 주기 위해)
             FinanceManager.Instance.IncreaseCurrentMoney(GetRecipePrice());
             SetState(ConsumerState.LineUp);
+            IngredientManager.Instance.OnRecipeConsumerFinished(this, true);
         }
         else // 제출 버튼을 누른 시점에서 재료 중에 단 하나라도 틀린 재료가 있다.
         {
@@ -100,9 +100,9 @@ public class RecipeConsumer : Consumer
             ResetPickCount();
             ingredientHandler.ResetAllIngredientLists();
             SetState(ConsumerState.Leave);
+            IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
         }
-
-        IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        
         speechScript.StopSpeech();
         appearanceScript.SetClickable(false);
         IsSubmit = false;
@@ -116,7 +116,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildClick()
     { 
         IsClicked = true;
-        DeactivatePointer();
+        consumerUI.DeactivatePointer();
         ResetPickCount();
         ingredientHandler.AttemptIngredients.Clear();
         ingredientHandler.OwnedIngredients.Clear();
@@ -131,7 +131,7 @@ public class RecipeConsumer : Consumer
     internal override void HandleChildUnclick()
     {
         IsClicked = false;
-        IngredientManager.Instance.OnRecipeConsumerFinished(this);
+        IngredientManager.Instance.OnRecipeConsumerFinished(this, false);
     }
 
     private IEnumerator EnterCoroutine()
@@ -141,7 +141,13 @@ public class RecipeConsumer : Consumer
         yield return new WaitUntil(() => moveScript.MoveStopIfCloseEnough(nearestPoint));
         StartCoroutine(HandleOrderOnUI());
         appearanceScript.SetClickable(true);
-        if (!IsClicked) ActivatePointer();
+        pointerCoroutine = StartCoroutine(ShowPointerAfterDelay());
+    }
+
+    private IEnumerator ShowPointerAfterDelay()
+    {
+        yield return new WaitForSeconds(recipeOrderWaitDuration);
+        if (!IsClicked) consumerUI.ActivatePointer();
     }
 
     public override void SetIngredientLists()
@@ -178,17 +184,7 @@ public class RecipeConsumer : Consumer
     public override IEnumerator HandleOrderOnUI()
     {
         StartCoroutine(speechScript.StartSpeechFromSituation(currentConsumerScriptableObject, ConsumerSituation.RecipeOrder, false, true, true, true, -1, $"{myRecipe.Name}"));
-        yield return new WaitForSeconds(recipeOrderDuration);
-    }
-
-    private void ActivatePointer()
-    {
-        pointer.SetActive(true);
-    }
-
-    private void DeactivatePointer()
-    {
-        pointer.SetActive(false);
+        yield return new WaitForSeconds(recipeOrderSpeechDuration);
     }
 
     public void AddPickCount()
@@ -204,5 +200,19 @@ public class RecipeConsumer : Consumer
     public void ResetPickCount()
     {
         CurrPickCount = 0;
+    }
+
+    public void OnConsumerHelpFinished()
+    {
+        IsAllIngredientCorrect = false;
+        IsClicked = false;
+        ResetPickCount();
+        if (pointerCoroutine != null)
+        {
+            StopCoroutine(pointerCoroutine);
+            pointerCoroutine = null;
+        }
+        consumerUI.DeactivatePointer();
+        ingredientHandler.ResetAllIngredientLists();
     }
 }

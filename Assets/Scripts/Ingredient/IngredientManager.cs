@@ -14,8 +14,7 @@ public class IngredientManager : Singleton<IngredientManager>
     [SerializeField] private GameObject stencil;
     [SerializeField] private CapsuleCollider2D potCollider;
     [SerializeField] private List<SpriteRenderer> ingredientsInPot;
-    [SerializeField] private PotUIController potUIController;
-    public PotUIController PotUIController => potUIController;
+
     private bool isFirstIngredientIn = false;
     public bool IsFirstIngredientIn
     {
@@ -98,7 +97,7 @@ public class IngredientManager : Singleton<IngredientManager>
         OnIngredientSelectMode += HandleIngredientSelectMode;
         OnIngredientDeselectMode += HandleIngredientDeselectMode;
 
-        potUIController.Initialize();
+        UIManager.Instance.PotUIController.Initialize();
     }
 
     public void ActivateIngredientObjOnPosition(bool IsActive)
@@ -113,7 +112,7 @@ public class IngredientManager : Singleton<IngredientManager>
     {
         if(currentRecipeConsumer != null)
         {
-            OnRecipeConsumerFinished(currentRecipeConsumer);
+            OnRecipeConsumerFinished(currentRecipeConsumer, false);
             currentRecipeConsumer = null;
         }
 
@@ -122,7 +121,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
         ActivateIngredientObjOnPosition(false);
         HandleIngredientDeselectMode();
-        potUIController.OnGameEnd();
+        UIManager.Instance.PotUIController.OnGameEnd();
     }
 
     public void CreateIngredientObjOnPosition()
@@ -204,7 +203,7 @@ public class IngredientManager : Singleton<IngredientManager>
 
     private void HandleIngredientSelectMode()
     {
-        potUIController.EnqueuePotRoutine(potUIController.BringPot());
+        UIManager.Instance.PotUIController.EnqueuePotRoutine(UIManager.Instance.PotUIController.BringPot());
         stencil.SetActive(true);
 
         // ingredient 클릭 활성화
@@ -320,12 +319,12 @@ public class IngredientManager : Singleton<IngredientManager>
         if(ingredientHandler.IsAllIngredientCorrect())
         {
             currentRecipeConsumer.IsAllIngredientCorrect = true;
-            potUIController.PlaySubmitAnim();
+            UIManager.Instance.PotUIController.PlaySubmitAnim();
         }
         else
         {
             currentRecipeConsumer.IsAllIngredientCorrect = false;
-            potUIController.StopSubmitAnim();
+            UIManager.Instance.PotUIController.StopSubmitAnim();
         }
 
         // 타이머 쓰는 경우는 조리완료 버튼을 쓰지 않고 바로 서빙
@@ -355,24 +354,24 @@ public class IngredientManager : Singleton<IngredientManager>
         if (ingredientHandler.IsAllIngredientCorrect())
         {
             currentRecipeConsumer.IsAllIngredientCorrect = true;
-            potUIController.PlaySubmitAnim();
+            UIManager.Instance.PotUIController.PlaySubmitAnim();
         }
         else
         {
             currentRecipeConsumer.IsAllIngredientCorrect = false;
-            potUIController.StopSubmitAnim();
+            UIManager.Instance.PotUIController.StopSubmitAnim();
         }
     }
 
-    public void OnRecipeConsumerFinished(RecipeConsumer consumer)
+    public void OnRecipeConsumerFinished(RecipeConsumer consumer, bool IsPlaySlideOutAnim)
     {
         if(currentRecipeConsumer == consumer)
         {
-            potUIController.EnqueuePotRoutine(potUIController.RemovePot());
-            consumer.IsAllIngredientCorrect = false;
-            consumer.IsClicked = false;
+            UIManager.Instance.PotUIController.EnqueuePotRoutine(UIManager.Instance.PotUIController.RemovePot(IsPlaySlideOutAnim));
+            consumer.OnConsumerHelpFinished();
             RemoveRecipeConsumer(consumer);
 
+            UIManager.Instance.PotUIController.StopShakeAnim();
             stencil.SetActive(false);
             IsIngredientSelectMode = false;
         }

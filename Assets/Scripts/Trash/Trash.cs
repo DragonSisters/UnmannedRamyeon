@@ -46,7 +46,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
             collider.size = colliderSize;
         }
 
-        originCursorIcon = GameManager.Instance.CursorIcon;
+        originCursorIcon = UIManager.Instance.CursorIcon;
         cleaningCursorIcon = TrashManager.Instance.CleaningCursorIcon;
         affectedConsumers.Clear();
     }
@@ -61,7 +61,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     public void OnDespawn()
     {
         // 커서가 다시 손가락으로 바뀐다.
-        GameManager.Instance.SetCursor(originCursorIcon);
+        UIManager.Instance.SetCursor(originCursorIcon);
         // 뽀득뽀득 소리가 멈춘다
         SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
         // 성공 소리를 내준다
@@ -83,7 +83,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     public void OnSpriteDown()
     {
         // 커서가 행주로 바뀐다.
-        GameManager.Instance.SetCursor(cleaningCursorIcon);
+        UIManager.Instance.SetCursor(cleaningCursorIcon);
     }
 
     public void OnSpriteDragging()
@@ -113,7 +113,7 @@ public class Trash : MonoBehaviour, IPoolable, IDraggableSprite
     public void OnSpriteUp()
     {
         // 커서가 다시 손가락으로 바뀐다.
-        GameManager.Instance.SetCursor(originCursorIcon);
+        UIManager.Instance.SetCursor(originCursorIcon);
         // 뽀득뽀득 소리가 멈춘다
         SoundManager.Instance.StopContinousSound(ContinousSoundType.TrashCleaning);
     }

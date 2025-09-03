@@ -13,7 +13,6 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     private IngredientScriptableObject ingredientScriptableObject;
     private SpriteRenderer spriteRenderer;
-    private PotUIController uiController;
 
     [SerializeField] private Material material;
     private readonly Color clickableColor = Color.white;
@@ -44,7 +43,6 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
     public void Initialize(IngredientScriptableObject ingredient, CapsuleCollider2D potRectTransform, List<SpriteRenderer> ingredients)
     {
-        uiController = IngredientManager.Instance.PotUIController;
         ingredientScriptableObject = ingredient;
         potCollider = potRectTransform;
         spritesInPot.Clear();
@@ -91,7 +89,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
         StartCoroutine(ShaderEffectHelper.SpringAnimation(material));
-        SetCursor();
+        UIManager.Instance.SetCursor(ingredientScriptableObject.CursorIcon);
 
         if (IsPointerOverPot(Input.mousePosition))
         {
@@ -114,7 +112,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
     {
         SoundManager.Instance.PlayEffectSound(EffectSoundType.Click);
 
-        ResetCursor();
+        UIManager.Instance.ResetCursor();
 
         if (IsPointerOverPot(Input.mousePosition))
         {
@@ -154,7 +152,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
 
         IngredientManager.Instance.IsFirstIngredientIn = true;
 
-        uiController.ShowIngredientInPot(index, ingredientScriptableObject);
+        UIManager.Instance.PotUIController.ShowIngredientInPot(index, ingredientScriptableObject);
 
         if (IsCorrectIngredient())
         {
@@ -163,7 +161,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         }
         else
         {
-            uiController.IsFirstTimeWrong = true;
+            UIManager.Instance.PotUIController.IsFirstTimeWrong = true;
             ShaderEffectHelper.SetOutlineColor(material, wrongColor);
             ShaderEffectHelper.SetOutlineColor(spritesInPot[index].material, wrongColor);
         }
@@ -181,7 +179,7 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
         // 가지고 올 재료 리스트와 가지고 있는 재료 리스트에서 제거
         IngredientManager.Instance.RemoveIngredientFromCorrectCunsumer(ingredientScriptableObject);
 
-        uiController.SetIngredientInPotInactive(index);
+        UIManager.Instance.PotUIController.SetIngredientInPotInactive(index);
     }
 
     private int GetNextAvailableSlotIndex()
@@ -192,16 +190,6 @@ public class IngredientDrag : MonoBehaviour, IDraggableSprite
                 return i;
         }
         return -1; // 꽉 찼을 때
-    }
-
-    private void SetCursor()
-    {
-        GameManager.Instance.SetCursor(ingredientScriptableObject.CursorIcon);
-    }
-
-    private void ResetCursor()
-    {
-        GameManager.Instance.ResetCursor();
     }
 
     private bool IsPointerOverPot(Vector2 screenPoint)

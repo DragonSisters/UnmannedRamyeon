@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,10 +10,13 @@ public class RecipeConsumerTimerUI : MonoBehaviour
     [SerializeField] private Color startFillColor;
     [SerializeField] private Color closeToEndFillColor;
     [SerializeField] private Animation shakeAnimation;
+    private float stayTime = 10f;
+    public float StayTime => stayTime;
     private float elapsedTime = 0;
     private float fillAmount = 0;
     private float closeToEnd = 0.35f;
     private bool isCloseToEnd = false;
+    private Coroutine timerCoroutine;
 
     public IEnumerator FillTimerRoutine(float stayTime)
     {
@@ -25,36 +29,48 @@ public class RecipeConsumerTimerUI : MonoBehaviour
             {
                 isCloseToEnd = true;
                 consumerTimerFill.color = closeToEndFillColor;
+                SoundManager.Instance.PlayLoopSound(LoopSoundType.TimeDue);
                 
+                // timer 바가 흔들리게 한다.
                 if(!shakeAnimation.isPlaying)
                 {
                     shakeAnimation.Play();
                 }
+                // Pot 이 흔들리게 한다.
+                UIManager.Instance.PotUIController.PlayShakeAnim();
             }
 
             consumerTimerFill.fillAmount = fillAmount;
             yield return null;
         }
-
-        if(elapsedTime > stayTime)
-        {
-            DeactivateTimer();
-        }
     }
 
     public void ActivateTimer()
     {
+        // 이전 코루틴이 있다면 정지
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+        }
         elapsedTime = 0;
         consumerTimerFill.fillAmount = 1;
         isCloseToEnd = false;
         consumerTimerFill.color = startFillColor;
         consumerTimerBackground.gameObject.SetActive(true);
         consumerTimerFill.gameObject.SetActive(true);
+        timerCoroutine = StartCoroutine(FillTimerRoutine(stayTime));
     }
 
     public void DeactivateTimer()
     {
+        // 코루틴 명시적 정지
+        if (timerCoroutine != null)
+        {
+            StopCoroutine(timerCoroutine);
+            timerCoroutine = null;
+        }
         shakeAnimation.Stop();
+        SoundManager.Instance.StopLoopSound();
         consumerTimerBackground.gameObject.SetActive(false);
         consumerTimerFill.gameObject.SetActive(false);
     }
