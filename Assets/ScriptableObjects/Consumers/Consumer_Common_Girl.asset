@@ -13,14 +13,7 @@ MonoBehaviour:
   m_Name: Consumer_Common_Girl
   m_EditorClassIdentifier: 
   appearancePrefab: {fileID: 3463868029112425272, guid: 1167883bba0ca4249af858b0339ce79b, type: 3}
-  stateDialogues:
-  - state: 3
-    line:
-    - "\uB300\uD30C \uB9C8\uB298\uC740 \uC544\uBB34\uB370\uB098 \uB123\uC5B4\uB3C4
-      \uB9DB\uC788\uC5B4"
-  - state: 6
-    line:
-    - "\uC5ED\uC2DC \uBB54\uAC00 \uBD80\uC871\uD560\uB588 \uB300\uD30C \uB9C8\uB298\uC774\uC57C"
+  stateDialogues: []
   situationDialogues:
   - situation: 0
     line:
