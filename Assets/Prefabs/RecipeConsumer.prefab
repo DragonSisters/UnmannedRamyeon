@@ -264,7 +264,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 45750e8252d150b4a8a3ba9a9c83cd5e, type: 2}
   consumerUI: {fileID: 1264228265461581360}
   timerUI: {fileID: 1837718294714103859}
-  easyRecipeThresholdIndex: 8
+  easyRecipeThresholdIndex: 20
   allRecipes:
   - {fileID: 11400000, guid: 7434d7d2e9d27d44bacb1aaa97671fdd, type: 2}
   - {fileID: 11400000, guid: d5ccfbb6eb77a7f49974a1b31daabd53, type: 2}
@@ -281,7 +281,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: aef44a56af247fa41b77f7742d1dd834, type: 2}
   - {fileID: 11400000, guid: 2754b2dc5ba0dc242b4d3d24f0771e8a, type: 2}
   - {fileID: 11400000, guid: 1dc6ce9e5287a474a911b2072bcb2c51, type: 2}
-  - {fileID: 11400000, guid: 83c758c27485f0d47879dd54cacedd88, type: 2}
   - {fileID: 11400000, guid: 614fbed755aafa040bb123c019fb420f, type: 2}
   - {fileID: 11400000, guid: c9e0ed2e0cf0f4341b3c9a235cc017c8, type: 2}
   - {fileID: 11400000, guid: 5efc4f0b105545f49adb5d7ead523f6e, type: 2}
@@ -291,10 +290,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 801ac3997b1e2ac4ba3a3fbb2d419f09, type: 2}
   - {fileID: 11400000, guid: b08c70bd6f7469e42af0ebeda8e3b311, type: 2}
   - {fileID: 11400000, guid: 65d7577770acedb4d82ae512573993db, type: 2}
+  - {fileID: 11400000, guid: bc527b9138ba8af4d9967f06cee0bb6d, type: 2}
+  - {fileID: 11400000, guid: b78d4b595292abf4a84c4eee64dbc08f, type: 2}
+  - {fileID: 11400000, guid: 191267d4c7a97234793e70e132158b96, type: 2}
   IsSubmit: 0
   IsAllIngredientCorrect: 0
   IsClicked: 0
-  pointer: {fileID: 9170169028031282125}
 --- !u!114 &1264228265461581360
 MonoBehaviour:
   m_ObjectHideFlags: 0
